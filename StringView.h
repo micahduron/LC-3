@@ -7,13 +7,12 @@ public:
      m_strPtr{ other.m_strPtr },
      m_length{ other.m_length }
     {}
-    StringView(const std::string& str, size_t startIndex, size_t strLen) :
-     m_strPtr{ str.data() + startIndex },
-     m_length{ strLen }
-    {}
     StringView(const char* str, size_t startIndex, size_t strLen) :
      m_strPtr{ str + startIndex },
      m_length{ strLen }
+    {}
+    StringView(const std::string& str, size_t startIndex, size_t strLen) :
+      StringView{ str.data(), startIndex, strLen }
     {}
 
     char&        operator [] (size_t index)       { return m_strPtr[index]; }
