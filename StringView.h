@@ -40,9 +40,6 @@ public:
     char&        operator [] (size_t index)       { return m_strPtr[index]; }
     const char&  operator [] (size_t index) const { return m_strPtr[index]; }
 
-    char&       at(size_t index);
-    const char& at(size_t index) const;
-
     size_t size() const { return m_length; }
 
     iterator       begin() { return iterator{ m_strPtr }; }
