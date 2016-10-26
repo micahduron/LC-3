@@ -19,6 +19,8 @@ public:
 
     size_t size() const { return m_length; }
 
+/*
+
     iterator       begin() { return iterator{ m_strPtr }; }
     const_iterator begin() const { return const_iterator{ m_strPtr }; }
 
@@ -27,6 +29,7 @@ public:
 
     const_iterator cbegin() const { return this->begin(); }
     const_iterator cend() const { return this->end(); }
+*/
 
 private:
     const char* m_strPtr;
