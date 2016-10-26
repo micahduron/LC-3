@@ -15,7 +15,6 @@ public:
       StringView{ str.data(), startIndex, strLen }
     {}
 
-    char&        operator [] (size_t index)       { return m_strPtr[index]; }
     const char&  operator [] (size_t index) const { return m_strPtr[index]; }
 
     size_t size() const { return m_length; }
