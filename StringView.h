@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <utility>
 
@@ -34,4 +35,12 @@ public:
 private:
     const char* m_strPtr;
     size_t m_length;
+
+    friend std::ostream& operator << (std::ostream&, const StringView&);
 };
+
+std::ostream& operator << (std::ostream& outStream, const StringView& strView) {
+    outStream.write(strView.m_strPtr, strView.size());
+
+    return outStream;
+}
