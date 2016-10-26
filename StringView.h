@@ -4,6 +4,37 @@
 
 class StringView {
 public:
+    class iterator :
+      public std::iterator<std::input_iterator_tag, const char>
+    {
+    public:
+        iterator(pointer basePtr) :
+          m_ptr{ basePtr }
+        {}
+
+        iterator operator ++ (int) {
+            iterator ret{ *this };
+
+            return ++ret;
+        }
+        iterator& operator ++ () {
+            ++m_ptr;
+
+            return *this;
+        }
+        bool operator == (iterator other) const {
+            return m_ptr == other.m_ptr;
+        }
+        bool operator != (iterator other) const {
+            return !(*this == other);
+        }
+        reference operator * () const {
+            return *m_ptr;
+        }
+    private:
+        pointer m_ptr;
+    };
+
     StringView(const StringView& other) :
      m_strPtr{ other.m_strPtr },
      m_length{ other.m_length }
