@@ -3,27 +3,6 @@
 
 class StringView {
 public:
-    class StringViewIterator {
-    public:
-        StringViewIterator(const StringViewIterator& other) :
-          m_ptr{ other.m_ptr }
-        {}
-        StringViewIterator(const char* strPtr) :
-          m_ptr{ strPtr }
-        {}
-
-        StringViewIterator operator ++ () {
-            StringViewIterator ret{ *this };
-
-            return ++ret;
-        }
-        StringViewIterator& operator ++ (int) {
-            ++m_ptr;
-
-            return *this;
-        }
-    };
-
     StringView(const StringView& other) :
      m_strPtr{ other.m_strPtr },
      m_length{ other.m_length }
