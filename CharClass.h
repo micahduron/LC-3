@@ -22,8 +22,8 @@ private:
 };
 CharClass operator | (const CharClass& classOne, const CharClass& classTwo) {
     return {
-      [classOne, classTwo] (char c) -> bool {
-          return classOne(c) || classTwo(c);
-      }
+        [classOne, classTwo] (char c) -> bool {
+            return classOne(c) || classTwo(c);
+        }
     };
 }
