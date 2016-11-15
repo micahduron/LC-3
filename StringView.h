@@ -35,16 +35,14 @@ public:
         pointer m_ptr;
     };
 
-    StringView(const StringView& other) :
-     m_strPtr{ other.m_strPtr },
-     m_length{ other.m_length }
+    StringView(const StringView& other) = default;
+    StringView(StringView&& other) = default;
+    StringView(const char* str, size_t length) :
+     m_strPtr{ str },
+     m_length{ length }
     {}
-    StringView(const char* str, size_t startIndex, size_t strLen) :
-     m_strPtr{ str + startIndex },
-     m_length{ strLen }
-    {}
-    StringView(const std::string& str, size_t startIndex, size_t strLen) :
-      StringView{ str.data(), startIndex, strLen }
+    StringView(const std::string& str, size_t length) :
+      StringView{ str.data(), length }
     {}
 
     const char&  operator [] (size_t index) const { return m_strPtr[index]; }
