@@ -4,11 +4,6 @@
 
 #pragma once
 
-enum TokenizeBehavior : uint32_t {
-    IgnoreWhitespace = 1 << 0,
-    IncludeSeparator = 1 << 1
-};
-
 class Tokenizer {
 public:
     Tokenizer(const std::string& sourceStr) :
