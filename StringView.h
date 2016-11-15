@@ -2,6 +2,8 @@
 #include <string>
 #include <utility>
 
+#pragma once
+
 class StringView {
 public:
     class iterator :
