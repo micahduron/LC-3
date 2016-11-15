@@ -20,10 +20,4 @@ public:
 private:
     std::function<bool(char)>   m_classFn;
 };
-CharClass operator | (const CharClass& classOne, const CharClass& classTwo) {
-    return {
-        [classOne, classTwo] (char c) -> bool {
-            return classOne(c) || classTwo(c);
-        }
-    };
-}
+CharClass operator | (const CharClass& classOne, const CharClass& classTwo);
