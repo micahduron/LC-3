@@ -40,8 +40,8 @@ public:
     StringView(const StringView& other) = default;
     StringView(StringView&& other) = default;
     StringView(const char* str, size_t length) :
-     m_strPtr{ str },
-     m_length{ length }
+      m_strPtr{ str },
+      m_length{ length }
     {}
     StringView(const std::string& str, size_t length) :
       StringView{ str.data(), length }
