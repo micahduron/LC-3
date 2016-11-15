@@ -62,8 +62,4 @@ private:
     friend std::ostream& operator << (std::ostream&, const StringView&);
 };
 
-std::ostream& operator << (std::ostream& outStream, const StringView& strView) {
-    outStream.write(strView.m_strPtr, strView.size());
-
-    return outStream;
-}
+std::ostream& operator << (std::ostream& outStream, const StringView& strView);
