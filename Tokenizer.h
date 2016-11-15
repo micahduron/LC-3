@@ -33,7 +33,11 @@ public:
     size_t skipUntilNot(const CharClass& whiteList);
 
     StringView read(size_t numChars) {
-        return { m_currPtr += numChars, numChars };
+        const char* basePtr = m_currPtr;
+
+        size_t viewLen = skip(numChars);
+
+        return { basePtr, viewLen };
     }
     StringView readUntil(const CharClass& blackList);
     StringView readUntilNot(const CharClass& whiteList);
