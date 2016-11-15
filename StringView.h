@@ -47,6 +47,9 @@ public:
       StringView{ str.data(), length }
     {}
 
+    StringView& operator = (const StringView& other) = default;
+    StringView& operator = (StringView&& other) = default;
+
     const char&  operator [] (size_t index) const { return m_strPtr[index]; }
 
     size_t size() const { return m_length; }
