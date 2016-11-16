@@ -22,6 +22,8 @@ public:
         return *++m_currPtr;
     }
     
+    StringView nextToken(const CharClass& separatorsClass);
+
     size_t skip(size_t numChars) {
         size_t ptrDelta = std::min(numChars, static_cast<size_t>(m_endPtr - m_currPtr));
 
