@@ -50,19 +50,31 @@ public:
     StringView& operator = (const StringView& other) = default;
     StringView& operator = (StringView&& other) = default;
 
-    const char&  operator [] (size_t index) const { return m_strPtr[index]; }
+    const char&  operator [] (size_t index) const {
+        return m_strPtr[index];
+    }
 
-    size_t size() const { return m_length; }
+    size_t size() const {
+        return m_length;
+    }
 
     const char* data() const {
         return m_strPtr;
     }
 
-    iterator begin() const { return iterator{ m_strPtr }; }
-    iterator end() const { return iterator{ m_strPtr + m_length }; }
+    iterator begin() const {
+        return iterator{ m_strPtr };
+    }
+    iterator end() const {
+        return iterator{ m_strPtr + m_length };
+    }
 
-    iterator cbegin() const { return this->begin(); }
-    iterator cend() const { return this->end(); }
+    iterator cbegin() const {
+        return begin();
+    }
+    iterator cend() const {
+        return end();
+    }
 
 private:
     const char* m_strPtr;
