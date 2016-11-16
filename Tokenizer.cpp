@@ -1,5 +1,12 @@
 #include "Tokenizer.h"
 
+StringView Tokenizer::nextToken(const CharClass& separatorsClass) {
+    StringView token = readUntil(separatorsClass);
+
+    skipUntilNot(separatorsClass);
+
+    return token;
+}
 size_t Tokenizer::skipUntil(const CharClass& blackList) {
     size_t charsSkipped = 0;
 
