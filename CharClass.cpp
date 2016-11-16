@@ -1,20 +1,20 @@
 #include "CharClass.h"
 
-CharClass combine(const CharClass& classOne, const CharClass& classTwo) {
+CharClass CharClass::combine(const CharClass& classOne, const CharClass& classTwo) {
     return {
         [classOne, classTwo] (char c) -> bool {
             return classOne(c) || classTwo(c);
         }
     };
 }
-CharClass intersect(const CharClass& classOne, const CharClass& classTwo) {
+CharClass CharClass::intersect(const CharClass& classOne, const CharClass& classTwo) {
     return {
         [classOne, classTwo] (char c) -> bool {
             return classOne(c) && classTwo(c);
         }
     };
 }
-CharClass complement(const CharClass& charClass) {
+CharClass CharClass::complement(const CharClass& charClass) {
     return {
         [charClass] (char c) -> bool {
             return !charClass(c);
