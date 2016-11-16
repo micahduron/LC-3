@@ -22,6 +22,9 @@ CharClass complement(const CharClass& charClass) {
     };
 }
 
+CharClass operator & (const CharClass& classOne, const CharClass& classTwo) {
+    return CharClass::intersect(classOne, classTwo);
+}
 CharClass operator | (const CharClass& classOne, const CharClass& classTwo) {
     return CharClass::combine(classOne, classTwo);
 }
