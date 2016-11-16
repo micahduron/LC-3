@@ -22,6 +22,14 @@ CharClass CharClass::complement(const CharClass& charClass) {
     };
 }
 
+CharClass CharClass::matchSingle(char matchChar) {
+    return {
+        [matchChar](char c) -> bool {
+            return c == matchChar;
+        }
+    };
+}
+
 CharClass operator ~ (const CharClass& charClass) {
     return CharClass::complement(charClass);
 }

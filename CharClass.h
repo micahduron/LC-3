@@ -21,6 +21,8 @@ public:
     static CharClass intersect(const CharClass& classOne, const CharClass& classTwo);
     static CharClass complement(const CharClass& charClass);
 
+    static CharClass matchSingle(char matchChar);
+
 private:
     std::function<bool(char)>   m_classFn;
 };
