@@ -33,6 +33,10 @@ public:
         return m_strPtr;
     }
 
+    StringView subString(size_t baseOffset, size_t length) {
+        return { m_strPtr + baseOffset, length };
+    }
+
     iterator begin() const {
         return iterator{ m_strPtr };
     }
