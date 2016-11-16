@@ -54,6 +54,10 @@ public:
 
     size_t size() const { return m_length; }
 
+    const char* data() const {
+        return m_strPtr;
+    }
+
     iterator begin() const { return iterator{ m_strPtr }; }
     iterator end() const { return iterator{ m_strPtr + m_length }; }
 
