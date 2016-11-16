@@ -6,36 +6,7 @@
 
 class StringView {
 public:
-    class iterator :
-      public std::iterator<std::input_iterator_tag, const char>
-    {
-    public:
-        iterator(pointer basePtr) :
-          m_ptr{ basePtr }
-        {}
-
-        iterator operator ++ (int) {
-            iterator ret{ *this };
-
-            return ++ret;
-        }
-        iterator& operator ++ () {
-            ++m_ptr;
-
-            return *this;
-        }
-        bool operator == (iterator other) const {
-            return m_ptr == other.m_ptr;
-        }
-        bool operator != (iterator other) const {
-            return !(*this == other);
-        }
-        reference operator * () const {
-            return *m_ptr;
-        }
-    private:
-        pointer m_ptr;
-    };
+    class iterator;
 
     StringView(const StringView& other) = default;
     StringView(StringView&& other) = default;
@@ -75,6 +46,37 @@ public:
     iterator cend() const {
         return end();
     }
+
+    class iterator :
+      public std::iterator<std::input_iterator_tag, const char>
+    {
+    public:
+        iterator(pointer basePtr) :
+          m_ptr{ basePtr }
+        {}
+
+        iterator operator ++ (int) {
+            iterator ret{ *this };
+
+            return ++ret;
+        }
+        iterator& operator ++ () {
+            ++m_ptr;
+
+            return *this;
+        }
+        bool operator == (iterator other) const {
+            return m_ptr == other.m_ptr;
+        }
+        bool operator != (iterator other) const {
+            return !(*this == other);
+        }
+        reference operator * () const {
+            return *m_ptr;
+        }
+    private:
+        pointer m_ptr;
+    };
 
 private:
     const char* m_strPtr;
