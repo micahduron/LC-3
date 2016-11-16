@@ -17,7 +17,12 @@ public:
         return m_classFn(c);
     }
 
+    static CharClass combine(const CharClass& classOne, const CharClass& classTwo);
+    static CharClass intersect(const CharClass& classOne, const CharClass& classTwo);
+    static CharClass complement(const CharClass& charClass);
+
 private:
     std::function<bool(char)>   m_classFn;
 };
+
 CharClass operator | (const CharClass& classOne, const CharClass& classTwo);
