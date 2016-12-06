@@ -10,7 +10,7 @@ MODULE_HEADERS = $(patsubst %, %.h, $(MODULES))
 .PHONY: all test debug clean
 
 test:	$(MODULE_OBJS)
-	make -C tests test
+	make -C tests
 
 clean:
 	make -C tests clean
