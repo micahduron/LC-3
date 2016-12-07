@@ -1,4 +1,4 @@
-#include "Tokenizer.h"
+#include "StringTokenizer.h"
 
 StringView StringTokenizer::nextToken(const CharClass& separatorsClass) {
     StringView token = readUntil(separatorsClass);

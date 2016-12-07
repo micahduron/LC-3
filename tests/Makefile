@@ -1,7 +1,7 @@
 GXXFLAGS = -std=c++17 -Wall -Werror
 GXX = g++ $(GXXFLAGS)
 
-MODULES = Tokenizer CharClass StringView
+MODULES = StringTokenizer CharClass StringView
 MODULES_DIR = ..
 
 MODULE_SRCS = $(patsubst %, $(MODULES_DIR)/%.cpp, $(MODULES))

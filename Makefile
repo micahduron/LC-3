@@ -1,7 +1,7 @@
 GXXFLAGS = -std=c++17 -Wall -Werror
 GXX = g++ $(GXXFLAGS)
 
-MODULES = Tokenizer CharClass StringView
+MODULES = StringTokenizer CharClass StringView
 
 MODULE_SRCS = $(patsubst %, %.cpp, $(MODULES))
 MODULE_OBJS = $(patsubst %, %.o, $(MODULES))
@@ -16,7 +16,7 @@ clean:
 	make -C tests clean
 	rm -f $(MODULE_OBJS)
 
-Tokenizer.o:	Tokenizer.cpp Tokenizer.h CharClass.h StringView.h
+StringTokenizer.o:	StringTokenizer.cpp StringTokenizer.h CharClass.h StringView.h
 	$(GXX) -c $<
 
 %.o:	%.cpp %.h
