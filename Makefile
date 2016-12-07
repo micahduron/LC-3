@@ -1,7 +1,10 @@
 GXXFLAGS = -std=c++17 -Wall -Werror
 GXX = g++ $(GXXFLAGS)
 
-MODULES = StringTokenizer CharClass StringView
+MODULES = \
+  StringTokenizer \
+  CharClass \
+  StringView
 
 MODULE_SRCS = $(patsubst %, %.cpp, $(MODULES))
 MODULE_OBJS = $(patsubst %, %.o, $(MODULES))
