@@ -1,13 +1,13 @@
 #include "Tokenizer.h"
 
-StringView Tokenizer::nextToken(const CharClass& separatorsClass) {
+StringView StringTokenizer::nextToken(const CharClass& separatorsClass) {
     StringView token = readUntil(separatorsClass);
 
     skipUntilNot(separatorsClass);
 
     return token;
 }
-size_t Tokenizer::skipUntil(const CharClass& blackList) {
+size_t StringTokenizer::skipUntil(const CharClass& blackList) {
     size_t charsSkipped = 0;
 
     while (!finished() && !blackList(peek())) {
@@ -16,7 +16,7 @@ size_t Tokenizer::skipUntil(const CharClass& blackList) {
     }
     return charsSkipped;
 }
-size_t Tokenizer::skipUntilNot(const CharClass& whiteList) {
+size_t StringTokenizer::skipUntilNot(const CharClass& whiteList) {
     size_t charsSkipped = 0;
 
     while (!finished() && whiteList(peek())) {
@@ -25,14 +25,14 @@ size_t Tokenizer::skipUntilNot(const CharClass& whiteList) {
     }
     return charsSkipped;
 }
-StringView Tokenizer::readUntil(const CharClass& blackList) {
+StringView StringTokenizer::readUntil(const CharClass& blackList) {
     const char* startPtr = m_currPtr;
 
     size_t numChars = skipUntil(blackList);
 
     return { startPtr, numChars };
 }
-StringView Tokenizer::readUntilNot(const CharClass& whiteList) {
+StringView StringTokenizer::readUntilNot(const CharClass& whiteList) {
     const char* startPtr = m_currPtr;
 
     size_t numChars = skipUntilNot(whiteList);

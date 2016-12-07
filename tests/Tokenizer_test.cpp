@@ -11,7 +11,7 @@ int main() {
 
     std::string sourceStr = "One, two, three, four";
 
-    Tokenizer tokenizer(sourceStr);
+    StringTokenizer tokenizer(sourceStr);
 
     while (!tokenizer.finished()) {
         auto numberStr = tokenizer.nextToken(separators);

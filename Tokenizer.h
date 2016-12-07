@@ -5,9 +5,9 @@
 
 #pragma once
 
-class Tokenizer {
+class StringTokenizer {
 public:
-    Tokenizer(const std::string& sourceStr) :
+    StringTokenizer(const std::string& sourceStr) :
       m_currPtr{ sourceStr.data() },
       m_endPtr{ sourceStr.data() + sourceStr.size() }
     {}
