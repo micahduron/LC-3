@@ -91,6 +91,8 @@ private:
     const char* m_strPtr;
     size_t m_length;
 
+    static int compareHelper(const char* str1, const char* str2, std::function<int(char, char)> cmpFn,
+                             size_t numIters);
     friend std::ostream& operator << (std::ostream&, const StringView&);
 };
 
