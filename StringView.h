@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include <functional>
 
 #pragma once
 
@@ -32,6 +33,10 @@ public:
     const char* data() const {
         return m_strPtr;
     }
+
+    int compare(const StringView& other, std::function<int(char, char)> cmpFn) const;
+    int compare(const std::string& other, std::function<int(char, char)> cmpFn) const;
+    int compare(const char* other, std::function<int(char, char)> cmpFn) const;
 
     StringView subString(size_t baseOffset, size_t length) {
         return { m_strPtr + baseOffset, length };
