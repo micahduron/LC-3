@@ -1,7 +1,7 @@
 #include "StringView.h"
 
-int StringView::compareHelper(const char* str1, const char* str2, std::function<int(char, char)> cmpFn,
-                              size_t numIters) {
+int StringView::compareHelper(const char* str1, size_t str1Size const char* str2,
+                              size_t str2Size, compare_func cmpFn) {
     while (--numIters) {
         auto cmpResult = cmpFn(*str1++, *str2++);
 
