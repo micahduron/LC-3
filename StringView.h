@@ -93,7 +93,7 @@ private:
     const char* m_strPtr;
     size_t m_length;
 
-    static int compareHelper(const char* str1, size_t str1Size const char* str2,
+    static int compareHelper(const char* str1, size_t str1Size, const char* str2,
                              size_t str2Size, compare_func cmpFn);
     friend std::ostream& operator << (std::ostream&, const StringView&);
 };

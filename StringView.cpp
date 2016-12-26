@@ -1,6 +1,6 @@
 #include "StringView.h"
 
-int StringView::compareHelper(const char* str1, size_t str1Size const char* str2,
+int StringView::compareHelper(const char* str1, size_t str1Size, const char* str2,
                               size_t str2Size, compare_func cmpFn) {
     if (str1Size < str2Size) {
         return cmpFn('\0', str2[str2Size - 1]);
