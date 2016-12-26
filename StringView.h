@@ -40,6 +40,15 @@ public:
     int compare(const std::string& other, compare_func cmpFn) const;
     int compare(const char* other, compare_func cmpFn) const;
 
+    bool operator == (const StringView& other) const;
+    bool operator == (const std::string& other) const;
+    bool operator == (const char* other) const;
+
+    template <typename T>
+    bool operator != (const T& other) const {
+        return !(*this == other);
+    }
+
     StringView subString(size_t baseOffset, size_t length) {
         return { m_strPtr + baseOffset, length };
     }

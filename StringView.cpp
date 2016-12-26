@@ -1,6 +1,8 @@
 #include <cstring>
 #include "StringView.h"
 
+static int LexicographicOrder(char c1, char c2);
+
 int StringView::compareHelper(const char* str1, size_t str1Size, const char* str2,
                               size_t str2Size, compare_func cmpFn) {
     if (str1Size < str2Size) {
@@ -19,6 +21,7 @@ int StringView::compareHelper(const char* str1, size_t str1Size, const char* str
     }
     return 0;
 }
+
 int StringView::compare(const StringView& other, compare_func cmpFn) const {
     return StringView::compareHelper(data(), size(), other.data(), other.size(), cmpFn);
 }
@@ -30,8 +33,23 @@ int StringView::compare(const char* other, compare_func cmpFn) const {
 
     return StringView::compareHelper(data(), size(), other, strSize, cmpFn);
 }
+
+bool StringView::operator == (const StringView& other) const {
+    return compare(other, LexicographicOrder) == 0;
+}
+bool StringView::operator == (const std::string& other) const {
+    return compare(other, LexicographicOrder) == 0;
+}
+bool StringView::operator == (const char* other) const {
+    return compare(other, LexicographicOrder) == 0;
+}
+
 std::ostream& operator << (std::ostream& outStream, const StringView& strView) {
     outStream.write(strView.m_strPtr, strView.size());
 
     return outStream;
+}
+
+int LexicographicOrder(char c1, char c2) {
+    return c1 - c2;
 }

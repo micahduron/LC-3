@@ -15,6 +15,12 @@ int main() {
         std::cout << '\n';
 
         std::cout << view << '\n';
+
+        if (view == text) {
+            std::cout << "Yep.\n";
+        } else {
+            std::cout << "Nope.\n";
+        }
     }
     return 0;
 }
