@@ -1,3 +1,4 @@
+#include <cstring>
 #include "StringView.h"
 
 int StringView::compareHelper(const char* str1, size_t str1Size, const char* str2,
@@ -17,6 +18,17 @@ int StringView::compareHelper(const char* str1, size_t str1Size, const char* str
         }
     }
     return 0;
+}
+int StringView::compare(const StringView& other, compare_func cmpFn) const {
+    return StringView::compareHelper(data(), size(), other.data(), other.size(), cmpFn);
+}
+int StringView::compare(const std::string& other, compare_func cmpFn) const {
+    return StringView::compareHelper(data(), size(), other.data(), other.size(), cmpFn);
+}
+int StringView::compare(const char* other, compare_func cmpFn) const {
+    auto strSize = std::strlen(other);
+
+    return StringView::compareHelper(data(), size(), other, strSize, cmpFn);
 }
 std::ostream& operator << (std::ostream& outStream, const StringView& strView) {
     outStream.write(strView.m_strPtr, strView.size());
