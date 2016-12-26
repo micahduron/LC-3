@@ -9,6 +9,8 @@ class StringView {
 public:
     class iterator;
 
+    using compare_func = std::function<int(char, char)>;
+
     StringView(const StringView& other) = default;
     StringView(StringView&& other) = default;
     StringView(const char* str, size_t length) :
@@ -34,9 +36,9 @@ public:
         return m_strPtr;
     }
 
-    int compare(const StringView& other, std::function<int(char, char)> cmpFn) const;
-    int compare(const std::string& other, std::function<int(char, char)> cmpFn) const;
-    int compare(const char* other, std::function<int(char, char)> cmpFn) const;
+    int compare(const StringView& other, compare_func cmpFn) const;
+    int compare(const std::string& other, compare_func cmpFn) const;
+    int compare(const char* other, compare_func cmpFn) const;
 
     StringView subString(size_t baseOffset, size_t length) {
         return { m_strPtr + baseOffset, length };
@@ -91,8 +93,8 @@ private:
     const char* m_strPtr;
     size_t m_length;
 
-    static int compareHelper(const char* str1, const char* str2, std::function<int(char, char)> cmpFn,
-                             size_t numIters);
+    static int compareHelper(const char* str1, const char* str2, compare_func cmpFn, size_t numIters);
+
     friend std::ostream& operator << (std::ostream&, const StringView&);
 };
 
