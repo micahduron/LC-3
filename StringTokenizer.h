@@ -15,6 +15,10 @@ public:
     bool finished() const {
         return m_currPtr == m_endPtr;
     }
+    explicit operator bool() const {
+        return finished();
+    }
+
     char peek() const {
         return *m_currPtr;
     }
