@@ -13,7 +13,7 @@ int main() {
 
     StringTokenizer tokenizer(sourceStr);
 
-    while (!tokenizer) {
+    while (tokenizer) {
         auto numberStr = tokenizer.nextToken(separators);
         std::cout << numberStr << ": " << numberStr.size() << '\n';
     }
