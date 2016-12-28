@@ -23,5 +23,8 @@ clean:
 StringTokenizer.o:	StringTokenizer.cpp StringTokenizer.h CharClass.h StringView.h
 	$(GXX) -c $<
 
+LC3Writer.o:	LC3Writer.cpp LC3Writer.h BinaryFileIO.h BinaryFileIO.tpp
+	$(GXX) -c $<
+
 %.o:	%.cpp %.h
 	$(GXX) -c $<
