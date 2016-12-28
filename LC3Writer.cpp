@@ -8,6 +8,8 @@ void LC3Writer::open(const char* fileName) {
 void LC3Writer::close() {
     if (m_fileHandle) {
         std::fclose(m_fileHandle);
+
+        m_fileHandle = nullptr;
     }
 }
 
