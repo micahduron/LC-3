@@ -19,8 +19,12 @@ public:
 
     LC3Writer& operator = (const LC3Writer& other) = delete;
 
-    explicit operator bool() const {
+    bool isOpen() const {
         return m_fileHandle != nullptr;
+    }
+
+    explicit operator bool() const {
+        return isOpen();
     }
 
     void open(const char* fileName);
