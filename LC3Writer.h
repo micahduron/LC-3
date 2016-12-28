@@ -31,6 +31,7 @@ public:
     void close();
 
     LC3Writer& put(word_type word);
+    LC3Writer& write(const word_type* wordArray, size_t numWords);
 
 private:
     using file_type = std::FILE*;
