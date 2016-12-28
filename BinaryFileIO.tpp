@@ -8,7 +8,7 @@ void BinaryFileIO<Mode>::open(const char* fileName) {
 }
 template <typename Mode>
 void BinaryFileIO<Mode>::close() {
-    if (m_fileHandle) {
+    if (isOpen()) {
         std::fclose(m_fileHandle);
 
         m_fileHandle = nullptr;
