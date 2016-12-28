@@ -1,6 +1,8 @@
 #include <cstdio>
 #include "lc3.h"
 
+#pragma once
+
 class LC3Writer {
 public:
     using word_type = LC3::Word;
