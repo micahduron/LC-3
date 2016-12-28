@@ -14,14 +14,7 @@ void LC3Writer::close() {
 }
 
 LC3Writer& LC3Writer::put(word_type word) {
-    auto bytesLeft = sizeof(word_type);
-    word_type byteMask = 0xFF << (8 * (sizeof(word_type) - 1));
+    std::fwrite(&word, sizeof(word), 1, m_fileHandle);
 
-    while (bytesLeft--) {
-        int currByte = (word & byteMask) >> (8 * bytesLeft);
-        std::fputc(currByte, m_fileHandle);
-
-        byteMask >>= 8;
-    }
     return *this;
 }
