@@ -4,7 +4,8 @@ GXX = g++ $(GXXFLAGS)
 MODULES = \
   StringTokenizer \
   CharClass \
-  StringView
+  StringView \
+  LC3Writer
 
 MODULES_DIR = ..
 

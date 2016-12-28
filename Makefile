@@ -4,7 +4,8 @@ GXX = g++ $(GXXFLAGS)
 MODULES = \
   StringTokenizer \
   CharClass \
-  StringView
+  StringView \
+  LC3Writer
 
 MODULE_SRCS = $(patsubst %, %.cpp, $(MODULES))
 MODULE_OBJS = $(patsubst %, %.o, $(MODULES))
