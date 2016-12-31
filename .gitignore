@@ -3,6 +3,9 @@
 !/tests/
 /tests/**/*
 
+!/util/
+/util/*
+
 !Makefile
 
 !*.cpp
