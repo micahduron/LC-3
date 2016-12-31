@@ -7,4 +7,4 @@ namespace LC3 {
 
     constexpr size_t WordBytes = 2;
     constexpr size_t WordBits = WordBytes * 8;
-};
+}
