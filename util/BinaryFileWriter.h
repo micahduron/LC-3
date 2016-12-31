@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <cstdint>
 #include <type_traits>
-#include "../BinaryFileIO.h"
+#include "BinaryFileIO.h"
 #include "ByteOrder.h"
 
 #pragma once
