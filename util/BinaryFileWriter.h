@@ -43,7 +43,7 @@ public:
 };
 
 template <>
-class OrderedBinaryFileWriter<ByteOrder::SystemEndian> : public BinaryFileIO<FileMode::Writer> {
+class OrderedBinaryFileWriter<ByteOrder::SystemOrder> : public BinaryFileIO<FileMode::Writer> {
 public:
     using BinaryFileIO::BinaryFileIO;
 
@@ -64,4 +64,4 @@ public:
     }
 };
 
-using BinaryFileWriter = OrderedBinaryFileWriter<ByteOrder::SystemEndian>;
+using BinaryFileWriter = OrderedBinaryFileWriter<ByteOrder::SystemOrder>;

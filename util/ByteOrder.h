@@ -1,7 +1,7 @@
 #pragma once
 
 namespace ByteOrder {
-    class SystemEndian {
+    class SystemOrder {
     public:
         template <typename T>
         T operator () (T value) {
