@@ -50,7 +50,7 @@ public:
     long tell() const {
         return std::ftell(const_cast<file_type*>(file()));
     }
-    bool seek(size_t offset, enum SeekMode mode = SeekMode::FromStart) {
+    bool seek(long offset, enum SeekMode mode = SeekMode::FromStart) {
         return std::fseek(file(), offset, mode) == 0;
     }
 
