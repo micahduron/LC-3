@@ -44,26 +44,4 @@ public:
     }
 };
 
-template <>
-class OrderedBinaryFileWriter<ByteOrder::SystemOrder> : public BinaryFileIO<FileMode::Writer> {
-public:
-    using BinaryFileIO::BinaryFileIO;
-
-    template <typename T>
-    size_t write(const T* data, size_t numElems) {
-        static_assert(std::is_unsigned<T>::value == true,
-                      "Requires unsigned integral type."
-        );
-        return std::fwrite(data, sizeof(T), numElems, file());
-    }
-
-    template <typename T>
-    size_t put(T datum) {
-        static_assert(std::is_unsigned<T>::value == true,
-                      "Requires unsigned integral type."
-        );
-        return std::fwrite(&datum, sizeof(T), 1, file());
-    }
-};
-
 using BinaryFileWriter = OrderedBinaryFileWriter<ByteOrder::SystemOrder>;
