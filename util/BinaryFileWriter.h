@@ -19,9 +19,7 @@ public:
         size_t elemsWritten = 0;
 
         for (; elemsWritten < numElems; ++elemsWritten, ++data) {
-            size_t elemBytesWritten = put(*data);
-
-            if (elemBytesWritten != sizeof(T)) {
+            if (!put(*data)) {
                 break;
             }
         }
@@ -29,14 +27,14 @@ public:
     }
 
     template <typename T>
-    size_t put(T datum) {
+    bool put(T datum) {
         static_assert(std::is_unsigned<T>::value == true,
                       "Requires unsigned integral type."
         );
         Endianness converter;
         auto convertedDatum = converter(datum);
 
-        return std::fwrite(&convertedDatum, sizeof(T), 1, file());
+        return std::fwrite(&convertedDatum, sizeof(T), 1, file()) == sizeof(T);
     }
 };
 
