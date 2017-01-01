@@ -1,8 +1,7 @@
 #pragma once
 
 namespace ByteOrder {
-    class SystemOrder {
-    public:
+    struct SystemOrder {
         template <typename T>
         T operator () (T value) {
             return value;
