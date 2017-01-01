@@ -15,6 +15,12 @@ namespace FileMode {
     };
 };
 
+enum SeekMode {
+    FromStart = SEEK_SET,
+    FromCurrent = SEEK_CUR,
+    FromEnd = SEEK_END
+};
+
 template <typename Mode>
 class BinaryFileIO {
 public:
@@ -43,6 +49,9 @@ public:
 
     long tell() const {
         return std::ftell(const_cast<file_type*>(file()));
+    }
+    bool seek(size_t offset, enum SeekMode mode = SeekMode::FromStart) {
+        return std::fseek(file(), offset, mode) == 0;
     }
 
 protected:
