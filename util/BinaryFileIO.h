@@ -47,6 +47,10 @@ public:
     void open(const char* fileName);
     void close();
 
+    bool eof() const {
+        return std::feof(const_cast<file_type*>(file()));
+    }
+
     long tell() const {
         return std::ftell(const_cast<file_type*>(file()));
     }
