@@ -31,11 +31,8 @@ public:
                       "Requires unsigned integral type."
         );
         T datum;
-        size_t bytesRead = std::fread(&datum, sizeof(T), 1, file());
 
-        if (bytesRead < sizeof(T)) {
-            seek(-static_cast<long>(bytesRead), SeekMode::FromCurrent);
-
+        if (std::fread(&datum, sizeof(T), 1, file()) != 1) {
             return false;
         }
         Endianness converter;
