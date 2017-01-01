@@ -41,6 +41,10 @@ public:
     void open(const char* fileName);
     void close();
 
+    long tell() const {
+        return std::ftell(const_cast<file_type*>(file()));
+    }
+
 protected:
     using file_type = std::FILE;
 
