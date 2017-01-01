@@ -5,12 +5,12 @@
 namespace FileMode {
     struct Writer {
         static std::FILE* open(const char *fileName) {
-            return std::fopen(fileName, "w");
+            return std::fopen(fileName, "wb");
         }
     };
     struct Reader {
         static std::FILE* open(const char *fileName) {
-            return std::fopen(fileName, "r");
+            return std::fopen(fileName, "rb");
         }
     };
 };
