@@ -37,7 +37,7 @@ public:
         size_t bytesWritten = std::fwrite(&convertedDatum, sizeof(T), 1, file());
 
         if (bytesWritten < sizeof(T)) {
-            seek(-bytesWritten, SeekMode::FromCurrent);
+            seek(-static_cast<long>(bytesWritten), SeekMode::FromCurrent);
 
             return false;
         }

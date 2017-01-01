@@ -34,7 +34,7 @@ public:
         size_t bytesRead = std::fread(&datum, sizeof(T), 1, file());
 
         if (bytesRead < sizeof(T)) {
-            seek(-bytesRead, SeekMode::FromCurrent);
+            seek(-static_cast<long>(bytesRead), SeekMode::FromCurrent);
 
             return false;
         }
