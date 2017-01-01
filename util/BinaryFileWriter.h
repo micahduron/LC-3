@@ -34,7 +34,14 @@ public:
         Endianness converter;
         auto convertedDatum = converter(datum);
 
-        return std::fwrite(&convertedDatum, sizeof(T), 1, file()) == sizeof(T);
+        size_t bytesWritten = std::fwrite(&convertedDatum, sizeof(T), 1, file());
+
+        if (bytesWritten < sizeof(T)) {
+            seek(-bytesWritten, SeekMode::FromCurrent);
+
+            return false;
+        }
+        return true;
     }
 };
 
