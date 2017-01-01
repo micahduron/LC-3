@@ -32,7 +32,7 @@ public:
                       "Requires unsigned integral type."
         );
         Endianness converter;
-        auto convertedDatum = converter(datum);
+        T convertedDatum = converter(datum);
 
         size_t bytesWritten = std::fwrite(&convertedDatum, sizeof(T), 1, file());
 
