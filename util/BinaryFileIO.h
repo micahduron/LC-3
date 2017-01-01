@@ -42,14 +42,17 @@ public:
     void close();
 
 protected:
-    using file_type = std::FILE*;
+    using file_type = std::FILE;
 
-    file_type file() {
+    file_type* file() {
+        return m_fileHandle;
+    }
+    const file_type* file() const {
         return m_fileHandle;
     }
 
 private:
-    std::FILE* m_fileHandle = nullptr;
+    file_type* m_fileHandle = nullptr;
 };
 
 #include "BinaryFileIO.tpp"
