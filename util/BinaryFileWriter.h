@@ -16,18 +16,16 @@ public:
         static_assert(std::is_unsigned<T>::value == true,
                       "Requires unsigned integral type."
         );
-        size_t bytesWritten = 0;
+        size_t elemsWritten = 0;
 
-        while (numElems--) {
+        for (; elemsWritten < numElems; ++elemsWritten, ++data) {
             size_t elemBytesWritten = put(*data);
-            bytesWritten += elemBytesWritten;
 
             if (elemBytesWritten != sizeof(T)) {
                 break;
             }
-            ++data;
         }
-        return bytesWritten;
+        return elemsWritten;
     }
 
     template <typename T>
