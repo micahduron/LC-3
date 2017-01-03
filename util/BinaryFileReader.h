@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <type_traits>
 #include "BinaryFileIO.h"
-#include "ByteOrder.h"
+#include "EndiannessConverter.h"
 
 #pragma once
 
@@ -35,11 +35,10 @@ public:
         if (std::fread(&datum, sizeof(T), 1, file()) != 1) {
             return false;
         }
-        Endianness converter;
-        outputRef = converter(datum);
+        outputRef = Endianness::decode(datum);
 
         return true;
     }
 };
 
-using BinaryFileReader = OrderedBinaryFileReader<ByteOrder::SystemOrder>;
+using BinaryFileReader = OrderedBinaryFileReader<Util::Endianness::Converter::NullConverter>;

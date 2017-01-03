@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <type_traits>
 #include "BinaryFileIO.h"
-#include "ByteOrder.h"
+#include "EndiannessConverter.h"
 
 #pragma once
 
@@ -30,11 +30,10 @@ public:
         static_assert(std::is_unsigned<T>::value == true,
                       "Requires unsigned integral type."
         );
-        Endianness converter;
-        T convertedDatum = converter(datum);
+        T convertedDatum = Endianness::encode(datum);
 
         return std::fwrite(&convertedDatum, sizeof(T), 1, file()) == 1;
     }
 };
 
-using BinaryFileWriter = OrderedBinaryFileWriter<ByteOrder::SystemOrder>;
+using BinaryFileWriter = OrderedBinaryFileWriter<Util::Endianness::Converter::NullConverter>;
