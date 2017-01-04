@@ -59,7 +59,7 @@ namespace Util::Endianness::Converter {
         struct Internal::DifferentEndianness
     >::type;
 
-    using BigEndian = typename std::conditional<
+    using BigEndian = std::conditional<
       GetSystemEndianness() == Big,
         struct Internal::SameEndianness,
         struct Internal::DifferentEndianness
