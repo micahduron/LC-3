@@ -1,4 +1,5 @@
 #include <string>
+#include <cstddef>
 #include <algorithm>
 #include "StringView.h"
 #include "CharClass.h"
@@ -12,8 +13,11 @@ public:
       m_endPtr{ sourceStr.data() + sourceStr.size() }
     {}
 
+    std::ptrdiff_t remaining() const {
+        return m_endPtr - m_currPtr;
+    }
     bool finished() const {
-        return m_currPtr == m_endPtr;
+        return remaining() > 0;
     }
     explicit operator bool() const {
         return !finished();
