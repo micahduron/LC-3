@@ -12,6 +12,10 @@ public:
       m_currPtr{ sourceStr.data() },
       m_endPtr{ sourceStr.data() + sourceStr.size() }
     {}
+    StringTokenizer(const StringView& sourceStr) :
+      m_currPtr{ sourceStr.data() },
+      m_endPtr{ sourceStr.data() + sourceStr.size() }
+    {}
 
     std::ptrdiff_t remaining() const {
         return m_endPtr - m_currPtr;
