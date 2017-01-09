@@ -8,6 +8,10 @@
 
 class StringTokenizer {
 public:
+    StringTokenizer(const char* sourceStr, size_t strLen) :
+      m_currPtr{ sourceStr },
+      m_endPtr{ sourceStr + strLen }
+    {}
     StringTokenizer(const std::string& sourceStr) :
       m_currPtr{ sourceStr.data() },
       m_endPtr{ sourceStr.data() + sourceStr.size() }
