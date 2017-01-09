@@ -40,23 +40,11 @@ public:
     
     StringView nextToken(const CharClass& separatorsClass);
 
-    size_t skip(size_t numChars) {
-        size_t ptrDelta = std::min(numChars, static_cast<size_t>(m_endPtr - m_currPtr));
-
-        m_currPtr += ptrDelta;
-
-        return ptrDelta;
-    }
+    size_t skip(size_t numChars);
     size_t skipUntil(const CharClass& blackList);
     size_t skipUntilNot(const CharClass& whiteList);
 
-    StringView read(size_t numChars) {
-        const char* basePtr = m_currPtr;
-
-        size_t viewLen = skip(numChars);
-
-        return { basePtr, viewLen };
-    }
+    StringView read(size_t numChars);
     StringView readUntil(const CharClass& blackList);
     StringView readUntilNot(const CharClass& whiteList);
 
