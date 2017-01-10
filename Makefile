@@ -8,6 +8,7 @@ MODULES = \
   LC3Writer
 
 MODULE_SRCS = $(patsubst %, %.cpp, $(MODULES))
+MODULE_DEPS = $(patsubst %, %.d, $(MODULES))
 MODULE_OBJS = $(patsubst %, %.o, $(MODULES))
 MODULE_HEADERS = $(patsubst %, %.h, $(MODULES))
 
@@ -20,14 +21,7 @@ clean:
 	make -C tests clean
 	rm -f $(MODULE_OBJS)
 
-StringTokenizer.o:	StringTokenizer.cpp StringTokenizer.h CharClass.h StringView.h
-	$(GXX) -c $<
+%.o:	%.cpp
+	$(GXX) -MM -MF $(patsubst %.o,%.d, $@) -c $<
 
-LC3Writer.o:	LC3Writer.cpp LC3Writer.h util/BinaryWriter.h
-	$(GXX) -c $<
-
-%.o:	%.cpp %.h
-	$(GXX) -c $<
-
-%.h:	%.tpp
-	touch $@
+-include $(MODULE_DEPS)
