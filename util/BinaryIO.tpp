@@ -1,13 +1,13 @@
-#include "BinaryFileIO.h"
+#include "BinaryIO.h"
 
 template <typename Mode>
-void BinaryFileIO<Mode>::open(const char* fileName) {
+void BinaryIO<Mode>::open(const char* fileName) {
     close();
 
     m_fileHandle = Mode::open(fileName);
 }
 template <typename Mode>
-void BinaryFileIO<Mode>::close() {
+void BinaryIO<Mode>::close() {
     if (isOpen()) {
         std::fclose(m_fileHandle);
 
