@@ -10,7 +10,6 @@ MODULES = \
 MODULE_SRCS = $(patsubst %, %.cpp, $(MODULES))
 MODULE_DEPS = $(patsubst %, %.d, $(MODULES))
 MODULE_OBJS = $(patsubst %, %.o, $(MODULES))
-MODULE_HEADERS = $(patsubst %, %.h, $(MODULES))
 
 .PHONY: all test debug clean
 
