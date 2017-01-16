@@ -18,9 +18,10 @@ test:	$(MODULE_OBJS)
 
 clean:
 	make -C tests clean
-	rm -f $(MODULE_OBJS)
+	rm -f $(MODULE_OBJS) $(MODULE_DEPS)
 
 %.o:	%.cpp
-	$(GXX) -MM -MF $(patsubst %.o,%.d, $@) -c $<
+	$(GXX) -MM -MF $(patsubst %.o,%.d,$@) $<
+	$(GXX) -c $<
 
 -include $(MODULE_DEPS)
