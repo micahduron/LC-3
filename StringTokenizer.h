@@ -25,7 +25,7 @@ public:
         return m_endPtr - m_currPtr;
     }
     bool finished() const {
-        return remaining() > 0;
+        return remaining() <= 0;
     }
     explicit operator bool() const {
         return !finished();
