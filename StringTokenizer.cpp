@@ -1,9 +1,9 @@
 #include "StringTokenizer.h"
 
 StringView StringTokenizer::nextToken(const CharClass& separatorsClass) {
-    StringView token = readUntil(separatorsClass);
-
     skipUntilNot(separatorsClass);
+
+    StringView token = readUntil(separatorsClass);
 
     return token;
 }
