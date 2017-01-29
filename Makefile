@@ -5,7 +5,8 @@ MODULES = \
   StringTokenizer \
   CharClass \
   StringView \
-  LC3Writer
+  LC3Writer \
+  LC3Reader
 
 MODULE_SRCS = $(patsubst %, %.cpp, $(MODULES))
 MODULE_DEPS = $(patsubst %, %.d, $(MODULES))
