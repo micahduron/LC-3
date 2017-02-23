@@ -1,4 +1,4 @@
-GXXFLAGS = -std=c++17 -Wall -Werror
+GXXFLAGS = -std=c++17 -Wall -Wextra -Werror
 GXX = g++ $(GXXFLAGS)
 
 MODULES_DIR = ..
