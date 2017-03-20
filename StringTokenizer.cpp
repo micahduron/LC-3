@@ -8,7 +8,7 @@ StringView StringTokenizer::nextToken(const CharClass& separatorsClass) {
     return token;
 }
 size_t StringTokenizer::skip(size_t numChars) {
-    size_t ptrDelta = std::min(numChars, static_cast<size_t>(m_endPtr - m_currPtr));
+    size_t ptrDelta = std::min(numChars, static_cast<size_t>(remaining()));
 
     m_currPtr += ptrDelta;
 
