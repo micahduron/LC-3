@@ -5,10 +5,10 @@
 static int LexicographicOrder(char c1, char c2);
 
 int StringView::compare(const StringView& other, compare_func cmpFn) const {
-    auto numIters = std::min(size(), other.size());
+    size_t numIters = std::min(size(), other.size());
 
-    auto iterOne = begin();
-    auto iterTwo = other.begin();
+    iterator iterOne = begin();
+    iterator iterTwo = other.begin();
 
     while (numIters--) {
         int cmpResult = cmpFn(*iterOne++, *iterTwo++);
