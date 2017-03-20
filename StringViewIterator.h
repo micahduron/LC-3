@@ -58,7 +58,7 @@ public:
     StringViewIterator operator + (difference_type delta) const {
         return { m_currPtr + delta, m_endPtr };
     }
-    
+
     StringViewIterator operator - (difference_type delta) const {
         return { m_currPtr - delta, m_endPtr };
     }
