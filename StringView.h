@@ -2,12 +2,13 @@
 #include <string>
 #include <utility>
 #include <functional>
+#include "StringViewIterator.h"
 
 #pragma once
 
 class StringView {
 public:
-    class iterator;
+    using iterator = StringViewIterator;
 
     using compare_func = std::function<int(char, char)>;
 
@@ -54,10 +55,12 @@ public:
     }
 
     iterator begin() const {
-        return iterator{ m_strPtr };
+        return { m_strPtr, m_strPtr + m_length };
     }
     iterator end() const {
-        return iterator{ m_strPtr + m_length };
+        auto endPtr = m_strPtr + m_length;
+
+        return { endPtr, endPtr };
     }
 
     iterator cbegin() const {
@@ -66,37 +69,6 @@ public:
     iterator cend() const {
         return end();
     }
-
-    class iterator :
-      public std::iterator<std::input_iterator_tag, const char>
-    {
-    public:
-        iterator(pointer basePtr) :
-          m_ptr{ basePtr }
-        {}
-
-        iterator operator ++ (int) {
-            iterator ret{ *this };
-
-            return ++ret;
-        }
-        iterator& operator ++ () {
-            ++m_ptr;
-
-            return *this;
-        }
-        bool operator == (iterator other) const {
-            return m_ptr == other.m_ptr;
-        }
-        bool operator != (iterator other) const {
-            return !(*this == other);
-        }
-        reference operator * () const {
-            return *m_ptr;
-        }
-    private:
-        pointer m_ptr;
-    };
 
 private:
     const char* m_strPtr;
