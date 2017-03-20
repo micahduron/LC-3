@@ -41,6 +41,10 @@ public:
     int compare(const std::string& other, compare_func cmpFn) const;
     int compare(const char* other, compare_func cmpFn) const;
 
+    int compare(const StringView& other) const;
+    int compare(const std::string& other) const;
+    int compare(const char* other) const;
+
     bool operator == (const StringView& other) const;
     bool operator == (const std::string& other) const;
     bool operator == (const char* other) const;
@@ -74,8 +78,6 @@ private:
     const char* m_strPtr;
     size_t m_length;
 
-    static int compareHelper(const char* str1, size_t str1Size, const char* str2,
-                             size_t str2Size, compare_func cmpFn);
     friend std::ostream& operator << (std::ostream&, const StringView&);
 };
 
