@@ -18,8 +18,14 @@ public:
     StringViewIterator& operator = (StringViewIterator&& other) = default;
 
     // Pointer dereference operator
-    value_type operator * () const {
-        return m_currPtr != m_endPtr ? *m_currPtr : '\0';
+    reference operator * () const {
+        // Because this method returns a reference, I cannot simply return '\0'.
+        // Rather, I have to statically allocate an empty string and return its
+        // null-terminator.
+        static const char emptyString[] = "";
+        const char& nullChar = emptyString[0];
+
+        return m_currPtr != m_endPtr ? *m_currPtr : nullChar;
     }
 
     // Increment/decrement operators
