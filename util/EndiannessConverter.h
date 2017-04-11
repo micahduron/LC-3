@@ -72,4 +72,14 @@ namespace Util {
         Internals::DifferentEndianness
       >::type
     {};
+
+    template <>
+    class EndiannessConverter<SameEndianness> :
+      public Internals::SameEndianness
+    {};
+
+    template <>
+    class EndiannessConverter<OppositeEndianness> :
+      public Internals::DifferentEndianness
+    {};
 }
