@@ -48,6 +48,22 @@ bool StringView::operator == (const char* other) const {
     return compare(other) == 0;
 }
 
+StringView::iterator StringView::begin() const {
+    return { m_strPtr, m_strPtr + m_length };
+}
+StringView::iterator StringView::end() const {
+    auto endPtr = m_strPtr + m_length;
+
+    return { endPtr, endPtr };
+}
+
+StringView::iterator StringView::cbegin() const {
+    return begin();
+}
+StringView::iterator StringView::cend() const {
+    return end();
+}
+
 std::ostream& operator << (std::ostream& outStream, const StringView& strView) {
     outStream.write(strView.m_strPtr, strView.size());
 
