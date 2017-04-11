@@ -3,8 +3,8 @@
 
 #pragma once
 
-namespace Util::Endianness::Converter {
-    namespace Internal {
+namespace Util {
+    namespace Internals {
         template <typename T>
         T SwitchEndianness(T value) {
             static_assert(std::is_unsigned<T>::value == true,
@@ -51,21 +51,25 @@ namespace Util::Endianness::Converter {
             }
         };
     }
-    using NullConverter = Internal::SameEndianness;
 
-    using LittleEndian = std::conditional<
-      GetSystemEndianness() == Little,
-        struct Internal::SameEndianness,
-        struct Internal::DifferentEndianness
-    >::type;
+    template <int Endianness>
+    class EndiannessConverter {};
 
-    using BigEndian = std::conditional<
-      GetSystemEndianness() == Big,
-        struct Internal::SameEndianness,
-        struct Internal::DifferentEndianness
-    >::type;
+    template <>
+    class EndiannessConverter<LittleEndian> :
+      public std::conditional<
+        GetSystemEndianness() == LittleEndian,
+        Internals::SameEndianness,
+        Internals::DifferentEndianness
+      >::type
+    {};
 
-    static_assert(std::is_same<LittleEndian, BigEndian>::value == false,
-                  "LittleEndian is not supposed to be the same type as BigEndian."
-    );
+    template <>
+    class EndiannessConverter<BigEndian> :
+      public std::conditional<
+        GetSystemEndianness() == BigEndian,
+        Internals::SameEndianness,
+        Internals::DifferentEndianness
+      >::type
+    {};
 }

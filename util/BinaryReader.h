@@ -2,7 +2,6 @@
 #include <type_traits>
 #include "BinaryIO.h"
 #include "FileMode.h"
-#include "EndiannessConverter.h"
 
 #pragma once
 
