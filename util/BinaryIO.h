@@ -15,7 +15,7 @@ namespace Util::FileIO {
         BinaryIO() {}
         BinaryIO(const BinaryIO& other) = delete;
         BinaryIO(const char* fileName) :
-          m_fileHandle{ Mode::open(fileName) }
+          m_fileHandle{ std::fopen(fileName, Mode::mode) }
         {}
 
         ~BinaryIO() {

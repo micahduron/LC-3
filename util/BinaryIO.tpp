@@ -4,7 +4,7 @@ template <typename Mode>
 void BinaryIO<Mode>::open(const char* fileName) {
     close();
 
-    m_fileHandle = Mode::open(fileName);
+    m_fileHandle = std::fopen(fileName, Mode::mode);
 }
 template <typename Mode>
 void BinaryIO<Mode>::close() {
