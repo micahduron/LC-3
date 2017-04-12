@@ -58,7 +58,7 @@ namespace Util {
     template <>
     class EndiannessConverter<LittleEndian> :
       public std::conditional<
-        GetSystemEndianness() == LittleEndian,
+        SystemEndianness == LittleEndian,
         Internals::SameEndianness,
         Internals::DifferentEndianness
       >::type
@@ -67,7 +67,7 @@ namespace Util {
     template <>
     class EndiannessConverter<BigEndian> :
       public std::conditional<
-        GetSystemEndianness() == BigEndian,
+        SystemEndianness == BigEndian,
         Internals::SameEndianness,
         Internals::DifferentEndianness
       >::type

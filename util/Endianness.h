@@ -8,7 +8,10 @@ namespace Util {
         OppositeEndianness
     };
 
-    constexpr int GetSystemEndianness() {
-        return LittleEndian;
+    namespace Internals {
+        constexpr int GetSystemEndianness() {
+            return LittleEndian;
+        }
     }
+    constexpr int SystemEndianness = Internals::GetSystemEndianness();
 }
