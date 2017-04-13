@@ -1,4 +1,5 @@
 #include <cstdio>
+#include "FileMode.h"
 
 #pragma once
 
@@ -11,11 +12,13 @@ namespace Util::FileIO {
 
     template <typename Mode>
     class BinaryIO {
+        static_assert(FileModeTraits<Mode>::IsBinary);
+
     public:
         BinaryIO() {}
         BinaryIO(const BinaryIO& other) = delete;
         BinaryIO(const char* fileName) :
-          m_fileHandle{ std::fopen(fileName, Mode::mode) }
+          m_fileHandle{ BinaryIO::openFile(fileName) }
         {}
 
         ~BinaryIO() {
@@ -58,6 +61,10 @@ namespace Util::FileIO {
 
     private:
         file_type* m_fileHandle = nullptr;
+
+        static file_type* openFile(const char* fileName) {
+            return std::fopen(fileName, FileModeTraits<Mode>::ModeString);
+        }
     };
 
 #include "BinaryIO.tpp"

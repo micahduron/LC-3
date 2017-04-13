@@ -8,7 +8,7 @@
 
 namespace Util::FileIO {
     template <typename Endianness>
-    class BinaryWriter : public BinaryIO<FileMode::Writer> {
+    class BinaryWriter : public BinaryIO<FileMode::BinaryWrite> {
     public:
         using BinaryIO::BinaryIO;
 

@@ -7,7 +7,7 @@
 
 namespace Util::FileIO {
     template <typename Endianness>
-    class BinaryReader : public BinaryIO<FileMode::Reader> {
+    class BinaryReader : public BinaryIO<FileMode::BinaryRead> {
     public:
         using BinaryIO::BinaryIO;
 
