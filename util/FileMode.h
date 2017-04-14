@@ -15,7 +15,7 @@ namespace Util {
         };
 
         template <typename Mode>
-        class FileModeTraits_Helper {
+        struct FileModeTraits_Helper {
             static constexpr bool IsBinary = Mode::ModeValue & FileModeEnum::Binary;
         };
     }
@@ -23,16 +23,16 @@ namespace Util {
     namespace FileMode {
         using namespace Internals;
 
-        class Read {
+        struct Read {
             static constexpr int ModeValue = FileModeEnum::Read;
         };
-        class Write {
+        struct Write {
             static constexpr int ModeValue = FileModeEnum::Write;
         };
-        class BinaryRead {
+        struct BinaryRead {
             static constexpr int ModeValue = FileModeEnum::BinaryRead;
         };
-        class BinaryWrite {
+        struct BinaryWrite {
             static constexpr int ModeValue = FileModeEnum::BinaryWrite;
         };
     }
