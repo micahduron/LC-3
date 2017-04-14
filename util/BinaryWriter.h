@@ -6,7 +6,7 @@
 
 #pragma once
 
-namespace Util::FileIO {
+namespace Util {
     template <typename Endianness>
     class BinaryWriter : public BinaryIO<FileMode::BinaryWrite> {
     public:

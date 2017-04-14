@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace Util::FileIO {
+namespace Util {
     enum SeekMode {
         FromStart = SEEK_SET,
         FromCurrent = SEEK_CUR,

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Util::FileIO {
+namespace Util {
     namespace Internals {
         enum FileModeEnum : int {
             // Basic file modes

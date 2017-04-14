@@ -5,7 +5,7 @@
 #pragma once
 
 class LC3Writer :
-  private Util::FileIO::BinaryWriter<Util::EndiannessConverter<Util::BigEndian>>
+  private Util::BinaryWriter<Util::EndiannessConverter<Util::BigEndian>>
 {
 public:
     using word_type = LC3::Word;

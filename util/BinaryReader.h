@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace Util::FileIO {
+namespace Util {
     template <typename Endianness>
     class BinaryReader : public BinaryIO<FileMode::BinaryRead> {
     public:
