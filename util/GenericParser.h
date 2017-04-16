@@ -117,6 +117,9 @@ namespace Util {
         template <typename Elem>
         class Maybe : public Multiple<Elem, 0, 1> {};
 
+        template <typename Elem, int NumInstances>
+        class Exactly : public Multiple<Elem, NumInstances, NumInstances> {};
+
     private:
         template <typename Elem>
         static bool AttemptParse(Context& context) {
