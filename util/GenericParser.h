@@ -1,5 +1,6 @@
 #include <type_traits>
 #include <utility>
+#include "ParserElementTraits.h"
 
 #pragma once
 
@@ -9,24 +10,13 @@ namespace Util {
     public:
         class ParserElement {
         public:
-            using context = Context;
+            using ContextType = Context;
+            using ParentType = GenericParser;
 
             /** Required function definitions: **/
             // static bool parse(Context& context);
         };
 
-    private:
-        template <typename Elem>
-        class IsValidElement :
-          public std::conditional<
-            std::is_base_of<ParserElement, Elem>::value &&
-              std::is_same<decltype(Elem::parse(std::declval<Context&>())), bool>::value,
-            std::true_type,
-            std::false_type
-          >::type
-        {};
-
-    public:
         class SavepointGuard {
         public:
             SavepointGuard(const SavepointGuard& other) = delete;
@@ -62,9 +52,14 @@ namespace Util {
             bool m_status;
         };
 
+        template <typename Elem>
+        static constexpr bool isValidElement() {
+            return ParserElementTraits<Elem>::template IsCompatible<Context> == true;
+        }
+
         template <typename... Elems>
         class Any : public ParserElement {
-            static_assert( (IsValidElement<Elems>::value && ...) );
+            static_assert( (GenericParser::template isValidElement<Elems>() && ...) );
 
         public:
             static bool parse(Context& context) {
@@ -74,7 +69,7 @@ namespace Util {
 
         template <typename... Elems>
         class All : public ParserElement {
-            static_assert( (IsValidElement<Elems>::value && ...) );
+            static_assert( (GenericParser::template isValidElement<Elems>() && ...) );
 
         public:
             static bool parse(Context& context) {
@@ -89,7 +84,7 @@ namespace Util {
 
         template <typename Elem, int LowerBound = 0, int UpperBound = -1>
         class Multiple : public ParserElement {
-            static_assert(IsValidElement<Elem>::value);
+            static_assert(GenericParser::template isValidElement<Elem>());
 
             static_assert(LowerBound >= 0);
             static_assert(UpperBound <= 0 || LowerBound <= UpperBound);
