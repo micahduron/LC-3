@@ -1,5 +1,7 @@
-GXXFLAGS = -std=c++17 -Wall -Wextra -Werror
-GXX = g++ $(GXXFLAGS)
+CXXFLAGS ?= -std=c++17 -Wall -Wextra -Werror
+CXX ?= g++
+
+COMPILE := $(CXX) $(CXXFLAGS) $(CXXFLAGS_EXTRA)
 
 MODULES_DIR = ..
 
@@ -18,10 +20,10 @@ clean:
 	rm -f $(TEST_OBJS) $(TEST_EXECS) $(TEST_DEPS)
 
 $(TEST_EXECS): %:	%.o $(MODULE_OBJS)
-	$(GXX) -o $@ $^
+	$(COMPILE) -o $@ $^
 
 -include $(TEST_DEPS)
 
 %.o:	%.cpp
-	$(GXX) -MM -MF $(patsubst %.o,%.d,$@) $<
-	$(GXX) -c $<
+	$(COMPILE) -MM -MF $(patsubst %.o,%.d,$@) $<
+	$(COMPILE) -c $<
