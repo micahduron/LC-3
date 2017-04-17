@@ -14,6 +14,6 @@ namespace Util {
           bool
         >::value;
 
-        static constexpr bool IsValid = IsCompatible<Parent>;
+        static_assert(IsCompatible<Parent> == true);
     };
 }
