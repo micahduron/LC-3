@@ -40,7 +40,7 @@ namespace Util {
 
             ~SavepointGuard() {
                 if (!m_status) {
-                    m_context.restore(m_savepoint);
+                    m_context.restore(std::move(m_savepoint));
                 }
             }
 
