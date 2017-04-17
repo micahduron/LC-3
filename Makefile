@@ -1,5 +1,7 @@
-GXXFLAGS = -std=c++17 -Wall -Wextra -Werror
-GXX = g++ $(GXXFLAGS)
+CXXFLAGS ?= -std=c++17 -Wall -Wextra -Werror
+CXX ?= g++
+
+COMPILE := $(CXX) $(CXXFLAGS) $(CXXFLAGS_EXTRA)
 
 MODULES = \
   StringTokenizer \
@@ -22,7 +24,7 @@ clean:
 	rm -f $(MODULE_OBJS) $(MODULE_DEPS)
 
 %.o:	%.cpp
-	$(GXX) -MM -MF $(patsubst %.o,%.d,$@) $<
-	$(GXX) -c $<
+	$(COMPILE) -MM -MF $(patsubst %.o,%.d,$@) $<
+	$(COMPILE) -c $<
 
 -include $(MODULE_DEPS)
