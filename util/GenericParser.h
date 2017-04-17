@@ -53,13 +53,13 @@ namespace Util {
         };
 
         template <typename Elem>
-        static constexpr bool isValidElement() {
+        static constexpr bool IsValidElement() {
             return ParserElementTraits<Elem>::template IsCompatible<Context> == true;
         }
 
         template <typename... Elems>
         class Any : public ParserElement {
-            static_assert( (GenericParser::template isValidElement<Elems>() && ...) );
+            static_assert( (GenericParser::template IsValidElement<Elems>() && ...) );
 
         public:
             static bool parse(Context& context) {
@@ -69,7 +69,7 @@ namespace Util {
 
         template <typename... Elems>
         class All : public ParserElement {
-            static_assert( (GenericParser::template isValidElement<Elems>() && ...) );
+            static_assert( (GenericParser::template IsValidElement<Elems>() && ...) );
 
         public:
             static bool parse(Context& context) {
@@ -84,7 +84,7 @@ namespace Util {
 
         template <typename Elem, int LowerBound = 0, int UpperBound = -1>
         class Multiple : public ParserElement {
-            static_assert(GenericParser::template isValidElement<Elem>());
+            static_assert(GenericParser::template IsValidElement<Elem>());
 
             static_assert(LowerBound >= 0);
             static_assert(UpperBound <= 0 || LowerBound <= UpperBound);
