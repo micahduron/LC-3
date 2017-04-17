@@ -3,8 +3,6 @@
 
 #pragma once
 
-#define TemplateString(ClassName, StringVal) struct ClassName { static constexpr auto value = StringVal; }
-
 namespace Util {
     template <typename Context>
     class GenericParser {
