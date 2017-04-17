@@ -48,7 +48,7 @@ namespace Util {
 
         private:
             Context& m_context;
-            typename Context::savepoint m_savepoint;
+            typename Context::Savepoint m_savepoint;
             bool m_status;
         };
 
