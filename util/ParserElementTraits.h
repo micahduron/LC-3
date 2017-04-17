@@ -8,12 +8,12 @@ namespace Util {
         using Context = typename Elem::ContextType;
         using Parent = typename Elem::ParentType;
 
-        template <typename TargetContext>
+        template <typename TargetParser>
         static constexpr bool IsCompatible = std::is_same<
-          decltype(Elem::parse(std::declval<TargetContext&>())),
+          decltype(Elem::parse(std::declval<typename TargetParser::ContextType&>())),
           bool
         >::value;
 
-        static constexpr bool IsValid = IsCompatible<Context>;
+        static constexpr bool IsValid = IsCompatible<Parent>;
     };
 }

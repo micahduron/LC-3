@@ -8,6 +8,8 @@ namespace Util {
     template <typename Context>
     class GenericParser {
     public:
+        using ContextType = Context;
+
         class ParserElement {
         public:
             using ContextType = Context;
@@ -54,7 +56,7 @@ namespace Util {
 
         template <typename Elem>
         static constexpr bool IsValidElement() {
-            return ParserElementTraits<Elem>::template IsCompatible<Context> == true;
+            return ParserElementTraits<Elem>::template IsCompatible<GenericParser>;
         }
 
         template <typename... Elems>
