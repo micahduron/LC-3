@@ -32,7 +32,7 @@ namespace Util {
             static_assert(std::is_unsigned<T>::value == true,
                           "Requires unsigned integral type."
             );
-            T convertedDatum = Endianness::encode(datum);
+            T convertedDatum = Endianness::Encode(datum);
 
             return std::fwrite(&convertedDatum, sizeof(T), 1, file()) == 1;
         }

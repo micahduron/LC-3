@@ -36,7 +36,7 @@ namespace Util {
             if (std::fread(&datum, sizeof(T), 1, file()) != 1) {
                 return false;
             }
-            outputRef = Endianness::decode(datum);
+            outputRef = Endianness::Decode(datum);
 
             return true;
         }

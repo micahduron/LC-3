@@ -31,22 +31,22 @@ namespace Util {
 
         struct SameEndianness {
             template <typename T>
-            static T encode(T value) {
+            static T Encode(T value) {
                 return KeepEndianness(value);
             }
             template <typename T>
-            static T decode(T value) {
+            static T Decode(T value) {
                 return KeepEndianness(value);
             }
         };
 
         struct DifferentEndianness {
             template <typename T>
-            static T encode(T value) {
+            static T Encode(T value) {
                 return SwitchEndianness(value);
             }
             template <typename T>
-            static T decode(T value) {
+            static T Decode(T value) {
                 return SwitchEndianness(value);
             }
         };
