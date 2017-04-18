@@ -18,7 +18,7 @@ namespace Util {
         BinaryIO() {}
         BinaryIO(const BinaryIO& other) = delete;
         BinaryIO(const char* fileName) :
-          m_fileHandle{ BinaryIO::openFile(fileName) }
+          m_fileHandle{ BinaryIO::OpenFile(fileName) }
         {}
 
         ~BinaryIO() {
@@ -62,7 +62,7 @@ namespace Util {
     private:
         file_type* m_fileHandle = nullptr;
 
-        static file_type* openFile(const char* fileName) {
+        static file_type* OpenFile(const char* fileName) {
             return std::fopen(fileName, FileModeTraits<Mode>::ModeString);
         }
     };
