@@ -11,6 +11,3 @@
 !*.cpp
 !*.tpp
 !*.h
-
-!/tests/*.cpp
-!/tests/*.h
