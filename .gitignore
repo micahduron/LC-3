@@ -6,7 +6,8 @@
 !/util/
 /util/*
 
-!Makefile
+!/configure.ac
+!Makefile.am
 
 !*.cpp
 !*.tpp
