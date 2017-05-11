@@ -1,7 +1,10 @@
 #include <iostream>
 #include <cstring>
-#include "../CharClass.h"
-#include "../StringTokenizer.h"
+#include "../util/CharClass.h"
+#include "../util/StringTokenizer.h"
+
+using Util::CharClass;
+using Util::StringTokenizer;
 
 int main() {
     CharClass isSpace{ [](char c) { return isspace(c); } };

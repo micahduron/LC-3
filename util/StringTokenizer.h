@@ -6,6 +6,8 @@
 
 #pragma once
 
+namespace Util {
+
 class StringTokenizer {
 public:
     StringTokenizer(const char* sourceStr, size_t strLen) :
@@ -16,7 +18,7 @@ public:
       m_currPtr{ sourceStr.data() },
       m_endPtr{ sourceStr.data() + sourceStr.size() }
     {}
-    StringTokenizer(const StringView& sourceStr) :
+    StringTokenizer(const Util::StringView& sourceStr) :
       m_currPtr{ sourceStr.data() },
       m_endPtr{ sourceStr.data() + sourceStr.size() }
     {}
@@ -38,17 +40,19 @@ public:
         return *++m_currPtr;
     }
     
-    StringView nextToken(const CharClass& separatorsClass);
+    Util::StringView nextToken(const Util::CharClass& separatorsClass);
 
     size_t skip(size_t numChars);
-    size_t skipUntil(const CharClass& blackList);
-    size_t skipUntilNot(const CharClass& whiteList);
+    size_t skipUntil(const Util::CharClass& blackList);
+    size_t skipUntilNot(const Util::CharClass& whiteList);
 
-    StringView read(size_t numChars);
-    StringView readUntil(const CharClass& blackList);
-    StringView readUntilNot(const CharClass& whiteList);
+    Util::StringView read(size_t numChars);
+    Util::StringView readUntil(const Util::CharClass& blackList);
+    Util::StringView readUntilNot(const Util::CharClass& whiteList);
 
 private:
     const char* m_currPtr;
     const char* m_endPtr;
 };
+
+}

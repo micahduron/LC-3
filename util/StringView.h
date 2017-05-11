@@ -5,6 +5,8 @@
 
 #pragma once
 
+namespace Util {
+
 class StringView {
 public:
     class iterator;
@@ -176,3 +178,5 @@ private:
 };
 
 std::ostream& operator << (std::ostream& outStream, const StringView& strView);
+
+}

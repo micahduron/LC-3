@@ -2,6 +2,8 @@
 #include <utility>
 #include "StringView.h"
 
+namespace Util {
+
 static int LexicographicOrder(char c1, char c2);
 
 int StringView::compare(const StringView& other, compare_func cmpFn) const {
@@ -72,4 +74,6 @@ std::ostream& operator << (std::ostream& outStream, const StringView& strView) {
 
 int LexicographicOrder(char c1, char c2) {
     return c1 - c2;
+}
+
 }

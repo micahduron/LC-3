@@ -1,5 +1,7 @@
 #include "StringTokenizer.h"
 
+namespace Util {
+
 StringView StringTokenizer::nextToken(const CharClass& separatorsClass) {
     skipUntilNot(separatorsClass);
 
@@ -52,4 +54,6 @@ StringView StringTokenizer::readUntilNot(const CharClass& whiteList) {
     size_t numChars = skipUntilNot(whiteList);
 
     return { startPtr, numChars };
+}
+
 }

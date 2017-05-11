@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
 
-#include "../StringView.h"
+#include "../util/StringView.h"
+
+using Util::StringView;
 
 int main() {
     std::string text = "Hello world!";

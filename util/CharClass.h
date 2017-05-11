@@ -2,6 +2,8 @@
 
 #pragma once
 
+namespace Util {
+
 class CharClass {
 public:
     CharClass(const CharClass& other) = default;
@@ -30,3 +32,5 @@ private:
 CharClass operator ~ (const CharClass& charClass);
 CharClass operator & (const CharClass& classOne, const CharClass& classTwo);
 CharClass operator | (const CharClass& classOne, const CharClass& classTwo);
+
+}
