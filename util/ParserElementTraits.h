@@ -1,6 +1,5 @@
 #include <type_traits>
 #include <utility>
-#include <void_t>
 
 #pragma once
 
