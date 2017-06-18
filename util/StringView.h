@@ -19,8 +19,8 @@ public:
       m_strPtr{ str },
       m_length{ length }
     {}
-    StringView(const std::string& str, size_t length) :
-      StringView{ str.data(), length }
+    StringView(const std::string& str, size_t offset, size_t length) :
+      StringView{ str.data() + offset, length }
     {}
 
     StringView& operator = (const StringView& other) = default;
