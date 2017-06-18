@@ -116,6 +116,12 @@ namespace Util {
         template <typename Elem, int NumInstances>
         class Exactly : public Multiple<Elem, NumInstances, NumInstances> {};
 
+        template <typename... Elems>
+        class Many : public Multiple<All<Elems...>, 0, -1> {};
+
+        template <typename Elem>
+        class Many<Elem> : public Multiple<Elem, 0, -1> {};
+
     private:
         template <typename Elem>
         static bool AttemptParse(Context& context) {
