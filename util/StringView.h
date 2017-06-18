@@ -109,7 +109,7 @@ public:
         return *this;
     }
     iterator operator ++ (int) {
-        return { ++m_currPtr, m_endPtr };
+        return { m_currPtr++, m_endPtr };
     }
 
     iterator& operator -- () {
