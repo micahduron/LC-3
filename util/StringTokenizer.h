@@ -10,6 +10,7 @@ namespace Util {
 
 class StringTokenizer {
 public:
+    StringTokenizer(const StringTokenizer& other) = default;
     StringTokenizer(const char* sourceStr, size_t strLen) :
       m_currPtr{ sourceStr },
       m_endPtr{ sourceStr + strLen }
@@ -22,6 +23,8 @@ public:
       m_currPtr{ sourceStr.data() },
       m_endPtr{ sourceStr.data() + sourceStr.size() }
     {}
+
+    StringTokenizer& operator = (const StringTokenizer& other) = default;
 
     std::ptrdiff_t remaining() const {
         return m_endPtr - m_currPtr;
