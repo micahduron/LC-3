@@ -95,10 +95,11 @@ namespace Util {
             static bool parse(Context& context) {
                 int instanceCount = CountInstances<Elem>(context);
 
-                return instanceCount >= LowerBound ||
-                  (UpperBound >= 0) ?
+                return instanceCount >= LowerBound &&
+                  ((UpperBound >= 0) ?
                     instanceCount <= UpperBound :
-                    false;
+                    true
+                  );
             }
         };
 
