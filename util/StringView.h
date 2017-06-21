@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <utility>
 #include <functional>
 
@@ -19,8 +20,14 @@ public:
       m_strPtr{ str },
       m_length{ length }
     {}
+    StringView(const char* str) :
+      StringView{ str, std::strlen(str) }
+    {}
     StringView(const std::string& str, size_t offset, size_t length) :
       StringView{ str.data() + offset, length }
+    {}
+    StringView(const std::string& str) :
+      StringView{ str.data(), str.size() }
     {}
 
     StringView& operator = (const StringView& other) = default;
