@@ -38,7 +38,7 @@ public:
     StringView& operator = (StringView&& other) = default;
 
     const char&  operator [] (size_t index) const {
-        return m_strPtr[index];
+        return *(data() + index);
     }
 
     size_t size() const {
@@ -70,7 +70,7 @@ public:
         assert(baseOffset <= size());
         assert(length <= (size() - baseOffset));
 
-        return { m_strPtr + baseOffset, length };
+        return { data() + baseOffset, length };
     }
 
     iterator begin() const;
