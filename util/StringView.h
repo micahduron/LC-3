@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <cassert>
 #include <utility>
 #include <functional>
 
@@ -25,7 +26,10 @@ public:
     {}
     StringView(const std::string& str, size_t offset, size_t length) :
       StringView{ str.data() + offset, length }
-    {}
+    {
+        assert(offset <= str.size());
+        assert(length <= (str.size() - offset));
+    }
     StringView(const std::string& str) :
       StringView{ str.data(), str.size() }
     {}
@@ -63,6 +67,9 @@ public:
     }
 
     StringView subString(size_t baseOffset, size_t length) {
+        assert(baseOffset <= size());
+        assert(length <= (size() - baseOffset));
+
         return { m_strPtr + baseOffset, length };
     }
 
