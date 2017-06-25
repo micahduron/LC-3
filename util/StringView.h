@@ -75,8 +75,6 @@ public:
 private:
     const char* m_strPtr;
     size_t m_length;
-
-    friend std::ostream& operator << (std::ostream&, const StringView&);
 };
 
 class StringView::iterator {

@@ -47,7 +47,7 @@ StringView::iterator StringView::cend() const {
 }
 
 std::ostream& operator << (std::ostream& outStream, const StringView& strView) {
-    outStream.write(strView.m_strPtr, strView.size());
+    outStream.write(strView.data(), strView.size());
 
     return outStream;
 }
