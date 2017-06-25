@@ -49,20 +49,13 @@ public:
         return m_strPtr;
     }
 
-    int compare(const StringView& other, compare_func cmpFn) const;
-    int compare(const std::string& other, compare_func cmpFn) const;
-    int compare(const char* other, compare_func cmpFn) const;
+    int compare(StringView other, compare_func cmpFn) const;
 
-    int compare(const StringView& other) const;
-    int compare(const std::string& other) const;
-    int compare(const char* other) const;
+    int compare(StringView other) const;
 
-    bool operator == (const StringView& other) const;
-    bool operator == (const std::string& other) const;
-    bool operator == (const char* other) const;
+    bool operator == (StringView other) const;
 
-    template <typename T>
-    bool operator != (const T& other) const {
+    bool operator != (StringView other) const {
         return !(*this == other);
     }
 

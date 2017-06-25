@@ -6,7 +6,7 @@ namespace Util {
 
 static int LexicographicOrder(char c1, char c2);
 
-int StringView::compare(const StringView& other, compare_func cmpFn) const {
+int StringView::compare(StringView other, compare_func cmpFn) const {
     size_t numIters = std::min(size(), other.size());
 
     iterator iterOne = begin();
@@ -21,32 +21,12 @@ int StringView::compare(const StringView& other, compare_func cmpFn) const {
     }
     return cmpFn(*iterOne, *iterTwo);
 }
-int StringView::compare(const std::string& other, compare_func cmpFn) const {
-    return compare(StringView(other, other.size()), cmpFn);
-}
-int StringView::compare(const char* other, compare_func cmpFn) const {
-    auto strSize = std::strlen(other);
 
-    return compare(StringView(other, strSize), cmpFn);
-}
-
-int StringView::compare(const StringView& other) const {
-    return compare(other, LexicographicOrder);
-}
-int StringView::compare(const std::string& other) const {
-    return compare(other, LexicographicOrder);
-}
-int StringView::compare(const char* other) const {
+int StringView::compare(StringView other) const {
     return compare(other, LexicographicOrder);
 }
 
-bool StringView::operator == (const StringView& other) const {
-    return compare(other) == 0;
-}
-bool StringView::operator == (const std::string& other) const {
-    return compare(other) == 0;
-}
-bool StringView::operator == (const char* other) const {
+bool StringView::operator == (StringView other) const {
     return compare(other) == 0;
 }
 
