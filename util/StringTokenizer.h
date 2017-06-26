@@ -11,23 +11,15 @@ namespace Util {
 class StringTokenizer {
 public:
     StringTokenizer(const StringTokenizer& other) = default;
-    StringTokenizer(const char* sourceStr, size_t strLen) :
-      m_currPtr{ sourceStr },
-      m_endPtr{ sourceStr + strLen }
-    {}
-    StringTokenizer(const std::string& sourceStr) :
-      m_currPtr{ sourceStr.data() },
-      m_endPtr{ sourceStr.data() + sourceStr.size() }
-    {}
-    StringTokenizer(const Util::StringView& sourceStr) :
-      m_currPtr{ sourceStr.data() },
-      m_endPtr{ sourceStr.data() + sourceStr.size() }
+    StringTokenizer(StringView source) :
+      m_currIter{ source.begin() },
+      m_endIter{ source.end() }
     {}
 
     StringTokenizer& operator = (const StringTokenizer& other) = default;
 
     std::ptrdiff_t remaining() const {
-        return m_endPtr - m_currPtr;
+        return m_endIter - m_currIter;
     }
     bool finished() const {
         return remaining() <= 0;
@@ -37,10 +29,10 @@ public:
     }
 
     char peek() const {
-        return *m_currPtr;
+        return *m_currIter;
     }
     char advance() {
-        return *++m_currPtr;
+        return *++m_currIter;
     }
     
     Util::StringView nextToken(const Util::CharClass& separatorsClass);
@@ -54,8 +46,8 @@ public:
     Util::StringView readUntilNot(const Util::CharClass& whiteList);
 
 private:
-    const char* m_currPtr;
-    const char* m_endPtr;
+    StringView::iterator m_currIter;
+    StringView::iterator m_endIter;
 };
 
 }
