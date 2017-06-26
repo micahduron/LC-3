@@ -1,10 +1,17 @@
 #include <cstring>
+#include <cassert>
 #include <utility>
 #include "StringView.h"
 
 namespace Util {
 
 static int LexicographicOrder(char c1, char c2);
+
+StringView::StringView(iterator startIter, iterator endIter) :
+  StringView(startIter.m_currPtr, endIter - startIter)
+{
+    assert(startIter <= endIter);
+}
 
 int StringView::compare(StringView other, compare_func cmpFn) const {
     size_t numIters = std::min(size(), other.size());

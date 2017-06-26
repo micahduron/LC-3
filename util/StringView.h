@@ -33,6 +33,7 @@ public:
     StringView(const std::string& str) :
       StringView{ str.data(), str.size() }
     {}
+    StringView(iterator startIter, iterator endIter);
 
     StringView& operator = (const StringView& other) = default;
     StringView& operator = (StringView&& other) = default;
@@ -180,6 +181,8 @@ public:
 private:
     pointer m_currPtr;
     pointer m_endPtr;
+
+    friend class StringView;
 };
 
 std::ostream& operator << (std::ostream& outStream, const StringView& strView);
