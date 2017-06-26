@@ -35,15 +35,15 @@ public:
         return *++m_currIter;
     }
     
-    Util::StringView nextToken(const Util::CharClass& separatorsClass);
+    StringView nextToken(const CharClass& separatorsClass);
 
     size_t skip(size_t numChars);
-    size_t skipUntil(const Util::CharClass& blackList);
-    size_t skipUntilNot(const Util::CharClass& whiteList);
+    size_t skipUntil(const CharClass& blackList);
+    size_t skipUntilNot(const CharClass& whiteList);
 
-    Util::StringView read(size_t numChars);
-    Util::StringView readUntil(const Util::CharClass& blackList);
-    Util::StringView readUntilNot(const Util::CharClass& whiteList);
+    StringView read(size_t numChars);
+    StringView readUntil(const CharClass& blackList);
+    StringView readUntilNot(const CharClass& whiteList);
 
 private:
     StringView::iterator m_currIter;
