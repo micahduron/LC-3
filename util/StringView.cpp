@@ -34,10 +34,10 @@ int StringView::compare(StringView other) const {
 }
 
 StringView::iterator StringView::begin() const {
-    return { m_strPtr, m_strPtr + m_length };
+    return { data(), data() + size() };
 }
 StringView::iterator StringView::end() const {
-    auto endPtr = m_strPtr + m_length;
+    auto endPtr = data() + size();
 
     return { endPtr, endPtr };
 }
