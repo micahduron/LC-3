@@ -33,10 +33,6 @@ int StringView::compare(StringView other) const {
     return compare(other, LexicographicOrder);
 }
 
-bool StringView::operator == (StringView other) const {
-    return compare(other) == 0;
-}
-
 StringView::iterator StringView::begin() const {
     return { m_strPtr, m_strPtr + m_length };
 }

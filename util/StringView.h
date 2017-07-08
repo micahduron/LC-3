@@ -54,7 +54,9 @@ public:
 
     int compare(StringView other) const;
 
-    bool operator == (StringView other) const;
+    bool operator == (StringView other) const {
+        return compare(other) == 0;
+    }
 
     bool operator != (StringView other) const {
         return !(*this == other);
