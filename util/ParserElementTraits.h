@@ -1,5 +1,6 @@
 #include <type_traits>
 #include <utility>
+#include "ParseState.h"
 
 #pragma once
 
@@ -14,7 +15,7 @@ namespace Util {
           Parser,
           typename std::enable_if<
             std::is_same<
-              bool,
+              ParseState,
               decltype(Elem::parse(std::declval<typename Parser::ContextType&>()))
             >::value,
             void
