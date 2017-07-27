@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
-#include "../CharClass.h"
+#include "../util/CharClass.h"
+
+using Util::CharClass;
 
 int main() {
     CharClass isAlpha{ [](char c)->bool { return isalpha(c); } };

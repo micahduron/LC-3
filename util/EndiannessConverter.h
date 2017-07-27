@@ -3,8 +3,8 @@
 
 #pragma once
 
-namespace Util::Endianness::Converter {
-    namespace Internal {
+namespace Util {
+    namespace Internals {
         template <typename T>
         T SwitchEndianness(T value) {
             static_assert(std::is_unsigned<T>::value == true,
@@ -31,41 +31,55 @@ namespace Util::Endianness::Converter {
 
         struct SameEndianness {
             template <typename T>
-            static T encode(T value) {
+            static T Encode(T value) {
                 return KeepEndianness(value);
             }
             template <typename T>
-            static T decode(T value) {
+            static T Decode(T value) {
                 return KeepEndianness(value);
             }
         };
 
         struct DifferentEndianness {
             template <typename T>
-            static T encode(T value) {
+            static T Encode(T value) {
                 return SwitchEndianness(value);
             }
             template <typename T>
-            static T decode(T value) {
+            static T Decode(T value) {
                 return SwitchEndianness(value);
             }
         };
     }
-    using NullConverter = Internal::SameEndianness;
 
-    using LittleEndian = std::conditional<
-      GetSystemEndianness() == Little,
-        struct Internal::SameEndianness,
-        struct Internal::DifferentEndianness
-    >::type;
+    template <int Endianness>
+    class EndiannessConverter {};
 
-    using BigEndian = std::conditional<
-      GetSystemEndianness() == Big,
-        struct Internal::SameEndianness,
-        struct Internal::DifferentEndianness
-    >::type;
+    template <>
+    class EndiannessConverter<LittleEndian> :
+      public std::conditional<
+        SystemEndianness == LittleEndian,
+        Internals::SameEndianness,
+        Internals::DifferentEndianness
+      >::type
+    {};
 
-    static_assert(std::is_same<LittleEndian, BigEndian>::value == false,
-                  "LittleEndian is not supposed to be the same type as BigEndian."
-    );
+    template <>
+    class EndiannessConverter<BigEndian> :
+      public std::conditional<
+        SystemEndianness == BigEndian,
+        Internals::SameEndianness,
+        Internals::DifferentEndianness
+      >::type
+    {};
+
+    template <>
+    class EndiannessConverter<SameEndianness> :
+      public Internals::SameEndianness
+    {};
+
+    template <>
+    class EndiannessConverter<OppositeEndianness> :
+      public Internals::DifferentEndianness
+    {};
 }

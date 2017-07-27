@@ -14,6 +14,14 @@ CXXFLAGS="-std=c++17 -Werror -Wall -Wextra"
 # Check for C++ preprocessor
 AC_PROG_CXXCPP
 
+AC_ARG_ENABLE(
+    debug,
+    AS_HELP_STRING([--enable-debug], [Build executables with debug symbols.])
+)
+AS_IF([test "$enable_debug" = yes], [
+    CXXFLAGS="$CXXFLAGS -g"
+])
+
 # Check for C++17 compiler support
 #   This isn't a definitive check. Some compilers only have partial support
 #   for C++17. I may add checks for specific C++17 features later on, but

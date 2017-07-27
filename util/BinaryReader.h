@@ -2,13 +2,12 @@
 #include <type_traits>
 #include "BinaryIO.h"
 #include "FileMode.h"
-#include "EndiannessConverter.h"
 
 #pragma once
 
-namespace Util::FileIO {
+namespace Util {
     template <typename Endianness>
-    class BinaryReader : public BinaryIO<FileMode::Reader> {
+    class BinaryReader : public BinaryIO<FileMode::BinaryRead> {
     public:
         using BinaryIO::BinaryIO;
 
@@ -37,7 +36,7 @@ namespace Util::FileIO {
             if (std::fread(&datum, sizeof(T), 1, file()) != 1) {
                 return false;
             }
-            outputRef = Endianness::decode(datum);
+            outputRef = Endianness::Decode(datum);
 
             return true;
         }

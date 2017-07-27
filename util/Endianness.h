@@ -1,12 +1,17 @@
 #pragma once
 
-namespace Util::Endianness {
+namespace Util {
     enum : int {
-        Little,
-        Big
+        LittleEndian,
+        BigEndian,
+        SameEndianness,
+        OppositeEndianness
     };
 
-    constexpr int GetSystemEndianness() {
-        return Little;
+    namespace Internals {
+        constexpr int GetSystemEndianness() {
+            return LittleEndian;
+        }
     }
+    constexpr int SystemEndianness = Internals::GetSystemEndianness();
 }

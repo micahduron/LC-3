@@ -1,22 +1,26 @@
 #include <type_traits>
 #include <utility>
+#include "ParseState.h"
 
 #pragma once
 
 namespace Util {
     namespace Internals {
-        template <typename Elem, typename Parser, typename = std::void_t<>>
+        template <typename Elem, typename Parser, typename = void>
         class IsCompatible_Helper : public std::false_type {};
 
         template <typename Elem, typename Parser>
         class IsCompatible_Helper<
           Elem,
           Parser,
-          std::void_t<
-            decltype(!Elem::parse(std::declval<typename Parser::ContextType&>()))
-          >
-        > : public std::true_type
-        {};
+          typename std::enable_if<
+            std::is_same<
+              ParseState,
+              decltype(Elem::parse(std::declval<typename Parser::ContextType&>()))
+            >::value,
+            void
+          >::type
+        > : public std::true_type {};
     }
 
     template <typename Elem>

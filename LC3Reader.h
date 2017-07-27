@@ -5,7 +5,7 @@
 #pragma once
 
 class LC3Reader :
-  private Util::FileIO::BinaryReader<Util::Endianness::Converter::BigEndian>
+  private Util::BinaryReader<Util::EndiannessConverter<Util::BigEndian>>
 {
 public:
     using word_type = LC3::Word;

@@ -6,9 +6,9 @@
 
 #pragma once
 
-namespace Util::FileIO {
+namespace Util {
     template <typename Endianness>
-    class BinaryWriter : public BinaryIO<FileMode::Writer> {
+    class BinaryWriter : public BinaryIO<FileMode::BinaryWrite> {
     public:
         using BinaryIO::BinaryIO;
 
@@ -32,7 +32,7 @@ namespace Util::FileIO {
             static_assert(std::is_unsigned<T>::value == true,
                           "Requires unsigned integral type."
             );
-            T convertedDatum = Endianness::encode(datum);
+            T convertedDatum = Endianness::Encode(datum);
 
             return std::fwrite(&convertedDatum, sizeof(T), 1, file()) == 1;
         }

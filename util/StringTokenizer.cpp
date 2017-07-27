@@ -1,5 +1,7 @@
 #include "StringTokenizer.h"
 
+namespace Util {
+
 StringView StringTokenizer::nextToken(const CharClass& separatorsClass) {
     skipUntilNot(separatorsClass);
 
@@ -10,7 +12,7 @@ StringView StringTokenizer::nextToken(const CharClass& separatorsClass) {
 size_t StringTokenizer::skip(size_t numChars) {
     size_t ptrDelta = std::min(numChars, static_cast<size_t>(remaining()));
 
-    m_currPtr += ptrDelta;
+    m_currIter += ptrDelta;
 
     return ptrDelta;
 }
@@ -33,23 +35,25 @@ size_t StringTokenizer::skipUntilNot(const CharClass& whiteList) {
     return charsSkipped;
 }
 StringView StringTokenizer::read(size_t numChars) {
-    const char* basePtr = m_currPtr;
+    auto startIter = m_currIter;
 
     size_t viewLen = skip(numChars);
 
-    return { basePtr, viewLen };
+    return { startIter, startIter + viewLen };
 }
 StringView StringTokenizer::readUntil(const CharClass& blackList) {
-    const char* startPtr = m_currPtr;
+    auto startIter = m_currIter;
 
     size_t numChars = skipUntil(blackList);
 
-    return { startPtr, numChars };
+    return { startIter, startIter + numChars };
 }
 StringView StringTokenizer::readUntilNot(const CharClass& whiteList) {
-    const char* startPtr = m_currPtr;
+    auto startIter = m_currIter;
 
     size_t numChars = skipUntilNot(whiteList);
 
-    return { startPtr, numChars };
+    return { startIter, startIter + numChars };
+}
+
 }

@@ -1,5 +1,7 @@
 #include "CharClass.h"
 
+namespace Util {
+
 CharClass CharClass::combine(const CharClass& classOne, const CharClass& classTwo) {
     return {
         [classOne, classTwo] (char c) -> bool {
@@ -38,4 +40,6 @@ CharClass operator & (const CharClass& classOne, const CharClass& classTwo) {
 }
 CharClass operator | (const CharClass& classOne, const CharClass& classTwo) {
     return CharClass::combine(classOne, classTwo);
+}
+
 }

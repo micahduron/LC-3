@@ -1,5 +1,6 @@
 #include <type_traits>
 #include <utility>
+#include "ParseState.h"
 #include "ParserElementTraits.h"
 
 #pragma once
@@ -16,7 +17,7 @@ namespace Util {
             using ParentType = GenericParser;
 
             /** Required function definitions: **/
-            // static bool parse(Context& context);
+            // static ParseState parse(Context& context);
         };
 
         class SavepointGuard {
@@ -59,26 +60,53 @@ namespace Util {
             return ParserElementTraits<Elem>::template IsCompatible<GenericParser>;
         }
 
-        template <typename... Elems>
+        template <typename ElemsH, typename... ElemsT>
         class Any : public ParserElement {
-            static_assert( (GenericParser::template IsValidElement<Elems>() && ...) );
+            static_assert(GenericParser::template IsValidElement<ElemsH>());
 
         public:
-            static bool parse(Context& context) {
-                return (AttemptParse<Elems>(context) || ...);
+            static ParseState parse(Context& context) {
+                ParseState parseStatus = AttemptParse<ElemsH>(context);
+
+                if constexpr (sizeof...(ElemsT) > 0) {
+                    return parseStatus == ParseState::NonFatalFail ?
+                        Any<ElemsT...>::parse(context) :
+                        parseStatus;
+                } else {
+                    return parseStatus;
+                }
             }
         };
 
+private:
+        template <typename ElemsH, typename... ElemsT>
+        class All_Helper : public ParserElement {
+        public:
+            static ParseState parse(Context& context) {
+                ParseState parseStatus = ElemsH::parse(context);
+
+                if (parseStatus != ParseState::Success) {
+                    return parseStatus;
+                }
+                if constexpr (sizeof...(ElemsT) > 0) {
+                    return All_Helper<ElemsT...>::parse(context);
+                } else {
+                    return ParseState::Success;
+                }
+            }
+        };
+
+public:
         template <typename... Elems>
         class All : public ParserElement {
             static_assert( (GenericParser::template IsValidElement<Elems>() && ...) );
 
         public:
-            static bool parse(Context& context) {
+            static ParseState parse(Context& context) {
                 SavepointGuard savepoint{ context };
-                bool parseStatus = (Elems::parse(context) && ...);
+                ParseState parseStatus = All_Helper<Elems...>::parse(context);
 
-                savepoint.setStatus(parseStatus);
+                savepoint.setStatus(parseStatus == ParseState::Success);
 
                 return parseStatus;
             }
@@ -92,13 +120,28 @@ namespace Util {
             static_assert(UpperBound <= 0 || LowerBound <= UpperBound);
 
         public:
-            static bool parse(Context& context) {
-                int instanceCount = CountInstances<Elem>(context);
+            static ParseState parse(Context& context) {
+                if constexpr (UpperBound >= 0) {
+                    for (int count = 0; count < UpperBound; ++count) {
+                        ParseState parseStatus = AttemptParse<Elem>(context);
 
-                return instanceCount >= LowerBound ||
-                  (UpperBound >= 0) ?
-                    instanceCount <= UpperBound :
-                    false;
+                        if (parseStatus != ParseState::Success) {
+                            return count >= LowerBound ?
+                                ParseState::Success :
+                                ParseState::NonFatalFail;
+                        }
+                    }
+                    return ParseState::Success;
+                } else {
+                    int count = 0;
+
+                    while (AttemptParse<Elem>(context) == ParseState::Success) {
+                        ++count;
+                    }
+                    return count >= LowerBound ?
+                        ParseState::Success :
+                        ParseState::NonFatalFail;
+                }
             }
         };
 
@@ -115,25 +158,21 @@ namespace Util {
         template <typename Elem, int NumInstances>
         class Exactly : public Multiple<Elem, NumInstances, NumInstances> {};
 
+        template <typename... Elems>
+        class Many : public Multiple<All<Elems...>, 0, -1> {};
+
+        template <typename Elem>
+        class Many<Elem> : public Multiple<Elem, 0, -1> {};
+
     private:
         template <typename Elem>
-        static bool AttemptParse(Context& context) {
+        static ParseState AttemptParse(Context& context) {
             SavepointGuard savepoint{ context };
-            bool parseStatus = Elem::parse(context);
+            ParseState parseStatus = Elem::parse(context);
 
-            savepoint.setStatus(parseStatus);
+            savepoint.setStatus(parseStatus == ParseState::Success);
 
             return parseStatus;
-        }
-
-        template <typename Elem>
-        static int CountInstances(Context& context) {
-            int instanceCount = 0;
-
-            while (AttemptParse<Elem>(context)) {
-                ++instanceCount;
-            }
-            return instanceCount;
         }
     };
 }

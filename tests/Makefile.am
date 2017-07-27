@@ -9,15 +9,15 @@ noinst_PROGRAMS = $(TESTS)
 
 CharClass_test_SOURCES = \
   CharClass_test.cpp \
-  ../CharClass.cpp ../CharClass.h
+  ../util/CharClass.cpp ../util/CharClass.h
 LC3Writer_test_SOURCES = \
   LC3Writer_test.cpp \
   ../LC3Writer.cpp ../LC3Writer.h
 StringTokenizer_test_SOURCES = \
   StringTokenizer_test.cpp \
-  ../StringTokenizer.cpp ../StringTokenizer.h \
-  ../StringView.cpp ../StringView.h \
-  ../CharClass.cpp ../CharClass.h
+  ../util/StringTokenizer.cpp ../util/StringTokenizer.h \
+  ../util/StringView.cpp ../util/StringView.h \
+  ../util/CharClass.cpp ../util/CharClass.h
 StringView_test_SOURCES = \
   StringView_test.cpp \
-  ../StringView.cpp ../StringView.h
+  ../util/StringView.cpp ../util/StringView.h

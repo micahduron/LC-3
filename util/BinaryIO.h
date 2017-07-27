@@ -1,8 +1,9 @@
 #include <cstdio>
+#include "FileMode.h"
 
 #pragma once
 
-namespace Util::FileIO {
+namespace Util {
     enum SeekMode {
         FromStart = SEEK_SET,
         FromCurrent = SEEK_CUR,
@@ -11,11 +12,13 @@ namespace Util::FileIO {
 
     template <typename Mode>
     class BinaryIO {
+        static_assert(FileModeTraits<Mode>::IsBinary);
+
     public:
         BinaryIO() {}
         BinaryIO(const BinaryIO& other) = delete;
         BinaryIO(const char* fileName) :
-          m_fileHandle{ Mode::open(fileName) }
+          m_fileHandle{ BinaryIO::OpenFile(fileName) }
         {}
 
         ~BinaryIO() {
@@ -58,6 +61,10 @@ namespace Util::FileIO {
 
     private:
         file_type* m_fileHandle = nullptr;
+
+        static file_type* OpenFile(const char* fileName) {
+            return std::fopen(fileName, FileModeTraits<Mode>::ModeString);
+        }
     };
 
 #include "BinaryIO.tpp"
