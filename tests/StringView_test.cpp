@@ -7,7 +7,14 @@ using Util::StringView;
 
 int main() {
     std::string text = "Hello world!";
-    StringView view(text);
+    StringView view;
+
+    if (view.size() != 0) {
+        std::cerr << "Empty StringView reports to be non-empty.\n";
+
+        return 1;
+    }
+    view = text;
 
     if (view != text) {
         std::cerr << "Equality operator (" <<

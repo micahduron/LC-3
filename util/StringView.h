@@ -119,6 +119,7 @@ class StringView {
 public:
     using iterator = Internals::StringView_iterator;
 
+    constexpr StringView() {}
     constexpr StringView(const StringView& other) = default;
     constexpr StringView(StringView&& other) = default;
     constexpr StringView(const char* str, size_t length) :
@@ -214,8 +215,8 @@ public:
     }
 
 private:
-    const char* m_strPtr;
-    size_t m_length;
+    const char* m_strPtr = nullptr;
+    size_t m_length = 0;
 };
 
 std::ostream& operator << (std::ostream& outStream, const StringView& strView);
