@@ -9,7 +9,7 @@ AC_LANG(C++)
 #   compiler requires a more complex autoconf script, and that's something
 #   I want to avoid right now.
 AC_PROG_CXX([g++])
-CXXFLAGS="-std=c++17 -Werror -Wall -Wextra"
+CXXFLAGS="-std=c++17 -Werror -Wall -Wextra -I$(pwd)"
 
 # Check for C++ preprocessor
 AC_PROG_CXXCPP

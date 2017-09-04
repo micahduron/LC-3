@@ -1,5 +1,5 @@
-#include "util/BinaryReader.h"
-#include "util/EndiannessConverter.h"
+#include <util/BinaryReader.h>
+#include <util/EndiannessConverter.h>
 #include "lc3.h"
 
 #pragma once

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstring>
-#include "../util/CharClass.h"
+#include <util/CharClass.h>
 
 using Util::CharClass;
 

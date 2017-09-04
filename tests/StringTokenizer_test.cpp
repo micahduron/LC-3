@@ -2,9 +2,9 @@
 #include <array>
 #include <vector>
 #include <cstring>
-#include "../util/CharClass.h"
-#include "../util/StringTokenizer.h"
-#include "../util/StringView.h"
+#include <util/CharClass.h>
+#include <util/StringTokenizer.h>
+#include <util/StringView.h>
 
 using Util::CharClass;
 using Util::StringTokenizer;
