@@ -148,7 +148,7 @@ public:
     constexpr StringView& operator = (StringView&& other) = default;
 
     constexpr const char&  operator [] (size_t index) const {
-        return *(data() + index);
+        return get(index);
     }
 
     constexpr size_t size() const {
@@ -215,6 +215,10 @@ public:
     }
 
 private:
+    constexpr const char& get(size_t index) const {
+        return *(data() + index);
+    }
+
     const char* m_strPtr = nullptr;
     size_t m_length = 0;
 };
