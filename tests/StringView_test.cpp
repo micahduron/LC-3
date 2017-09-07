@@ -13,6 +13,16 @@ int main() {
 
         return 1;
     }
+    if (view.front() != '\0') {
+        std::cerr << "front() returns non-null on empty StringView.\n";
+
+        return 1;
+    }
+    if (view.back() != '\0') {
+        std::cerr << "back() returns non-null on empty StringView.\n";
+
+        return 1;
+    }
     view = text;
 
     if (view != text) {
@@ -28,6 +38,20 @@ int main() {
             std::cerr << "StringView::compare() (" <<
                 "Index: " << i << ", " <<
                 "View: " << subView << ")\n";
+            return 1;
+        }
+        if (subView.front() != subView[0]) {
+            std::cerr << "front() (" <<
+                "Returned: " << subView.front() << ", " <<
+                "Expected: " << subView[0] << ")\n";
+
+            return 1;
+        }
+        if (subView.back() != subView[subView.size() - 1]) {
+            std::cerr << "back() (" <<
+                "Returned: " << subView.back() << ", " <<
+                "Expected: " << subView[subView.size() - 1] << ")\n";
+
             return 1;
         }
     }

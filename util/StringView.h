@@ -159,6 +159,14 @@ public:
         return m_strPtr;
     }
 
+    constexpr char front() const {
+        return size() > 0 ? get(0) : '\0';
+    }
+
+    constexpr char back() const {
+        return size() > 0 ? get(size() - 1) : '\0';
+    }
+
     template <typename Comparator>
     constexpr int compare(StringView other, Comparator&& cmp = Comparator()) const {
         size_t numIters = std::min(size(), other.size());
