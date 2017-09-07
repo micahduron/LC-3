@@ -6,7 +6,7 @@ using Util::CharClass;
 
 int main() {
     CharClass isAlpha{ [](char c)->bool { return isalpha(c); } };
-    auto isLetterJ = CharClass::matchSingle('J');
+    CharClass isLetterJ("J");
     CharClass isNum{ [](char c)->bool { return c >= '0' && c <= '9'; } };
 
     auto isAlnum = isAlpha | isNum;

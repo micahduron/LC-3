@@ -4,30 +4,22 @@ namespace Util {
 
 CharClass CharClass::combine(const CharClass& classOne, const CharClass& classTwo) {
     return {
-        [classOne, classTwo] (char c) -> bool {
+        [&classOne, &classTwo] (char c) {
             return classOne(c) || classTwo(c);
         }
     };
 }
 CharClass CharClass::intersect(const CharClass& classOne, const CharClass& classTwo) {
     return {
-        [classOne, classTwo] (char c) -> bool {
+        [&classOne, &classTwo] (char c) {
             return classOne(c) && classTwo(c);
         }
     };
 }
 CharClass CharClass::complement(const CharClass& charClass) {
     return {
-        [charClass] (char c) -> bool {
+        [&charClass] (char c) {
             return !charClass(c);
-        }
-    };
-}
-
-CharClass CharClass::matchSingle(char matchChar) {
-    return {
-        [matchChar](char c) -> bool {
-            return c == matchChar;
         }
     };
 }
