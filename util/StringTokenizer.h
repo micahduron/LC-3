@@ -1,5 +1,6 @@
 #include <string>
 #include <cstddef>
+#include <cassert>
 #include <algorithm>
 #include "StringView.h"
 #include "CharClass.h"
@@ -41,15 +42,82 @@ public:
         return *++m_currIter;
     }
     
-    StringView nextToken(const CharClass& separatorsClass);
+    StringView nextToken(const CharClass& separatorsClass) {
+        skipUntilNot(separatorsClass);
 
-    size_t skip(size_t numChars);
-    size_t skipUntil(const CharClass& blackList);
-    size_t skipUntilNot(const CharClass& whiteList);
+        StringView token = readUntil(separatorsClass);
 
-    StringView read(size_t numChars);
-    StringView readUntil(const CharClass& blackList);
-    StringView readUntilNot(const CharClass& whiteList);
+        skipUntilNot(separatorsClass);
+
+        return token;
+    }
+
+    size_t skip(size_t numChars) {
+        StrIter oldIter = m_currIter;
+        m_currIter = StringTokenizer::fetch(m_currIter, m_endIter, numChars);
+
+        return m_currIter - oldIter;
+    }
+    size_t skipUntil(const CharClass& blacklist) {
+        StrIter oldIter = m_currIter;
+        m_currIter = StringTokenizer::fetchUntil(m_currIter, m_endIter, blacklist);
+
+        return m_currIter - oldIter;
+    }
+    size_t skipUntilNot(const CharClass& whitelist) {
+        StrIter oldIter = m_currIter;
+        m_currIter = StringTokenizer::fetchUntilNot(m_currIter, m_endIter, whitelist);
+
+        return m_currIter - oldIter;
+    }
+
+    StringView read(size_t numChars) {
+        StrIter oldIter = m_currIter;
+        m_currIter = StringTokenizer::fetch(m_currIter, m_endIter, numChars);
+
+        return { oldIter, m_currIter };
+    }
+    StringView readUntil(const CharClass& blacklist) {
+        StrIter oldIter = m_currIter;
+        m_currIter = StringTokenizer::fetchUntil(m_currIter, m_endIter, blacklist);
+
+        return { oldIter, m_currIter };
+    }
+    StringView readUntilNot(const CharClass& whitelist) {
+        StrIter oldIter = m_currIter;
+        m_currIter = StringTokenizer::fetchUntilNot(m_currIter, m_endIter, whitelist);
+
+        return { oldIter, m_currIter };
+    }
+
+private:
+    static StrIter fetch(const StrIter& start, const StrIter& end, size_t numChars) {
+        assert(end >= start);
+
+        size_t rangeLen = end - start;
+
+        return (numChars <= rangeLen) ? start + numChars : end;
+    }
+    static StrIter fetchUntil(const StrIter& start, const StrIter& end, const CharClass& blacklist) {
+        assert(end >= start);
+
+        StrIter curr = start;
+
+        while (curr != end && !blacklist(*curr)) {
+            ++curr;
+        }
+        return curr;
+    }
+    static StrIter fetchUntilNot(const StrIter& start, const StrIter& end, const CharClass& whitelist) {
+        assert(end >= start);
+
+        StrIter curr = start;
+
+        while (curr != end && whitelist(*curr)) {
+            ++curr;
+        }
+        return curr;
+    }
 
 private:
     StrIter m_startIter;

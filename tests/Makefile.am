@@ -15,7 +15,7 @@ LC3Writer_test_SOURCES = \
   ../LC3Writer.cpp ../LC3Writer.h
 StringTokenizer_test_SOURCES = \
   StringTokenizer_test.cpp \
-  ../util/StringTokenizer.cpp ../util/StringTokenizer.h \
+  ../util/StringTokenizer.h \
   ../util/StringView.cpp ../util/StringView.h \
   ../util/CharClass.cpp ../util/CharClass.h
 StringView_test_SOURCES = \
