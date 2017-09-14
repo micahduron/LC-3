@@ -38,8 +38,15 @@ public:
         return !finished();
     }
 
-    char peek() const {
-        return *m_currIter;
+    char peekChar(size_t offset = 0) const {
+        return *StringTokenizer::fetch(m_currIter, m_endIter, offset);
+    }
+
+    StringView peekStr(size_t length, size_t offset = 0) const {
+        StrIter start = StringTokenizer::fetch(m_currIter, m_endIter, offset);
+        StrIter end = StringTokenizer::fetch(start, m_endIter, length);
+
+        return { start, end };
     }
     char advance() {
         return *++m_currIter;
