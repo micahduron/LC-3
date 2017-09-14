@@ -10,10 +10,16 @@ namespace Util {
 
 class StringTokenizer {
 public:
+    using StrIter = StringView::iterator;
+
     StringTokenizer(const StringTokenizer& other) = default;
     StringTokenizer(StringView source) :
-      m_currIter{ source.begin() },
-      m_endIter{ source.end() }
+      StringTokenizer{ source.begin(), source.end() }
+    {}
+    StringTokenizer(StrIter startIter, StrIter endIter) :
+      m_startIter{ startIter },
+      m_currIter{ startIter },
+      m_endIter{ endIter }
     {}
 
     StringTokenizer& operator = (const StringTokenizer& other) = default;
@@ -46,8 +52,9 @@ public:
     StringView readUntilNot(const CharClass& whiteList);
 
 private:
-    StringView::iterator m_currIter;
-    StringView::iterator m_endIter;
+    StrIter m_startIter;
+    StrIter m_currIter;
+    StrIter m_endIter;
 };
 
 }
