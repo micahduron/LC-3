@@ -20,41 +20,6 @@ namespace Util {
             // static ParseState parse(Context& context);
         };
 
-        class SavepointGuard {
-        public:
-            SavepointGuard(const SavepointGuard& other) = delete;
-            SavepointGuard(Context& context, bool defaultStatus = false) :
-              m_context{ context },
-              m_savepoint{ context.save() },
-              m_status{ defaultStatus }
-            {}
-
-            ~SavepointGuard() {
-                if (!m_status) {
-                    m_context.restore(std::move(m_savepoint));
-                }
-            }
-
-            SavepointGuard& operator = (const SavepointGuard& other) = delete;
-
-            void setStatus(bool newStatus) {
-                m_status = newStatus;
-            }
-
-            void save() {
-                m_savepoint = m_context.save();
-            }
-
-            void restore() {
-                m_context.restore(m_savepoint);
-            }
-
-        private:
-            Context& m_context;
-            typename Context::Savepoint m_savepoint;
-            bool m_status;
-        };
-
         template <typename Elem>
         static constexpr bool IsValidElement() {
             return ParserElementTraits<Elem>::template IsCompatible<GenericParser>;
@@ -66,7 +31,7 @@ namespace Util {
 
         public:
             static ParseState parse(Context& context) {
-                ParseState parseStatus = AttemptParse<ElemsH>(context);
+                ParseState parseStatus = ElemsH::parse(context);
 
                 if constexpr (sizeof...(ElemsT) > 0) {
                     return parseStatus == ParseState::NonFatalFail ?
@@ -78,9 +43,10 @@ namespace Util {
             }
         };
 
-private:
         template <typename ElemsH, typename... ElemsT>
-        class All_Helper : public ParserElement {
+        class All : public ParserElement {
+            static_assert(GenericParser::template IsValidElement<ElemsH>());
+
         public:
             static ParseState parse(Context& context) {
                 ParseState parseStatus = ElemsH::parse(context);
@@ -89,26 +55,10 @@ private:
                     return parseStatus;
                 }
                 if constexpr (sizeof...(ElemsT) > 0) {
-                    return All_Helper<ElemsT...>::parse(context);
+                    return All<ElemsT...>::parse(context);
                 } else {
                     return ParseState::Success;
                 }
-            }
-        };
-
-public:
-        template <typename... Elems>
-        class All : public ParserElement {
-            static_assert( (GenericParser::template IsValidElement<Elems>() && ...) );
-
-        public:
-            static ParseState parse(Context& context) {
-                SavepointGuard savepoint{ context };
-                ParseState parseStatus = All_Helper<Elems...>::parse(context);
-
-                savepoint.setStatus(parseStatus == ParseState::Success);
-
-                return parseStatus;
             }
         };
 
@@ -123,22 +73,32 @@ public:
             static ParseState parse(Context& context) {
                 if constexpr (UpperBound >= 0) {
                     for (int count = 0; count < UpperBound; ++count) {
-                        ParseState parseStatus = AttemptParse<Elem>(context);
+                        ParseState parseStatus = Elem::parse(context);
 
+                        if (parseStatus == ParseState::FatalFail) {
+                            return ParseState::FatalFail;
+                        }
                         if (parseStatus != ParseState::Success) {
                             return count >= LowerBound ?
                                 ParseState::Success :
-                                ParseState::NonFatalFail;
+                                parseStatus;
                         }
                     }
                     return ParseState::Success;
                 } else {
                     int count = 0;
+                    ParseState parseStatus = ParseState::FatalFail;
 
-                    while (AttemptParse<Elem>(context) == ParseState::Success) {
+                    do {
+                        parseStatus = Elem::parse(context);
+
+                        if (parseStatus == ParseState::FatalFail) {
+                            return ParseState::FatalFail;
+                        }
                         ++count;
-                    }
-                    return count >= LowerBound ?
+                    } while (parseStatus == ParseState::Success);
+
+                    return (count >= LowerBound) ?
                         ParseState::Success :
                         ParseState::NonFatalFail;
                 }
@@ -163,16 +123,5 @@ public:
 
         template <typename Elem>
         class Many<Elem> : public Multiple<Elem, 0, -1> {};
-
-    private:
-        template <typename Elem>
-        static ParseState AttemptParse(Context& context) {
-            SavepointGuard savepoint{ context };
-            ParseState parseStatus = Elem::parse(context);
-
-            savepoint.setStatus(parseStatus == ParseState::Success);
-
-            return parseStatus;
-        }
     };
 }
