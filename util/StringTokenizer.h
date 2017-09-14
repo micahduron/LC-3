@@ -51,6 +51,16 @@ public:
     char advance() {
         return *++m_currIter;
     }
+
+    StrIter startIter() const {
+        return m_startIter;
+    }
+    StrIter currIter() const {
+        return m_currIter;
+    }
+    StrIter endIter() const {
+        return m_endIter;
+    }
     
     StringView nextToken(const CharClass& separatorsClass) {
         skipUntilNot(separatorsClass);
