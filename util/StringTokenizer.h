@@ -48,9 +48,6 @@ public:
 
         return { start, end };
     }
-    char advance() {
-        return *++m_currIter;
-    }
 
     StrIter startIter() const {
         return m_startIter;
