@@ -25,11 +25,14 @@ public:
 
     StringTokenizer& operator = (const StringTokenizer& other) = default;
 
-    std::ptrdiff_t remaining() const {
-        return m_endIter - m_currIter;
+    size_t position() const {
+        return static_cast<size_t>(m_currIter - m_startIter);
+    }
+    size_t remaining() const {
+        return static_cast<size_t>(m_endIter - m_currIter);
     }
     bool finished() const {
-        return remaining() <= 0;
+        return remaining() == 0;
     }
     explicit operator bool() const {
         return !finished();
