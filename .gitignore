@@ -6,6 +6,9 @@
 !/util/
 /util/*
 
+!/language/
+/language/*
+
 !/configure.ac
 !Makefile.am
 
