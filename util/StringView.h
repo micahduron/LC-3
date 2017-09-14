@@ -3,6 +3,7 @@
 #include <cstring>
 #include <cassert>
 #include <utility>
+#include <functional>
 
 #pragma once
 
@@ -238,3 +239,25 @@ std::ostream& operator << (std::ostream& outStream, const StringView& strView);
 constexpr Util::StringView operator ""_sv (const char* str, size_t strSize) {
     return { str, strSize };
 }
+
+namespace std {
+
+template <>
+struct hash<Util::StringView> {
+    size_t operator () (const Util::StringView& strView) const {
+        // A simple multiplicative hash for strings. Both constants
+        // are random 64-bit primes.
+        size_t acc = 0;
+        auto charMultiplier = 0xED7CB501657307DFULL;
+
+        for (char c : strView) {
+            acc += charMultiplier * c;
+            charMultiplier *= charMultiplier;
+        }
+        constexpr auto hashMultiplier = 0xDB0487630191DE0BULL;
+
+        return (hashMultiplier * acc) >> 1;
+    }
+};
+
+} // namespace std
