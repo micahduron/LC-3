@@ -47,7 +47,7 @@ int main() {
             return 1;
         }
     }
-    if (i != expectedTokenSize) {
+    if (i < expectedTokenSize) {
         std::cerr << "Unexpected number of tokens ("
                   << "Expected: " << expectedTokenSize << ", "
                   << "Result: " << i << ")\n";
