@@ -3,7 +3,8 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 TESTS = CharClass_test \
         LC3Writer_test \
         StringTokenizer_test \
-        StringView_test
+        StringView_test \
+        Tokenizer_test
 
 noinst_PROGRAMS = $(TESTS)
 
@@ -20,4 +21,10 @@ StringTokenizer_test_SOURCES = \
   ../util/CharClass.cpp ../util/CharClass.h
 StringView_test_SOURCES = \
   StringView_test.cpp \
+  ../util/StringView.cpp ../util/StringView.h
+Tokenizer_test_SOURCES = \
+  Tokenizer_test.cpp \
+  ../util/StringTokenizer.h \
+  ../language/Tokenizer.cpp ../language/Tokenizer.h \
+  ../util/CharClass.cpp ../util/CharClass.h \
   ../util/StringView.cpp ../util/StringView.h
