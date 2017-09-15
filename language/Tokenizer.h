@@ -18,7 +18,7 @@ private:
 public:
     Util::StringTokenizer tokenizer;
     SrcIter lineStart;
-    size_t lineNum = 0;
+    size_t lineNum = 1;
 
     bool isDone = false;
 
