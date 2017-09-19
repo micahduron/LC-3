@@ -9,35 +9,6 @@
 
 namespace LC3::Language {
 
-namespace Internals {
-
-struct TokenizerState {
-private:
-    using SrcIter = Util::StringView::iterator;
-
-public:
-    Util::StringTokenizer tokenizer;
-    SrcIter lineStart;
-    size_t lineNum = 1;
-
-    bool isDone = false;
-
-    TokenizerState(SrcIter startIter, SrcIter endIter) :
-      tokenizer{ startIter, endIter },
-      lineStart{ startIter }
-    {}
-
-    SourceLocation getLocation() const {
-        Util::StringView src(tokenizer.startIter(), tokenizer.endIter());
-        size_t lineOffset = tokenizer.currIter() - lineStart;
-        size_t absOffset = tokenizer.currIter() - tokenizer.startIter();
-
-        return { src, lineNum, lineOffset, absOffset };
-    }
-};
-
-} // namespace LC3::Language::Internals
-
 class Tokenizer {
 private:
     using SrcIter = Util::StringView::iterator;
@@ -55,7 +26,8 @@ public:
       Tokenizer(src.begin(), src.end())
     {}
     Tokenizer(SrcIter startIter, SrcIter endIter) :
-      m_state{ startIter, endIter }
+      m_tokenizer{ startIter, endIter },
+      m_lineStart{ startIter }
     {
         // Assign m_currToken with the first token
         consume(1);
@@ -65,16 +37,19 @@ public:
     Tokenizer& operator = (Tokenizer&& other) = default;
 
     bool isDone() const {
-        return m_state.isDone;
+        return m_isDone;
     }
     explicit operator bool () const {
         return !isDone();
     }
 
     void consume(size_t numTokens = 1) {
-        if (numTokens > 0) {
-            m_currToken = Tokenizer::getToken(m_state, numTokens);
+        if (numTokens == 0) return;
+
+        while (--numTokens) {
+            getToken();
         }
+        m_currToken = getToken();
     }
 
     Tokenizer& operator += (size_t numSteps) {
@@ -112,9 +87,23 @@ public:
     }
 
 private:
-    static Token getToken(Internals::TokenizerState& state, size_t numSteps);
+    Token getToken();
 
-    Internals::TokenizerState m_state;
+    SourceLocation getLocation() const {
+        Util::StringView src(m_tokenizer.startIter(), m_tokenizer.endIter());
+        size_t lineOffset = m_tokenizer.currIter() - m_lineStart;
+        size_t absOffset = m_tokenizer.currIter() - m_tokenizer.startIter();
+
+        return { src, m_lineNum, lineOffset, absOffset };
+    }
+
+    Util::StringTokenizer m_tokenizer;
+
+    SrcIter m_lineStart;
+    size_t m_lineNum = 1;
+
+    bool m_isDone = false;
+
     Token m_currToken;
 };
 

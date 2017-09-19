@@ -11,7 +11,6 @@ namespace LC3::Language {
 using Util::CharClass;
 using Util::StringView;
 using Util::StringTokenizer;
-using Internals::TokenizerState;
 
 static const CharClass isPunct(".,#:");
 static const CharClass isQuote("'\"");
@@ -25,41 +24,30 @@ static const CharClass isAlnum = isAlpha | isDecDigit;
 static const CharClass isWord = isAlnum | CharClass("_");
 static const CharClass isEnd("\0"_sv);
 
-static Token getToken_impl(TokenizerState& state);
-
-Token Tokenizer::getToken(TokenizerState& state, size_t numTokens) {
-    assert(numTokens > 0);
-
-    while (--numTokens) {
-        getToken_impl(state);
-    }
-    return getToken_impl(state);
-}
-
-Token getToken_impl(TokenizerState& state) {
-    StringTokenizer& tokenizer = state.tokenizer;
+Token Tokenizer::getToken() {
+    StringTokenizer& tokenizer = m_tokenizer;
     char nextChar = tokenizer.peekChar();
 
     if (isSpace(nextChar)) {
         tokenizer.skipUntilNot(isSpace);
 
-        return getToken_impl(state);
+        return getToken();
     }
     if (isComment(nextChar)) {
         tokenizer.skipUntil(isNewline);
 
-        return getToken_impl(state);
+        return getToken();
     }
     StringView tokenStr;
     auto tokenType = TokenType::Unknown;
-    auto tokenLocation = state.getLocation();
+    auto tokenLocation = getLocation();
 
     if (isNewline(nextChar)) {
         tokenStr = tokenizer.read(1);
         tokenType = TokenType::Linebreak;
 
-        ++state.lineNum;
-        state.lineStart = tokenizer.currIter();
+        ++m_lineNum;
+        m_lineStart = tokenizer.currIter();
     } else if (isPunct(nextChar)) {
         tokenStr = tokenizer.read(1);
 
@@ -118,7 +106,7 @@ Token getToken_impl(TokenizerState& state) {
         tokenType = TokenType::String;
     } else if (isEnd(nextChar)) {
         tokenType = TokenType::End;
-        state.isDone = true;
+        m_isDone = true;
     } else {
         tokenStr = tokenizer.read(1);
         tokenType = TokenType::Unknown;
