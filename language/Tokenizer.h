@@ -75,15 +75,21 @@ public:
         return (ret += numSteps);
     }
 
-    const Token& peek() const {
+    const Token& peek() const & {
+        return m_currToken;
+    }
+    Token peek() && {
         return m_currToken;
     }
     Token peek(size_t numSkips) const {
         return *(*this + numSkips);
     }
 
-    const Token& operator * () const {
-        return m_currToken;
+    const Token& operator * () const & {
+        return peek();
+    }
+    Token operator * () && {
+        return peek();
     }
 
 private:
