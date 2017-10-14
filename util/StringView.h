@@ -3,6 +3,7 @@
 #include <cstring>
 #include <cassert>
 #include <utility>
+#include <type_traits>
 #include <functional>
 
 #pragma once
@@ -223,6 +224,30 @@ public:
         return end();
     }
 
+    template <typename Func>
+    static size_t hash(const StringView& strView, Func&& fn = Func()) {
+        static_assert(std::is_same_v<char, decltype(std::declval<Func>()(char(0)))>,
+            "Invalid type signature.");
+
+        // This is a simple multiplicative hash for strings. Both multiplier
+        // values are randomly selected 64-bit primes.
+
+        auto charMultiplier = 0xED7CB501657307DFULL;
+        size_t accumulator = 0;
+
+        for (char c : strView) {
+            accumulator += charMultiplier * fn(c);
+            charMultiplier *= charMultiplier;
+        }
+        constexpr auto hashMultiplier = 0xDB0487630191DE0BULL;
+
+        return (accumulator * hashMultiplier) >> 1;
+    }
+
+    static size_t hash(const StringView& strView) {
+        return hash(strView, [](char c) { return c; });
+    }
+
 private:
     constexpr const char& get(size_t index) const {
         return *(data() + index);
@@ -245,18 +270,7 @@ namespace std {
 template <>
 struct hash<Util::StringView> {
     size_t operator () (const Util::StringView& strView) const {
-        // A simple multiplicative hash for strings. Both constants
-        // are random 64-bit primes.
-        size_t acc = 0;
-        auto charMultiplier = 0xED7CB501657307DFULL;
-
-        for (char c : strView) {
-            acc += charMultiplier * c;
-            charMultiplier *= charMultiplier;
-        }
-        constexpr auto hashMultiplier = 0xDB0487630191DE0BULL;
-
-        return (hashMultiplier * acc) >> 1;
+        return Util::StringView::hash(strView);
     }
 };
 
