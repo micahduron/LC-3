@@ -17,14 +17,14 @@ LC3Writer_test_SOURCES = \
 StringTokenizer_test_SOURCES = \
   StringTokenizer_test.cpp \
   ../util/StringTokenizer.h \
-  ../util/StringView.cpp ../util/StringView.h \
+  ../util/StringView.h \
   ../util/CharClass.cpp ../util/CharClass.h
 StringView_test_SOURCES = \
   StringView_test.cpp \
-  ../util/StringView.cpp ../util/StringView.h
+  ../util/StringView.h
 Tokenizer_test_SOURCES = \
   Tokenizer_test.cpp \
   ../util/StringTokenizer.h \
+  ../util/StringView.h \
   ../language/Tokenizer.cpp ../language/Tokenizer.h \
-  ../util/CharClass.cpp ../util/CharClass.h \
-  ../util/StringView.cpp ../util/StringView.h
+  ../util/CharClass.cpp ../util/CharClass.h

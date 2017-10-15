@@ -257,7 +257,11 @@ private:
     size_t m_length = 0;
 };
 
-std::ostream& operator << (std::ostream& outStream, const StringView& strView);
+inline std::ostream& operator << (std::ostream& outStream, const StringView& strView) {
+    outStream.write(strView.data(), strView.size());
+
+    return outStream;
+}
 
 }
 
