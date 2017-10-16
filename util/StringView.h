@@ -201,7 +201,7 @@ public:
         return !(*this == other);
     }
 
-    constexpr StringView subString(size_t baseOffset, size_t length) {
+    constexpr StringView subString(size_t baseOffset, size_t length) const {
         assert(baseOffset <= size());
         assert(length <= (size() - baseOffset));
 
