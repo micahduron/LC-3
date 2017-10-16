@@ -86,29 +86,37 @@ public:
 
     // Comparison operators
     constexpr bool operator == (const StringView_iterator& other) const {
-        return m_currPtr == other.m_currPtr;
+        return strPtr() == other.strPtr();
     }
     constexpr bool operator != (const StringView_iterator& other) const {
         return !(*this == other);
     }
     constexpr bool operator > (const StringView_iterator& other) const {
-        return (*this - other) > 0;
+        return strPtr() > other.strPtr();
     }
     constexpr bool operator < (const StringView_iterator& other) const {
         return other > *this;
     }
     constexpr bool operator >= (const StringView_iterator& other) const {
-        return (*this == other) || (*this > other);
+        return strPtr() >= other.strPtr();
     }
     constexpr bool operator <= (const StringView_iterator& other) const {
-        return (*this == other) || (*this < other);
+        return strPtr() <= other.strPtr();
     }
 
     // Subscript operator
     constexpr value_type operator [] (difference_type n) const {
         return *(*this + n);
     }
+
 private:
+    constexpr pointer strPtr() const {
+        return m_currPtr;
+    }
+    constexpr pointer endPtr() const {
+        return m_endPtr;
+    }
+
     pointer m_currPtr;
     pointer m_endPtr;
 
