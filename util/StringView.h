@@ -193,6 +193,20 @@ public:
         return compare(other, lexicographicCmp);
     }
 
+    template <typename Comparator>
+    constexpr bool beginsWith(StringView prefix, Comparator&& cmp = Comparator()) const {
+        if (prefix.size() > size()) return false;
+
+        return subString(0, prefix.size()).compare(prefix, cmp) == 0;
+    }
+
+    constexpr bool beginsWith(StringView prefix) const {
+        auto lexicographicCmp = [](char c1, char c2) -> int {
+            return c1 - c2;
+        };
+        return beginsWith(prefix, lexicographicCmp);
+    }
+
     constexpr bool operator == (StringView other) const {
         return compare(other) == 0;
     }
