@@ -1,14 +1,11 @@
 #include <iostream>
 #include <tuple>
-#include <stdexcept>
 #include "../language/Tokenizer.h"
 
 using Util::StringView;
 using LC3::Language::Token;
 using LC3::Language::TokenType;
 using LC3::Language::Tokenizer;
-
-std::ostream& operator << (std::ostream& outStream, const TokenType& type);
 
 std::tuple<const StringView&, TokenType> TokenTuple(const Token& token);
 
@@ -68,30 +65,4 @@ int main() {
 
 std::tuple<const StringView&, TokenType> TokenTuple(const Token& token) {
     return { token.str, token.type };
-}
-
-std::ostream& operator << (std::ostream& outStream, const TokenType& type) {
-#define X(name) \
-    case TokenType::name: \
-        outStream << #name; \
-        break
-
-    switch (type) {
-        X(Comma);
-        X(Period);
-        X(Pound);
-        X(Colon);
-        X(Word);
-        X(Number);
-        X(String);
-        X(Linebreak);
-        X(End);
-        X(Unknown);
-
-        default:
-            throw std::domain_error("Unimplemented case");
-    }
-#undef X
-
-    return outStream;
 }

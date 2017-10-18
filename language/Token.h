@@ -1,3 +1,5 @@
+#include <iostream>
+#include <stdexcept>
 #include <util/StringView.h>
 #include "SourceLocation.h"
 
@@ -23,5 +25,31 @@ struct Token {
     Util::StringView str;
     SourceLocation location;
 };
+
+inline std::ostream& operator << (std::ostream& outStream, TokenType tokenType) {
+    switch (tokenType) {
+    #define CASE(type) \
+        case TokenType::type: \
+            outStream << #type; \
+            break
+
+        CASE(Comma);
+        CASE(Period);
+        CASE(Pound);
+        CASE(Colon);
+        CASE(Word);
+        CASE(Number);
+        CASE(String);
+        CASE(Linebreak);
+        CASE(End);
+        CASE(Unknown);
+
+    #undef CASE
+
+        default:
+            throw std::domain_error("Unimplemented TokenType case.");
+    }
+    return outStream;
+}
 
 } // namespace LC3::Language
