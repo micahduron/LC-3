@@ -1,11 +1,16 @@
 #include <iostream>
 #include <cstring>
+#include <cctype>
 #include <util/CharClass.h>
 
 using Util::CharClass;
 
 int main() {
-    CharClass isAlpha{ [](char c)->bool { return isalpha(c); } };
+    CharClass isAlpha([](char c) -> bool {
+        auto cu = static_cast<unsigned char>(c);
+
+        return isalpha(cu);
+    });
     CharClass isLetterJ("J");
     CharClass isNum{ [](char c)->bool { return c >= '0' && c <= '9'; } };
 

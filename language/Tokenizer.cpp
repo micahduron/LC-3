@@ -16,8 +16,16 @@ static const CharClass isPunct(".,#:");
 static const CharClass isQuote("'\"");
 static const CharClass isComment(";");
 static const CharClass isNewline("\n");
-static const CharClass isSpace = ~isNewline & CharClass([](char c) -> bool { return std::isspace(c); });
-static const CharClass isAlpha([](char c) -> bool { return std::isalpha(c); });
+static const CharClass isSpace = ~isNewline & CharClass([](char c) -> bool {
+    auto cu = static_cast<unsigned char>(c);
+
+    return std::isspace(cu) != 0;
+});
+static const CharClass isAlpha([](char c) -> bool {
+    auto cu = static_cast<unsigned char>(c);
+
+    return std::isalpha(cu) != 0;
+});
 static const CharClass isDecDigit("0123456789");
 static const CharClass isHexDigit("0123456789abcdefABCDEF");
 static const CharClass isAlnum = isAlpha | isDecDigit;

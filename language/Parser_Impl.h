@@ -181,7 +181,9 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
                 return false;
             }
             return std::all_of(startIter + 1, endIter, [](char c) -> bool {
-                return std::isxdigit(c) != 0;
+                auto cu = static_cast<unsigned char>(c);
+
+                return std::isxdigit(cu) != 0;
             });
         }
     };
@@ -222,7 +224,9 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
     private:
         static bool IsValid(const Util::StringView& tokenStr) {
             return std::all_of(tokenStr.begin(), tokenStr.end(), [](char c) -> bool {
-                return std::isdigit(c) != 0;
+                auto cu = static_cast<unsigned char>(c);
+
+                return std::isdigit(cu) != 0;
             });
         }
     };
