@@ -1,0 +1,8 @@
+// Surrounding the keywords with _(...) will allow me to include
+// this file directly within my code and apply an arbitrary macro
+// to each line.
+
+_(ORIG)
+_(END)
+_(FILL)
+_(STRINGZ)

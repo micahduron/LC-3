@@ -1,0 +1,9 @@
+// Surrounding the keywords with _(...) will allow me to include
+// this file directly within my code and apply an arbitrary macro
+// to each line.
+
+_(ADD)
+_(AND)
+_(BR)
+_(NOT)
+

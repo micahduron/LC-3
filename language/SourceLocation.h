@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cstddef>
 #include <util/StringView.h>
 
@@ -25,5 +26,11 @@ struct SourceLocation {
         return { lineStart, lineEnd };
     }
 };
+
+inline std::ostream& operator << (std::ostream& outStream, const SourceLocation& loc) {
+    outStream << '(' << loc.lineNum << ", " << loc.lineOffset << ')';
+
+    return outStream;
+}
 
 } // namespace LC3::Language
