@@ -164,7 +164,10 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
             SyntaxTreeNode& treeNode = context.tree.descendTree();
 
             treeNode.type = NodeType::HexNumber;
-            treeNode.token = token;
+
+            // Removes the leading 'x' character, leaving only the hex digits.
+            token.str = token.str.subString(1, token.str.size() - 1);
+            treeNode.token = std::move(token);
 
             return ParseState::Success;
         }
