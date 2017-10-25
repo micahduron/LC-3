@@ -48,8 +48,20 @@ class Constants {
         }
     };
 
-    static const StringSet Directives;
-    static const StringSet Instructions;
+    static inline const StringSet Directives = {
+        #define _(x) #x ##_sv,
+
+        #include "./keywords/Directives.str"
+
+        #undef _
+    };
+    static inline const StringSet Instructions = {
+        #define _(x) #x ##_sv,
+
+        #include "./keywords/Instructions.str"
+
+        #undef _
+    };
 
 public:
     static bool IsDirective(const StringView& strView) {
@@ -65,22 +77,6 @@ public:
     static bool IsReserved(const StringView& strView) {
         return IsDirective(strView) || IsInstruction(strView);
     }
-};
-
-const Constants::StringSet Constants::Directives = {
-    #define _(x) #x ##_sv,
-
-    #include "./keywords/Directives.str"
-
-    #undef _
-};
-
-const Constants::StringSet Constants::Instructions = {
-    #define _(x) #x ##_sv,
-
-    #include "./keywords/Instructions.str"
-
-    #undef _
 };
 
 } // namespace LC3::Language
