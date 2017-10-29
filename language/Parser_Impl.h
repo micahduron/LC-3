@@ -7,6 +7,8 @@
 #include "ParserContext.h"
 #include "Constants.h"
 
+#pragma once
+
 namespace LC3::Language {
 
 struct Parser_Impl : protected Util::GenericParser<ParserContext> {
