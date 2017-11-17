@@ -11,7 +11,7 @@ std::tuple<const StringView&, TokenType> TokenTuple(const Token& token);
 
 int main() {
     const char* src = ".bloop 43\n \
-        instr #42, x56 ; woop\n \
+        instr #-42, x56 ; woop\n \
         lol: .FILLZ \"Hello, \\\"world!\\\"\" ; bloop";
 
     std::tuple<StringView, TokenType> expectedTokens[] = {
@@ -21,6 +21,7 @@ int main() {
         { "\n", TokenType::Linebreak },
         { "instr", TokenType::Word },
         { "#", TokenType::Pound },
+        { "-", TokenType::Minus },
         { "42", TokenType::Number },
         { ",", TokenType::Comma },
         { "x56", TokenType::Word },

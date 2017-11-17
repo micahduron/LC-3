@@ -13,6 +13,7 @@ protected:
     using Comma = Atom<TokenType::Comma>;
     using PoundSign = Atom<TokenType::Pound>;
     using Colon = Atom<TokenType::Colon>;
+    using Minus = Atom<TokenType::Minus>;
     using Linebreak = Atom<TokenType::Linebreak>;
     using End = Atom<TokenType::End, FailureMode::Fatal>;
 

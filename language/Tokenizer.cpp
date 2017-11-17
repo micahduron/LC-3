@@ -12,7 +12,7 @@ using Util::CharClass;
 using Util::StringView;
 using Util::StringTokenizer;
 
-static const CharClass isPunct(".,#:");
+static const CharClass isPunct(".,#:-");
 static const CharClass isQuote("'\"");
 static const CharClass isComment(";");
 static const CharClass isNewline("\n");
@@ -71,6 +71,9 @@ Token Tokenizer::getToken() {
                 break;
             case '#':
                 tokenType = TokenType::Pound;
+                break;
+            case '-':
+                tokenType = TokenType::Minus;
                 break;
             default:
                 throw std::domain_error("Unimplemented token-punctuation case.");

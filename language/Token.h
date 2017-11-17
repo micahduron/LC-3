@@ -12,6 +12,7 @@ enum class TokenType {
     Period,
     Pound,
     Colon,
+    Minus,
     Word,
     Number,
     String,
@@ -37,6 +38,7 @@ inline std::ostream& operator << (std::ostream& outStream, TokenType tokenType) 
         CASE(Period);
         CASE(Pound);
         CASE(Colon);
+        CASE(Minus);
         CASE(Word);
         CASE(Number);
         CASE(String);
