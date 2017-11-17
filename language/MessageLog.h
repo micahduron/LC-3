@@ -13,13 +13,13 @@ public:
     std::ostream& error() {
         ++m_numErrors;
 
-        return getOutputStream() << "\nError: ";
+        return getOutputStream() << "Error: ";
     }
 
     std::ostream& warning() {
         ++m_numWarnings;
 
-        return getOutputStream() << "\nWarning: ";
+        return getOutputStream() << "Warning: ";
     }
 
     int errorCount() const {
