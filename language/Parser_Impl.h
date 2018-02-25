@@ -83,6 +83,26 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
     template <typename Elem>
     using SetDefault = SetIgnore<Elem>;
 
+    template <typename Elem>
+    struct HaltOnFail : public ParserElement {
+        static ParseState parse(ParserContext& context) {
+            ParseState status = SetError<Elem>::parse(context);
+
+            return status != ParseState::Success ?
+                ParseState::FatalFail :
+                ParseState::Success;
+        }
+    };
+
+    template <typename ElemsHead, typename... ElemsTail>
+    class HaltIfNone_Sub : public Any<ElemsHead, HaltIfNone_Sub<ElemsTail...>> {};
+
+    template <typename ElemLast>
+    class HaltIfNone_Sub<ElemLast> : public HaltOnFail<ElemLast> {};
+
+    template <typename... Elems>
+    using HaltIfNone = SetDefault<HaltIfNone_Sub<Elems...>>;
+
     struct DirectiveName : public ParserElement {
         static ParseState parse(ParserContext& context) {
             assert(context.tree.treeTop() == context.tree.currRoot());
