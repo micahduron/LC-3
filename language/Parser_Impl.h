@@ -52,6 +52,37 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
         }
     };
 
+    template <typename FlagHandler, typename FlagHandler::value FlagValue, typename Elem>
+    struct SetFlags : public ParserElement {
+        static ParseState parse(ParserContext& context) {
+            ParserFlags& parseFlags = context.flags;
+
+            auto prevFlag = FlagHandler::get(parseFlags);
+            FlagHandler::set(parseFlags, FlagValue);
+
+            ParseState status = Elem::parse(context);
+
+            FlagHandler::set(parseFlags, prevFlag);
+
+            return status;
+        }
+    };
+
+    template <typename ParserFlags::ErrorFlags::value ErrMode, typename Elem>
+    using SetErrorMode = SetFlags<ParserFlags::ErrorFlags, ErrMode, Elem>;
+
+    template <typename Elem>
+    using SetError = SetErrorMode<ErrorMode::Error, Elem>;
+
+    template <typename Elem>
+    using SetIgnore = SetErrorMode<ErrorMode::Ignore, Elem>;
+
+    template <typename Elem>
+    using SetWarn = SetErrorMode<ErrorMode::Warn, Elem>;
+
+    template <typename Elem>
+    using SetDefault = SetIgnore<Elem>;
+
     struct DirectiveName : public ParserElement {
         static ParseState parse(ParserContext& context) {
             assert(context.tree.treeTop() == context.tree.currRoot());
