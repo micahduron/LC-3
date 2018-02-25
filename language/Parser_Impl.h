@@ -34,7 +34,7 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
     // An atom verifies if the current token is of an expected type and will
     // consume it if it matches, otherwise it will do nothing. This element
     // does not modify the AST in any way.
-    template <TokenType ExpectedType, FailureMode FailMode = FailureMode::Ignore>
+    template <TokenType ExpectedType>
     struct Atom : public ParserElement {
         static ParseState parse(ParserContext& context) {
             Token token = *context.tokenizer;
@@ -43,9 +43,11 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
                 ++context.tokenizer;
 
                 return ParseState::Success;
-            } else if constexpr (FailMode == FailureMode::Fatal) {
-                context.log.error() << token.location << " Unexpected token "
-                                    << token.type << ". Expected " << ExpectedType << '\n';
+            }
+            if (context.flags & ErrorMode::Error) {
+                context.log.error() << token.location << " Unexpected token '"
+                                    << token.type << "'.\n"
+                                    << token.location.getLine() << '\n';
                 return ParseState::FatalFail;
             }
             return ParseState::NonFatalFail;
@@ -131,7 +133,16 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
 
             Token token = *context.tokenizer;
 
-            if (token.type == TokenType::Word && Constants::IsInstruction(token.str)) {
+            if (token.type == TokenType::Word) {
+                if (!Constants::IsInstruction(token.str)) {
+                    if (context.flags & ErrorMode::Error) {
+                        context.log.error() << token.location << " Unknown instruction "
+                                            << "name.\n";
+                        return ParseState::FatalFail;
+                    } else {
+                        return ParseState::NonFatalFail;
+                    }
+                }
                 ++context.tokenizer;
 
                 SyntaxTreeNode& treeNode = context.tree.descendTree();
@@ -189,6 +200,12 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
             Token token = *context.tokenizer;
 
             if (token.type != TokenType::Word) {
+                if (context.flags & ErrorMode::Error) {
+                    context.log.error() << token.location << " Unexpected token.\n";
+                    context.log.error() << token.location.getLine() << '\n';
+
+                    return ParseState::FatalFail;
+                }
                 return ParseState::NonFatalFail;
             }
             ++context.tokenizer;
@@ -244,13 +261,12 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
         }
     };
 
-    template <FailureMode FailMode>
     struct DecNumberDefn : public ParserElement {
         static ParseState parse(ParserContext& context) {
             Token token = *context.tokenizer;
 
             if (token.type != TokenType::Number) {
-                if constexpr (FailMode == FailureMode::Fatal) {
+                if (context.flags & ErrorMode::Error) {
                     context.log.error() << "Expected number\n";
 
                     return ParseState::FatalFail;
@@ -259,7 +275,7 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
                 }
             }
             if (!DecNumberDefn::IsValid(token.str)) {
-                if constexpr (FailMode == FailureMode::Fatal) {
+                if (context.flags & ErrorMode::Error) {
                     context.log.error() << "Invalid number\n";
 
                     return ParseState::FatalFail;

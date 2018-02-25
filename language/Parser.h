@@ -15,11 +15,11 @@ protected:
     using Colon = Atom<TokenType::Colon>;
     using Minus = Atom<TokenType::Minus>;
     using Linebreak = Atom<TokenType::Linebreak>;
-    using End = Atom<TokenType::End, FailureMode::Fatal>;
+    using End = SetError<Atom<TokenType::End>>;
 
     using DecimalNumber = Any<
-        All<PoundSign, DecNumberDefn<FailureMode::Fatal>>,
-        DecNumberDefn<FailureMode::Ignore>
+        All<PoundSign, SetError<DecNumberDefn>>,
+        DecNumberDefn
     >;
     using Number = Any<HexNumber, DecimalNumber>;
 
