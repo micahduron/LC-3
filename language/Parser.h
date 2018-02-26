@@ -27,11 +27,25 @@ protected:
     using DirectiveStmt = TreeChild<DirectiveName, Many<DirectiveArg>>;
     using Directive = All<Period, DirectiveStmt>;
 
-    using InstrArg = TreeChild<Any<Register, Number, LabelRef>>;
-    using InstrArgList = All<InstrArg, Many<Comma, InstrArg>>;
-    using Instruction = TreeChild<InstrName, InstrArgList>;
+    template <template <typename... Ts> typename DisjuncType>
+    using InstrArg_T = TreeChild<DisjuncType<Register, Number, LabelRef>>;
 
-    using Line = All<Maybe<LabelDefn>, Maybe<Any<Instruction, Directive>>, Linebreak>;
+    using InstrArg_Head = InstrArg_T<Any>;
+    using InstrArg_Tail = InstrArg_T<HaltIfNone>;
+
+    using InstrArgList = Maybe<All<InstrArg_Head, Many<Comma, InstrArg_Tail>>>;
+    using Instruction = TreeChild<SetError<InstrName>, InstrArgList>;
+
+    using Line = All<
+        Maybe<LabelDefn>,
+        Maybe<
+          Any<
+            Directive,
+            Instruction
+          >
+        >,
+        Linebreak
+    >;
     using Document = All<Many<Line>, End>;
 
 public:
