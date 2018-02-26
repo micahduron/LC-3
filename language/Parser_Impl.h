@@ -245,12 +245,12 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
 
     private:
         static bool IsValid(const Util::StringView& tokenStr) {
+            if (tokenStr.size() == 0) {
+                return false;
+            }
             auto startIter = tokenStr.begin();
             auto endIter = tokenStr.end();
 
-            if (startIter == endIter) {
-                return false;
-            }
             if (std::tolower(*startIter) != 'x') {
                 return false;
             }
@@ -304,7 +304,10 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
 
     private:
         static bool IsValid(const Util::StringView& tokenStr) {
-            return std::all_of(tokenStr.begin(), tokenStr.end(), [](char c) -> bool {
+            if (tokenStr.size() == 0) return false;
+
+            return std::all_of(tokenStr.begin(), tokenStr.end(), [](char c) -> bool
+            {
                 auto cu = static_cast<unsigned char>(c);
 
                 return std::isdigit(cu) != 0;
