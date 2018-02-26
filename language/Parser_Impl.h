@@ -121,7 +121,8 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
 
                 return ParseState::Success;
             }
-            context.log.error() << "Invalid directive name.\n";
+            context.log.error() << "Invalid directive name.\n"
+                                << token.location.getLine() << '\n';
 
             return ParseState::FatalFail;
         }
