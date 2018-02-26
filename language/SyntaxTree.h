@@ -17,6 +17,7 @@ enum class NodeType {
     Register,
     HexNumber,
     DecNumber,
+    NegNumber,
     String,
     Blank,
     Root
@@ -136,6 +137,7 @@ std::ostream& operator << (std::ostream& outStream, NodeType nodeType) {
         CASE(Register);
         CASE(HexNumber);
         CASE(DecNumber);
+        CASE(NegNumber);
         CASE(String);
         CASE(Blank);
         CASE(Root);

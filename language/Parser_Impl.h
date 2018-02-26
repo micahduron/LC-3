@@ -265,6 +265,14 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
         static ParseState parse(ParserContext& context) {
             Token token = *context.tokenizer;
 
+            if (token.type == TokenType::Minus) {
+                SyntaxTreeNode& node = context.tree.descendTree();
+
+                node.type = NodeType::NegNumber;
+                node.token = token;
+
+                token = *++context.tokenizer;
+            }
             if (token.type != TokenType::Number) {
                 if (context.flags & ErrorMode::Error) {
                     context.log.error() << "Expected number\n";
