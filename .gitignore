@@ -17,3 +17,5 @@
 !*.cpp
 !*.tpp
 !*.h
+
+!configure
