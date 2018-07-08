@@ -5,6 +5,7 @@
 #include <utility>
 #include <type_traits>
 #include <functional>
+#include "Hash.h"
 
 #pragma once
 
@@ -251,19 +252,12 @@ public:
         static_assert(std::is_same_v<char, decltype(std::declval<Func>()(char(0)))>,
             "Invalid type signature.");
 
-        // This is a simple multiplicative hash for strings. Both multiplier
-        // values are randomly selected 64-bit primes.
-
-        auto charMultiplier = 0xED7CB501657307DFULL;
-        size_t accumulator = 0;
+        Hash hasher(0xED7CB501657307DFULL, 0xDB0487630191DE0BULL, 1);
 
         for (char c : strView) {
-            accumulator += charMultiplier * fn(c);
-            charMultiplier *= charMultiplier;
+            hasher(fn(c));
         }
-        constexpr auto hashMultiplier = 0xDB0487630191DE0BULL;
-
-        return (accumulator * hashMultiplier) >> 1;
+        return hasher.finalize();
     }
 
     static size_t hash(const StringView& strView) {
