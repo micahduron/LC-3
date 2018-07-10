@@ -2,8 +2,8 @@
 // this file directly within my code and apply an arbitrary macro
 // to each line.
 
-_(ADD)
-_(AND)
-_(BR)
-_(NOT)
+_(ADD, 0x1000)
+_(AND, 0x1020)
+_(BR,  0x0000)
+_(NOT, 0x903F)
 
