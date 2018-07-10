@@ -5,11 +5,15 @@
 #include "Token.h"
 #include "Tokenizer.h"
 #include "ParserContext.h"
-#include "Constants.h"
+#include "keywords/Instructions.h"
+#include "keywords/Directives.h"
 
 #pragma once
 
 namespace LC3::Language {
+
+using Keywords::Instructions;
+using Keywords::Directives;
 
 struct Parser_Impl : protected Util::GenericParser<ParserContext> {
     enum class FailureMode {
@@ -111,7 +115,7 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
 
             Token token = *context.tokenizer;
 
-            if (token.type == TokenType::Word && Constants::IsDirective(token.str)) {
+            if (token.type == TokenType::Word && Directives::has(token.str)) {
                 ++context.tokenizer;
 
                 SyntaxTreeNode& newRoot = context.tree.descendTree();
@@ -135,7 +139,7 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
             Token token = *context.tokenizer;
 
             if (token.type == TokenType::Word) {
-                if (!Constants::IsInstruction(token.str)) {
+                if (!Instructions::has(token.str)) {
                     if (context.flags & ErrorMode::Error) {
                         context.log.error() << token.location << " Unknown instruction "
                                             << "name.\n";
@@ -176,7 +180,7 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
                 ConstructNode(context, token);
 
                 return ParseState::Success;
-            } else if (!Constants::IsReserved(token.str)) {
+            } else if (!Instructions::has(token.str) && !Directives::has(token.str)) {
                 ++context.tokenizer;
 
                 ConstructNode(context, token);
