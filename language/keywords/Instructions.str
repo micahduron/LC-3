@@ -3,7 +3,7 @@
 // to each line.
 
 _(ADD, 0x1000)
-_(AND, 0x1020)
+_(AND, 0x5000)
 _(BR,  0x0000)
 _(NOT, 0x903F)
 
