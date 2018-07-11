@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <lc3.h>
 #include <util/StringView.h>
 #include <util/KeywordMap.h>
@@ -38,5 +39,19 @@ public:
         return Directive::Invalid;
     }
 };
+
+std::ostream& operator << (std::ostream& outStream, Directive dir) {
+    switch (dir) {
+        #define _(Name) \
+            case Directive::Name: \
+                outStream << #Name; \
+                break;
+        #include "Directives.str"
+
+        _(Invalid)
+        #undef _
+    }
+    return outStream;
+}
 
 } // namespace LC3::Language::Keywords

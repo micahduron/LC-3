@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <lc3.h>
 #include <util/StringView.h>
 #include <util/StringUtils.h>
@@ -53,5 +54,19 @@ public:
         return static_cast<LC3::Word>(instr);
     }
 };
+
+std::ostream& operator << (std::ostream& outStream, Instruction instr) {
+    switch (instr) {
+        #define _(Name, Opcode) \
+            case Instruction::Name: \
+                outStream << #Name; \
+                break;
+        #include "Instructions.str"
+
+        _(Invalid, 0xFFFF)
+        #undef _
+    }
+    return outStream;
+}
 
 } // namespace LC3::Language::Keywords
