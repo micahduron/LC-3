@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 namespace LC3::Language {
 
 enum class NodeType {
