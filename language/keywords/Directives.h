@@ -19,7 +19,7 @@ enum class Directive {
 };
 
 class Directives {
-    static const KeywordMap<enum Directive> DirSet;
+    static const KeywordMap<enum Directive> DirMap;
 
 public:
     static bool has(const StringView& dirName) {

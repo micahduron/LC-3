@@ -2,16 +2,16 @@
 
 namespace LC3::Language::Keywords {
 
-const KeywordMap<enum Directive> Directives::DirSet = {
+const KeywordMap<enum Directive> Directives::DirMap = {
     #define _(Name) { #Name ##_sv, Directive::Name },
     #include "Directives.str"
     #undef _
 };
 
 enum Directive Directives::get(const StringView& dirName) {
-    auto setIter = DirSet.find(dirName);
+    auto setIter = DirMap.find(dirName);
 
-    if (setIter != DirSet.end()) {
+    if (setIter != DirMap.end()) {
         return setIter->second;
     }
     return Directive::Invalid;
