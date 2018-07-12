@@ -18,7 +18,7 @@ enum class NodeType {
     Root
 };
 
-std::ostream& operator << (std::ostream& outStream, NodeType nodeType) {
+inline std::ostream& operator << (std::ostream& outStream, NodeType nodeType) {
     switch (nodeType) {
     #define CASE(type) \
         case NodeType::type: \
