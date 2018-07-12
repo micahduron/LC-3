@@ -1,19 +1,11 @@
-#include <algorithm>
-#include <cassert>
-#include <cctype>
 #include <util/GenericParser.h>
 #include "Token.h"
 #include "Tokenizer.h"
 #include "ParserContext.h"
-#include "keywords/Instructions.h"
-#include "keywords/Directives.h"
 
 #pragma once
 
 namespace LC3::Language {
-
-using Keywords::Instructions;
-using Keywords::Directives;
 
 struct Parser_Impl : protected Util::GenericParser<ParserContext> {
     enum class FailureMode {
@@ -110,257 +102,44 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
     using HaltIfNone = SetDefault<HaltIfNone_Sub<Elems...>>;
 
     struct DirectiveName : public ParserElement {
-        static ParseState parse(ParserContext& context) {
-            assert(context.tree.treeTop() == context.tree.currRoot());
-
-            Token token = *context.tokenizer;
-
-            if (token.type == TokenType::Word && Directives::has(token.str)) {
-                ++context.tokenizer;
-
-                SyntaxTreeNode& newRoot = context.tree.descendTree();
-
-                newRoot.type = NodeType::Directive;
-                newRoot.token = token;
-
-                return ParseState::Success;
-            }
-            context.log.error() << "Invalid directive name.\n"
-                                << token.location.getLine() << '\n';
-
-            return ParseState::FatalFail;
-        }
+        static ParseState parse(ParserContext& context);
     };
 
     struct InstrName : public ParserElement {
-        static ParseState parse(ParserContext& context) {
-            assert(context.tree.treeTop() == context.tree.currRoot());
-
-            Token token = *context.tokenizer;
-
-            if (token.type == TokenType::Word) {
-                if (!Instructions::has(token.str)) {
-                    if (context.flags & ErrorMode::Error) {
-                        context.log.error() << token.location << " Unknown instruction "
-                                            << "name.\n";
-                        return ParseState::FatalFail;
-                    } else {
-                        return ParseState::NonFatalFail;
-                    }
-                }
-                ++context.tokenizer;
-
-                SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-                treeNode.type = NodeType::Instruction;
-                treeNode.token = token;
-
-                return ParseState::Success;
-            }
-            return ParseState::NonFatalFail;
-        }
+        static ParseState parse(ParserContext& context);
     };
 
     struct LabelDefn : public ParserElement {
-        static ParseState parse(ParserContext& context) {
-            assert(context.tree.treeTop() == context.tree.currRoot());
+        static ParseState parse(ParserContext& context);
 
-            Token token = *context.tokenizer;
-
-            if (token.type != TokenType::Word) {
-                return ParseState::NonFatalFail;
-            }
-            Token nextToken = context.tokenizer.peek(1);
-
-            // A strange quirk of LC-3 is that labels can be reserved words,
-            // even valid hexadecimal numbers, if they are followed by a colon.
-            if (nextToken.type == TokenType::Colon) {
-                context.tokenizer += 2;
-            
-                ConstructNode(context, token);
-
-                return ParseState::Success;
-            } else if (!Instructions::has(token.str) && !Directives::has(token.str)) {
-                ++context.tokenizer;
-
-                ConstructNode(context, token);
-
-                return ParseState::Success;
-            }
-            return ParseState::NonFatalFail;
-        }
     private:
-        static void ConstructNode(ParserContext& context, const Token& token) {
-            SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-            treeNode.type = NodeType::LabelDefn;
-            treeNode.token = token;
-
-            context.tree.ascendTree();
-        }
+        static void ConstructNode(ParserContext& context, const Token& token);
     };
 
     struct LabelRef : public ParserElement {
-        static ParseState parse(ParserContext& context) {
-            Token token = *context.tokenizer;
-
-            if (token.type != TokenType::Word) {
-                if (context.flags & ErrorMode::Error) {
-                    context.log.error() << token.location << " Unexpected token.\n";
-                    context.log.error() << token.location.getLine() << '\n';
-
-                    return ParseState::FatalFail;
-                }
-                return ParseState::NonFatalFail;
-            }
-            ++context.tokenizer;
-
-            SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-            treeNode.type = NodeType::LabelRef;
-            treeNode.token = std::move(token);
-
-            return ParseState::Success;
-        }
+        static ParseState parse(ParserContext& context);
     };
 
     struct HexNumber : public ParserElement {
-        static ParseState parse(ParserContext& context) {
-            Token token = *context.tokenizer;
-
-            if (token.type != TokenType::Word) {
-                return ParseState::NonFatalFail;
-            }
-            if (!IsValid(token.str)) {
-                return ParseState::NonFatalFail;
-            }
-            ++context.tokenizer;
-
-            SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-            treeNode.type = NodeType::HexNumber;
-
-            // Removes the leading 'x' character, leaving only the hex digits.
-            token.str = token.str.subString(1, token.str.size() - 1);
-            treeNode.token = std::move(token);
-
-            return ParseState::Success;
-        }
+        static ParseState parse(ParserContext& context);
 
     private:
-        static bool IsValid(const Util::StringView& tokenStr) {
-            if (tokenStr.size() == 0) {
-                return false;
-            }
-            auto startIter = tokenStr.begin();
-            auto endIter = tokenStr.end();
-
-            if (std::tolower(*startIter) != 'x') {
-                return false;
-            }
-            return std::all_of(startIter + 1, endIter, [](char c) -> bool {
-                auto cu = static_cast<unsigned char>(c);
-
-                return std::isxdigit(cu) != 0;
-            });
-        }
+        static bool IsValid(const Util::StringView& tokenStr);
     };
 
     struct DecNumberDefn : public ParserElement {
-        static ParseState parse(ParserContext& context) {
-            Token token = *context.tokenizer;
-
-            if (token.type == TokenType::Minus) {
-                SyntaxTreeNode& node = context.tree.descendTree();
-
-                node.type = NodeType::NegNumber;
-                node.token = token;
-
-                token = *++context.tokenizer;
-            }
-            if (token.type != TokenType::Number) {
-                if (context.flags & ErrorMode::Error) {
-                    context.log.error() << "Expected number\n";
-
-                    return ParseState::FatalFail;
-                } else {
-                    return ParseState::NonFatalFail;
-                }
-            }
-            if (!DecNumberDefn::IsValid(token.str)) {
-                if (context.flags & ErrorMode::Error) {
-                    context.log.error() << "Invalid number\n";
-
-                    return ParseState::FatalFail;
-                } else {
-                    return ParseState::NonFatalFail;
-                }
-            }
-            ++context.tokenizer;
-
-            SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-            treeNode.type = NodeType::DecNumber;
-            treeNode.token = token;
-
-            return ParseState::Success;
-        }
+        static ParseState parse(ParserContext& context);
 
     private:
-        static bool IsValid(const Util::StringView& tokenStr) {
-            if (tokenStr.size() == 0) return false;
-
-            return std::all_of(tokenStr.begin(), tokenStr.end(), [](char c) -> bool
-            {
-                auto cu = static_cast<unsigned char>(c);
-
-                return std::isdigit(cu) != 0;
-            });
-        }
+        static bool IsValid(const Util::StringView& tokenStr);
     };
 
     struct String : public ParserElement {
-        static ParseState parse(ParserContext& context) {
-            Token token = *context.tokenizer;
-
-            if (token.type != TokenType::String) {
-                return ParseState::NonFatalFail;
-            }
-            ++context.tokenizer;
-
-            SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-            treeNode.type = NodeType::String;
-            treeNode.token = std::move(token);
-
-            return ParseState::Success;
-        }
+        static ParseState parse(ParserContext& context);
     };
 
     struct Register : public ParserElement {
-        static ParseState parse(ParserContext& context) {
-            Token token = *context.tokenizer;
-
-            if (token.type != TokenType::Word) {
-                return ParseState::NonFatalFail;
-            }
-            if (token.str.size() != 2) {
-                return ParseState::NonFatalFail;
-            }
-            if ((token.str.beginsWith("R"_sv) || token.str.beginsWith("r"_sv)) &&
-                (token.str[1] >= '0' && token.str[1] <= '7'))
-            {
-                ++context.tokenizer;
-
-                SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-                treeNode.type = NodeType::Register;
-                treeNode.token = std::move(token);
-
-                return ParseState::Success;
-            }
-            return ParseState::NonFatalFail;
-        }
+        static ParseState parse(ParserContext& context);
     };
 };
 
