@@ -19,39 +19,16 @@ enum class Directive {
 };
 
 class Directives {
-    static inline const KeywordMap<enum Directive> DirSet = {
-        #define _(Name) { #Name ## _sv, Directive::Name },
-        #include "Directives.str"
-        #undef _
-    };
+    static const KeywordMap<enum Directive> DirSet;
 
 public:
     static bool has(const StringView& dirName) {
         return get(dirName) != Directive::Invalid;
     }
 
-    static enum Directive get(const StringView& dirName) {
-        auto setIter = DirSet.find(dirName);
-
-        if (setIter != DirSet.end()) {
-            return setIter->second;
-        }
-        return Directive::Invalid;
-    }
+    static enum Directive get(const StringView& dirName);
 };
 
-std::ostream& operator << (std::ostream& outStream, Directive dir) {
-    switch (dir) {
-        #define _(Name) \
-            case Directive::Name: \
-                outStream << #Name; \
-                break;
-        #include "Directives.str"
-
-        _(Invalid)
-        #undef _
-    }
-    return outStream;
-}
+std::ostream& operator << (std::ostream& outStream, Directive dir);
 
 } // namespace LC3::Language::Keywords
