@@ -1,5 +1,6 @@
 #include <cassert>
 #include <util/StringView.h>
+#include <util/StringUtils.h>
 #include "keywords/Instructions.h"
 #include "keywords/Directives.h"
 #include "Parser_Impl.h"
@@ -8,6 +9,7 @@ namespace LC3::Language {
 
 using Util::StringView;
 using Util::ParseState;
+using Util::Str::CaselessCompare;
 using Keywords::Instructions;
 using Keywords::Directives;
 
@@ -232,7 +234,7 @@ ParseState Parser_Impl::Register::parse(ParserContext& context) {
     if (token.str.size() != 2) {
         return ParseState::NonFatalFail;
     }
-    if ((token.str.beginsWith("R"_sv) || token.str.beginsWith("r"_sv)) &&
+    if (token.str.beginsWith("R", CaselessCompare()) &&
         (token.str[1] >= '0' && token.str[1] <= '7'))
     {
         ++context.tokenizer;
