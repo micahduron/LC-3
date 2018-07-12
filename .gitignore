@@ -10,6 +10,7 @@
 /language/*
 
 !/language/keywords/
+/language/keywords/*
 
 !/configure.ac
 !Makefile.am
@@ -17,5 +18,6 @@
 !*.cpp
 !*.tpp
 !*.h
+!*.str
 
 !configure
