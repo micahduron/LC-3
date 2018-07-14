@@ -134,7 +134,7 @@ ParseState Parser_Impl::HexNumber::parse(ParserContext& context) {
     ++context.tokenizer;
 
     // Removes the leading 'x' character, leaving only the hex digits.
-    token.str = token.str.subString(1, token.str.size() - 1);
+    token.str = token.str.subString(1);
     LC3::Word parsedNum = std::strtoul(token.str.data(), nullptr, 16);
     context.tree.descendTree<NumberNode>(parsedNum, token);
 
