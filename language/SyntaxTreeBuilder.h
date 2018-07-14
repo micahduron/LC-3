@@ -37,15 +37,22 @@ public:
         return currRoot();
     }
 
-    SyntaxTreeNode& descendTree() {
+    template <typename NodeT, typename... ArgsT>
+    SyntaxTreeNode& descendTree(ArgsT&&... args) {
         auto& rootChildren = currRoot().children;
 
-        rootChildren.emplace_back();
+        NodeT treeNode{ std::forward<ArgsT>(args)... };
+        rootChildren.emplace_back(std::move(treeNode));
 
         SyntaxTreeNode* nextRoot = &rootChildren.back();
         m_nodeStack.push_back(nextRoot);
 
         return currRoot();
+    }
+
+    template <typename... ArgsT>
+    SyntaxTreeNode& descendTree(ArgsT&&... args) {
+        return descendTree<SyntaxTreeNode>(std::forward<ArgsT>(args)...);
     }
 
     class DescentGuard {
