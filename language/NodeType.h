@@ -10,8 +10,6 @@ enum class NodeType {
     LabelDefn,
     LabelRef,
     Register,
-    HexNumber,
-    DecNumber,
     Number,
     NegNumber,
     String,
@@ -31,8 +29,6 @@ inline std::ostream& operator << (std::ostream& outStream, NodeType nodeType) {
         CASE(LabelDefn);
         CASE(LabelRef);
         CASE(Register);
-        CASE(HexNumber);
-        CASE(DecNumber);
         CASE(Number);
         CASE(NegNumber);
         CASE(String);
