@@ -22,6 +22,15 @@ struct SyntaxTreeNode {
       token{ nodeToken }
     {}
 
+    template <typename VisitorT>
+    void walk(VisitorT&& visitor) const {
+        visitor(*this);
+
+        for (const auto& child : this->children) {
+            visitor(child);
+        }
+    }
+
     bool operator == (const SyntaxTreeNode& other) const {
         return this == &other;
     }
