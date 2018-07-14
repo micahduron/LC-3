@@ -41,4 +41,10 @@ struct RegisterNode :
     using NodeBase::NodeBase;
 };
 
+struct NumberNode :
+    public NodeBase<NodeType::Number, LC3::Word>
+{
+    using NodeBase::NodeBase;
+};
+
 } // namespace LC3::Language
