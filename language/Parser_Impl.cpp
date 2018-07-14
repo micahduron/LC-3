@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cstdlib>
 #include <util/StringView.h>
 #include <util/StringUtils.h>
 #include "TreeNodes.h"
@@ -132,13 +133,10 @@ ParseState Parser_Impl::HexNumber::parse(ParserContext& context) {
     }
     ++context.tokenizer;
 
-    SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-    treeNode.type = NodeType::HexNumber;
-
     // Removes the leading 'x' character, leaving only the hex digits.
     token.str = token.str.subString(1, token.str.size() - 1);
-    treeNode.token = std::move(token);
+    LC3::Word parsedNum = std::strtoul(token.str.data(), nullptr, 16);
+    context.tree.descendTree<NumberNode>(parsedNum, token);
 
     return ParseState::Success;
 }
@@ -191,10 +189,8 @@ ParseState Parser_Impl::DecNumberDefn::parse(ParserContext& context) {
     }
     ++context.tokenizer;
 
-    SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-    treeNode.type = NodeType::DecNumber;
-    treeNode.token = token;
+    LC3::Word parsedNum = std::strtoul(token.str.data(), nullptr, 10);
+    context.tree.descendTree<NumberNode>(parsedNum, token);
 
     return ParseState::Success;
 }
