@@ -1,5 +1,6 @@
 #pragma once
 
+#include <any>
 #include <vector>
 #include "Token.h"
 #include "NodeType.h"
@@ -31,12 +32,25 @@ struct SyntaxTreeNode {
         }
     }
 
+    template <typename NodeT>
+    auto& data() {
+        return std::any_cast<typename NodeT::DataContainer&>(m_data);
+    }
+
+    template <typename NodeT>
+    const auto& data() const {
+        return std::any_cast<const typename NodeT::DataContainer&>(m_data);
+    }
+
     bool operator == (const SyntaxTreeNode& other) const {
         return this == &other;
     }
     bool operator != (const SyntaxTreeNode& other) const {
         return this != &other;
     }
+
+protected:
+    std::any m_data;
 };
 
 } // namespace LC3::Language
