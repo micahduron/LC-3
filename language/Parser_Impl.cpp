@@ -1,6 +1,7 @@
 #include <cassert>
 #include <util/StringView.h>
 #include <util/StringUtils.h>
+#include "TreeNodes.h"
 #include "keywords/Instructions.h"
 #include "keywords/Directives.h"
 #include "Parser_Impl.h"
@@ -11,22 +12,24 @@ using Util::StringView;
 using Util::ParseState;
 using Util::Str::CaselessCompare;
 using Keywords::Instructions;
+using Keywords::Instruction;
 using Keywords::Directives;
+using Keywords::Directive;
 
 ParseState Parser_Impl::DirectiveName::parse(ParserContext& context) {
     assert(context.tree.treeTop() == context.tree.currRoot());
 
     Token token = *context.tokenizer;
 
-    if (token.type == TokenType::Word && Directives::has(token.str)) {
-        ++context.tokenizer;
+    if (token.type == TokenType::Word) {
+        Directive dirType = Directives::get(token.str);
 
-        SyntaxTreeNode& newRoot = context.tree.descendTree();
+        if (dirType != Directive::Invalid) {
+            ++context.tokenizer;
+            context.tree.descendTree<DirectiveNode>(dirType, token);
 
-        newRoot.type = NodeType::Directive;
-        newRoot.token = token;
-
-        return ParseState::Success;
+            return ParseState::Success;
+        }
     }
     context.log.error() << "Invalid directive name.\n"
                         << token.location.getLine() << '\n';
@@ -40,7 +43,9 @@ ParseState Parser_Impl::InstrName::parse(ParserContext& context) {
     Token token = *context.tokenizer;
 
     if (token.type == TokenType::Word) {
-        if (!Instructions::has(token.str)) {
+        Instruction instrType = Instructions::get(token.str);
+
+        if (instrType == Instruction::Invalid) {
             if (context.flags & ErrorMode::Error) {
                 context.log.error() << token.location << " Unknown instruction "
                                     << "name.\n";
@@ -50,11 +55,7 @@ ParseState Parser_Impl::InstrName::parse(ParserContext& context) {
             }
         }
         ++context.tokenizer;
-
-        SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-        treeNode.type = NodeType::Instruction;
-        treeNode.token = token;
+        context.tree.descendTree<InstructionNode>(instrType, token);
 
         return ParseState::Success;
     }
@@ -239,10 +240,8 @@ ParseState Parser_Impl::Register::parse(ParserContext& context) {
     {
         ++context.tokenizer;
 
-        SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-        treeNode.type = NodeType::Register;
-        treeNode.token = std::move(token);
+        int regNum = token.str[1] - '0';
+        context.tree.descendTree<RegisterNode>(regNum, token);
 
         return ParseState::Success;
     }
