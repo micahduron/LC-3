@@ -231,6 +231,10 @@ public:
         return { data() + baseOffset, length };
     }
 
+    constexpr StringView subString(size_t baseOffset) const {
+        return subString(baseOffset, size() - baseOffset);
+    }
+
     constexpr iterator begin() const {
         return { data(), data() + size() };
     }
