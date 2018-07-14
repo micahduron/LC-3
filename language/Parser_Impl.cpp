@@ -142,7 +142,7 @@ ParseState Parser_Impl::HexNumber::parse(ParserContext& context) {
 }
 
 bool Parser_Impl::HexNumber::IsValid(const StringView& tokenStr) {
-    if (tokenStr.size() == 0) {
+    if (tokenStr.size() < 2) {
         return false;
     }
     auto startIter = tokenStr.begin();
