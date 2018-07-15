@@ -160,13 +160,10 @@ bool Parser_Impl::HexNumber::IsValid(const StringView& tokenStr) {
 
 ParseState Parser_Impl::DecNumberDefn::parse(ParserContext& context) {
     Token token = *context.tokenizer;
+    bool isNegative = false;
 
     if (token.type == TokenType::Minus) {
-        SyntaxTreeNode& node = context.tree.descendTree();
-
-        node.type = NodeType::NegNumber;
-        node.token = token;
-
+        isNegative = true;
         token = *++context.tokenizer;
     }
     if (token.type != TokenType::Number) {
@@ -190,6 +187,10 @@ ParseState Parser_Impl::DecNumberDefn::parse(ParserContext& context) {
     ++context.tokenizer;
 
     LC3::Word parsedNum = std::strtoul(token.str.data(), nullptr, 10);
+
+    if (isNegative) {
+        parsedNum = ~parsedNum + 1;
+    }
     context.tree.descendTree<NumberNode>(parsedNum, token);
 
     return ParseState::Success;
