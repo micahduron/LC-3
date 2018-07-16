@@ -28,7 +28,7 @@ struct SourceLocation {
 };
 
 inline std::ostream& operator << (std::ostream& outStream, const SourceLocation& loc) {
-    outStream << '(' << loc.lineNum << ", " << loc.lineOffset << ')';
+    outStream << '[' << loc.lineNum << ":" << loc.lineOffset << ']';
 
     return outStream;
 }
