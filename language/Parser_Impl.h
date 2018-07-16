@@ -1,4 +1,5 @@
 #include <util/GenericParser.h>
+#include <Log.h>
 #include "Token.h"
 #include "Tokenizer.h"
 #include "ParserContext.h"
@@ -41,9 +42,9 @@ struct Parser_Impl : protected Util::GenericParser<ParserContext> {
                 return ParseState::Success;
             }
             if (context.flags & ErrorMode::Error) {
-                context.log.error() << token.location << " Unexpected token '"
-                                    << token.type << "'.\n"
-                                    << token.location.getLine() << '\n';
+                Log::error() << token.location << " Unexpected token '"
+                             << token.type << "'.\n"
+                             << token.location.getLine() << '\n';
                 return ParseState::FatalFail;
             }
             return ParseState::NonFatalFail;

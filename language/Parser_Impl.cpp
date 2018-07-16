@@ -32,8 +32,8 @@ ParseState Parser_Impl::DirectiveName::parse(ParserContext& context) {
             return ParseState::Success;
         }
     }
-    context.log.error() << "Invalid directive name.\n"
-                        << token.location.getLine() << '\n';
+    Log::error() << "Invalid directive name.\n"
+                 << token.location.getLine() << '\n';
 
     return ParseState::FatalFail;
 }
@@ -48,8 +48,8 @@ ParseState Parser_Impl::InstrName::parse(ParserContext& context) {
 
         if (instrType == Instruction::Invalid) {
             if (context.flags & ErrorMode::Error) {
-                context.log.error() << token.location << " Unknown instruction "
-                                    << "name.\n";
+                Log::error() << token.location << " Unknown instruction "
+                             << "name.\n";
                 return ParseState::FatalFail;
             } else {
                 return ParseState::NonFatalFail;
@@ -105,8 +105,8 @@ ParseState Parser_Impl::LabelRef::parse(ParserContext& context) {
 
     if (token.type != TokenType::Word) {
         if (context.flags & ErrorMode::Error) {
-            context.log.error() << token.location << " Unexpected token.\n";
-            context.log.error() << token.location.getLine() << '\n';
+            Log::error() << token.location << " Unexpected token.\n";
+                         << token.location.getLine() << '\n';
 
             return ParseState::FatalFail;
         }
@@ -168,7 +168,7 @@ ParseState Parser_Impl::DecNumberDefn::parse(ParserContext& context) {
     }
     if (token.type != TokenType::Number) {
         if (context.flags & ErrorMode::Error) {
-            context.log.error() << "Expected number\n";
+            Log::error() << "Expected number\n";
 
             return ParseState::FatalFail;
         } else {
@@ -177,7 +177,7 @@ ParseState Parser_Impl::DecNumberDefn::parse(ParserContext& context) {
     }
     if (!DecNumberDefn::IsValid(token.str)) {
         if (context.flags & ErrorMode::Error) {
-            context.log.error() << "Invalid number\n";
+            Log::error() << "Invalid number\n";
 
             return ParseState::FatalFail;
         } else {

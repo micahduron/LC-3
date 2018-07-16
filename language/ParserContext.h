@@ -1,6 +1,5 @@
 #include <util/StringView.h>
 #include "Tokenizer.h"
-#include "MessageLog.h"
 #include "SyntaxTree.h"
 #include "ParserFlags.h"
 
@@ -10,7 +9,6 @@ namespace LC3::Language {
 
 struct ParserContext {
     Tokenizer tokenizer;
-    MessageLog log;
     ParserFlags flags;
     SyntaxTreeBuilder tree;
 
