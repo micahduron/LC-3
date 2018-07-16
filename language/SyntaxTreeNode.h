@@ -23,6 +23,18 @@ struct SyntaxTreeNode {
       token{ nodeToken }
     {}
 
+    SyntaxTreeNode& child(size_t index) {
+        return children[index];
+    }
+
+    const SyntaxTreeNode& child(size_t index) const {
+        return children[index];
+    }
+
+    const SourceLocation& location() const {
+        return token.location;
+    }
+
     template <typename VisitorT>
     void walk(VisitorT&& visitor) const {
         visitor(*this);
