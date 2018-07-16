@@ -36,6 +36,15 @@ struct SyntaxTreeNode {
     }
 
     template <typename VisitorT>
+    void walk(VisitorT&& visitor) {
+        visitor(*this);
+
+        for (auto& child : this->children) {
+            visitor(child);
+        }
+    }
+
+    template <typename VisitorT>
     void walk(VisitorT&& visitor) const {
         visitor(*this);
 
