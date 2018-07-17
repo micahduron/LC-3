@@ -18,6 +18,9 @@ struct SourceLocation {
         while (*lineStart != '\n' && lineStart != src.begin()) {
             --lineStart;
         }
+        if (*lineStart == '\n') {
+            ++lineStart;
+        }
         auto lineEnd = src.begin() + absOffset;
 
         while (*lineEnd != '\n' && lineEnd != src.end()) {
