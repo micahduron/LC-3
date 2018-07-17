@@ -105,7 +105,7 @@ ParseState Parser_Impl::LabelRef::parse(ParserContext& context) {
 
     if (token.type != TokenType::Word) {
         if (context.flags & ErrorMode::Error) {
-            Log::error() << token.location << " Unexpected token.\n";
+            Log::error() << token.location << " Unexpected token.\n"
                          << token.location.getLine() << '\n';
 
             return ParseState::FatalFail;
