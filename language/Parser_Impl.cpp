@@ -1,5 +1,7 @@
 #include <cassert>
 #include <cstdlib>
+#include <memory>
+#include <string>
 #include <util/StringView.h>
 #include <util/StringUtils.h>
 #include "TreeNodes.h"
@@ -207,6 +209,33 @@ bool Parser_Impl::DecNumberDefn::IsValid(const StringView& tokenStr) {
     });
 }
 
+static std::string GetString(const StringView& tokenStr) {
+    std::string result;
+    result.reserve(tokenStr.size());
+
+    size_t i = 0;
+    size_t k = 0;
+
+    for (; i < tokenStr.size(); ++i, ++k) {
+        char currChar = '\0';
+
+        if (tokenStr[i] == '\\') {
+            char nextChar = tokenStr[i + 1];
+
+            if (nextChar == 'n') {
+                currChar = '\n';
+            } else {
+                currChar = nextChar;
+            }
+            ++i;
+        } else {
+            currChar = tokenStr[i];
+        }
+        result += currChar;
+    }
+    return result;
+}
+
 ParseState Parser_Impl::String::parse(ParserContext& context) {
     Token token = *context.tokenizer;
 
@@ -215,10 +244,8 @@ ParseState Parser_Impl::String::parse(ParserContext& context) {
     }
     ++context.tokenizer;
 
-    SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-    treeNode.type = NodeType::String;
-    treeNode.token = std::move(token);
+    auto strVal = std::make_shared<std::string>(GetString(token.str));
+    context.tree.descendTree<StringNode>(std::move(strVal), token);
 
     return ParseState::Success;
 }

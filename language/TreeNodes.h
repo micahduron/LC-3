@@ -2,6 +2,8 @@
 
 #include <utility>
 #include <cassert>
+#include <memory>
+#include <string>
 #include <lc3.h>
 #include "SyntaxTreeNode.h"
 #include "keywords/Instructions.h"
@@ -43,6 +45,12 @@ struct RegisterNode :
 
 struct NumberNode :
     public NodeBase<NodeType::Number, LC3::Word>
+{
+    using NodeBase::NodeBase;
+};
+
+struct StringNode :
+    public NodeBase<NodeType::String, std::shared_ptr<std::string>>
 {
     using NodeBase::NodeBase;
 };
