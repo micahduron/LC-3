@@ -104,6 +104,7 @@ Token Tokenizer::getToken() {
 
             if (tokenizer.peekChar() == '\\') {
                 tokenizer.skip(1);
+                ++tokenLength;
 
                 if (tokenizer.peekChar() == quoteChar) {
                     ++tokenLength;
