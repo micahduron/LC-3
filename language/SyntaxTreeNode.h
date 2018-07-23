@@ -29,10 +29,14 @@ struct SyntaxTreeNode {
     SyntaxTreeNode& operator = (SyntaxTreeNode&& other) = default;
 
     SyntaxTreeNode& child(size_t index) {
+        assert(index < children.size());
+
         return children[index];
     }
 
     const SyntaxTreeNode& child(size_t index) const {
+        assert(index < children.size());
+
         return children[index];
     }
 
