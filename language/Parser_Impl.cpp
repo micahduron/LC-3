@@ -58,7 +58,7 @@ ParseState Parser_Impl::InstrName::parse(ParserContext& context) {
             }
         }
         ++context.tokenizer;
-        context.tree.descendTree<InstructionNode>(instrType, token);
+        context.tree.descendTree<InstructionNode>(InstructionData{instrType}, token);
 
         return ParseState::Success;
     }
