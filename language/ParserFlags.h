@@ -22,9 +22,6 @@ struct ParserFlags {
         static void set(ParserFlags& parseFlags, value flagVal) {
             parseFlags.errorFlags = flagVal;
         }
-
-    private:
-        value m_value;
     };
 
     ErrorFlags::value errorFlags = ErrorMode::Default;
