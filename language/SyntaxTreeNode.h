@@ -15,6 +15,8 @@ struct SyntaxTreeNode {
     std::vector<SyntaxTreeNode> children;
 
     SyntaxTreeNode() {}
+    SyntaxTreeNode(const SyntaxTreeNode& other) = delete;
+    SyntaxTreeNode(SyntaxTreeNode&& other) = default;
     SyntaxTreeNode(NodeType nodeType) :
       type{ nodeType }
     {}
@@ -22,6 +24,9 @@ struct SyntaxTreeNode {
       type{ nodeType },
       token{ nodeToken }
     {}
+
+    SyntaxTreeNode& operator = (const SyntaxTreeNode& other) = delete;
+    SyntaxTreeNode& operator = (SyntaxTreeNode&& other) = default;
 
     SyntaxTreeNode& child(size_t index) {
         return children[index];
