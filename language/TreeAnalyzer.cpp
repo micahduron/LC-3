@@ -71,6 +71,9 @@ struct FormatSpec {
 template <NodeType NodeT>
 struct BasicCheck : public NodeChecker::ParserElement {
     static ParseState parse(CheckerContext& ctx) {
+        if (ctx.childIndex >= ctx.parent().children.size()) {
+            return ParseState::NonFatalFail;
+        }
         const auto& currChild = ctx.currentChild();
 
         if (currChild.type == NodeT) {
