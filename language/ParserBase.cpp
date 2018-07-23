@@ -7,7 +7,7 @@
 #include "TreeNodes.h"
 #include "keywords/Instructions.h"
 #include "keywords/Directives.h"
-#include "Parser_Impl.h"
+#include "ParserBase.h"
 
 namespace LC3::Language {
 
@@ -19,7 +19,7 @@ using Keywords::Instruction;
 using Keywords::Directives;
 using Keywords::Directive;
 
-ParseState Parser_Impl::DirectiveName::parse(ParserContext& context) {
+ParseState ParserBase::DirectiveName::parse(ParserContext& context) {
     assert(context.tree.treeTop() == context.tree.currRoot());
 
     Token token = *context.tokenizer;
@@ -40,7 +40,7 @@ ParseState Parser_Impl::DirectiveName::parse(ParserContext& context) {
     return ParseState::FatalFail;
 }
 
-ParseState Parser_Impl::InstrName::parse(ParserContext& context) {
+ParseState ParserBase::InstrName::parse(ParserContext& context) {
     assert(context.tree.treeTop() == context.tree.currRoot());
 
     Token token = *context.tokenizer;
@@ -65,7 +65,7 @@ ParseState Parser_Impl::InstrName::parse(ParserContext& context) {
     return ParseState::NonFatalFail;
 }
 
-ParseState Parser_Impl::LabelDefn::parse(ParserContext& context) {
+ParseState ParserBase::LabelDefn::parse(ParserContext& context) {
     assert(context.tree.treeTop() == context.tree.currRoot());
 
     Token token = *context.tokenizer;
@@ -93,7 +93,7 @@ ParseState Parser_Impl::LabelDefn::parse(ParserContext& context) {
     return ParseState::NonFatalFail;
 }
 
-void Parser_Impl::LabelDefn::ConstructNode(ParserContext& context, const Token& token) {
+void ParserBase::LabelDefn::ConstructNode(ParserContext& context, const Token& token) {
     SyntaxTreeNode& treeNode = context.tree.descendTree();
 
     treeNode.type = NodeType::LabelDefn;
@@ -102,7 +102,7 @@ void Parser_Impl::LabelDefn::ConstructNode(ParserContext& context, const Token& 
     context.tree.ascendTree();
 }
 
-ParseState Parser_Impl::LabelRef::parse(ParserContext& context) {
+ParseState ParserBase::LabelRef::parse(ParserContext& context) {
     Token token = *context.tokenizer;
 
     if (token.type != TokenType::Word) {
@@ -124,7 +124,7 @@ ParseState Parser_Impl::LabelRef::parse(ParserContext& context) {
     return ParseState::Success;
 }
 
-ParseState Parser_Impl::HexNumber::parse(ParserContext& context) {
+ParseState ParserBase::HexNumber::parse(ParserContext& context) {
     Token token = *context.tokenizer;
 
     if (token.type != TokenType::Word) {
@@ -143,7 +143,7 @@ ParseState Parser_Impl::HexNumber::parse(ParserContext& context) {
     return ParseState::Success;
 }
 
-bool Parser_Impl::HexNumber::IsValid(const StringView& tokenStr) {
+bool ParserBase::HexNumber::IsValid(const StringView& tokenStr) {
     if (tokenStr.size() < 2) {
         return false;
     }
@@ -160,7 +160,7 @@ bool Parser_Impl::HexNumber::IsValid(const StringView& tokenStr) {
     });
 }
 
-ParseState Parser_Impl::DecNumberDefn::parse(ParserContext& context) {
+ParseState ParserBase::DecNumberDefn::parse(ParserContext& context) {
     Token token = *context.tokenizer;
     bool isNegative = false;
 
@@ -198,7 +198,7 @@ ParseState Parser_Impl::DecNumberDefn::parse(ParserContext& context) {
     return ParseState::Success;
 }
 
-bool Parser_Impl::DecNumberDefn::IsValid(const StringView& tokenStr) {
+bool ParserBase::DecNumberDefn::IsValid(const StringView& tokenStr) {
     if (tokenStr.size() == 0) return false;
 
     return std::all_of(tokenStr.begin(), tokenStr.end(), [](char c) -> bool
@@ -236,7 +236,7 @@ static std::string GetString(const StringView& tokenStr) {
     return result;
 }
 
-ParseState Parser_Impl::String::parse(ParserContext& context) {
+ParseState ParserBase::String::parse(ParserContext& context) {
     Token token = *context.tokenizer;
 
     if (token.type != TokenType::String) {
@@ -250,7 +250,7 @@ ParseState Parser_Impl::String::parse(ParserContext& context) {
     return ParseState::Success;
 }
 
-ParseState Parser_Impl::Register::parse(ParserContext& context) {
+ParseState ParserBase::Register::parse(ParserContext& context) {
     Token token = *context.tokenizer;
 
     if (token.type != TokenType::Word) {
@@ -273,3 +273,4 @@ ParseState Parser_Impl::Register::parse(ParserContext& context) {
 }
 
 } // namespace LC3::Language
+

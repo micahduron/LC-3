@@ -1,14 +1,15 @@
-#include <util/GenericParser.h>
+#pragma once
+
 #include <Log.h>
+#include <util/GenericParser.h>
 #include "Token.h"
 #include "Tokenizer.h"
 #include "ParserContext.h"
 
-#pragma once
-
 namespace LC3::Language {
 
-struct Parser_Impl : protected Util::GenericParser<ParserContext> {
+class ParserBase : public Util::GenericParser<ParserContext> {
+public:
     enum class FailureMode {
         Ignore,
         Fatal,
