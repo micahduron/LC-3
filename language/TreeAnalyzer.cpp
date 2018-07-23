@@ -36,6 +36,8 @@ struct CheckerContext {
     }
 
     const SyntaxTreeNode& parent() const {
+        assert(node != nullptr);
+
         return *node;
     }
 
