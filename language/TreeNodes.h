@@ -29,6 +29,12 @@ struct NodeBase : public SyntaxTreeNode {
 struct InstructionData {
     Instruction type = Instruction::Invalid;
     NodeFormat format = NodeFormat::Invalid;
+
+    struct {
+        bool n;
+        bool z;
+        bool p;
+    } flags = {false, false, false};
 };
 
 struct InstructionNode :
