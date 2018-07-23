@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_map>
 #include <optional>
 #include <lc3.h>
 #include <util/StringView.h>
@@ -9,7 +10,11 @@ namespace LC3::Language {
 using Util::StringView;
 
 class SymbolTable {
+    using table_type = std::unordered_map<StringView, LC3::Word>;
+
 public:
+    using iterator = table_type::const_iterator;
+
     SymbolTable() {}
     SymbolTable(const SymbolTable& other) = delete;
     SymbolTable(SymbolTable&& other) = default;
@@ -30,10 +35,18 @@ public:
         return {};
     }
 
+    iterator begin() const {
+        return m_table.begin();
+    }
+
+    iterator end() const {
+        return m_table.end();
+    }
+
     static std::optional<SymbolTable> make(const SyntaxTreeNode& root);
 
 private:
-    std::unordered_map<StringView, LC3::Word> m_table;
+    table_type m_table;
 };
 
 } // namespace LC3::Language
