@@ -54,7 +54,7 @@ struct DirectiveNode :
 };
 
 struct RegisterNode :
-    public NodeBase<NodeType::Register, int>
+    public NodeBase<NodeType::Register, LC3::Word>
 {
     using NodeBase::NodeBase;
 };

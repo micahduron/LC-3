@@ -264,7 +264,7 @@ ParseState ParserBase::Register::parse(ParserContext& context) {
     {
         ++context.tokenizer;
 
-        int regNum = token.str[1] - '0';
+        LC3::Word regNum = token.str[1] - '0';
         context.tree.descendTree<RegisterNode>(regNum, token);
 
         return ParseState::Success;
