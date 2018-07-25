@@ -8,6 +8,7 @@
 #include "NodeType.h"
 #include "TreeNodes.h"
 #include "SymbolTable.h"
+#include "ProgramCounter.h"
 
 namespace LC3::Language {
 
@@ -67,42 +68,21 @@ static void PopulateSymbols(std::stack<StringView>& syms, LC3::Word addr, Symbol
     }
 }
 
-static LC3::Word CalcAddress(const SyntaxTreeNode& node, LC3::Word prevAddress) {
-    switch (node.type) {
-        case NodeType::Instruction:
-            return prevAddress + InstructionNode::size(node);
-        case NodeType::Directive: {
-            Directive dirType = node.data<DirectiveNode>();
-
-            if (dirType == Directive::ORIG) {
-                auto& addrVal = node.child(0).data<NumberNode>();
-
-                return addrVal;
-            } else {
-                return prevAddress + DirectiveNode::size(node);
-            }
-        }
-        default:
-            break;
-    }
-    return prevAddress;
-}
-
 std::optional<SymbolTable> PopulateSymbolTable(const SyntaxTreeNode& root) {
     bool retStatus = true;
     SymbolTable symTable;
-    LC3::Word currAddress = 0;
+    ProgramCounter progCounter;
     std::stack<StringView> unresolvedSyms;
 
     for (const SyntaxTreeNode& childNode : root.children) {
-        currAddress = CalcAddress(childNode, currAddress);
+        progCounter.update(childNode);
 
         switch (childNode.type) {
             case NodeType::LabelDefn:
                 unresolvedSyms.push(childNode.token.str);
                 break;
             case NodeType::Instruction:
-                PopulateSymbols(unresolvedSyms, currAddress, symTable);
+                PopulateSymbols(unresolvedSyms, progCounter.address(), symTable);
                 break;
             case NodeType::Directive: {
                 Directive dirType = childNode.data<DirectiveNode>();
@@ -113,7 +93,7 @@ std::optional<SymbolTable> PopulateSymbolTable(const SyntaxTreeNode& root) {
 
                     break;
                 }
-                PopulateSymbols(unresolvedSyms, currAddress, symTable);
+                PopulateSymbols(unresolvedSyms, progCounter.address(), symTable);
                 break;
             }
             default:
