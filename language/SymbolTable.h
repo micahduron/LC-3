@@ -26,6 +26,10 @@ public:
         m_table[symbolName] = addr;
     }
 
+    bool has(const StringView& symbolName) const {
+        return m_table.find(symbolName) != m_table.end();
+    }
+
     std::optional<LC3::Word> get(const StringView& symbolName) const {
         auto symIter = m_table.find(symbolName);
         
