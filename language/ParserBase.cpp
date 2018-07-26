@@ -1,5 +1,6 @@
 #include <cassert>
 #include <cstdlib>
+#include <exception>
 #include <memory>
 #include <string>
 #include <util/StringView.h>
@@ -40,6 +41,27 @@ ParseState ParserBase::DirectiveName::parse(ParserContext& context) {
     return ParseState::FatalFail;
 }
 
+static BRFlagsNode MakeBranchFlags(const Token& flagToken) {
+    BRFlagsData branchFlags;
+
+    for (char c : flagToken.str) {
+        switch (std::tolower(c)) {
+            case 'n':
+                branchFlags.n = true;
+                break;
+            case 'z':
+                branchFlags.z = true;
+                break;
+            case 'p':
+                branchFlags.p = true;
+                break;
+            default:
+                throw std::logic_error("Unimplemented branch flag");
+        }
+    }
+    return BRFlagsNode(std::move(branchFlags), flagToken);
+}
+
 ParseState ParserBase::InstrName::parse(ParserContext& context) {
     assert(context.tree.treeTop() == context.tree.currRoot());
 
@@ -58,8 +80,22 @@ ParseState ParserBase::InstrName::parse(ParserContext& context) {
             }
         }
         ++context.tokenizer;
-        context.tree.descendTree<InstructionNode>(InstructionData{instrType}, token);
 
+        if (instrType == Instruction::BR) {
+            Token flagsToken = token;
+            flagsToken.str = token.str.subString(2);
+
+            token.str = token.str.subString(0, 2);
+
+            auto flagsNode = MakeBranchFlags(flagsToken);
+
+            auto& instrNode = context.tree.descendTree<InstructionNode>(
+                                    InstructionData{instrType}, token);
+            instrNode.children.push_back(std::move(flagsNode));
+        } else {
+            context.tree.descendTree<InstructionNode>(InstructionData{instrType},
+                                                      token);
+        }
         return ParseState::Success;
     }
     return ParseState::NonFatalFail;
