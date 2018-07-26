@@ -29,12 +29,6 @@ struct NodeBase : public SyntaxTreeNode {
 struct InstructionData {
     Instruction type = Instruction::Invalid;
     NodeFormat format = NodeFormat::Invalid;
-
-    struct {
-        bool n;
-        bool z;
-        bool p;
-    } flags = {false, false, false};
 };
 
 struct InstructionNode :
@@ -71,6 +65,18 @@ struct StringNode :
     using NodeBase::NodeBase;
 
     static size_t size(const SyntaxTreeNode& node);
+};
+
+struct BRFlagsData {
+    bool n = false;
+    bool z = false;
+    bool p = false;
+};
+
+struct BRFlagsNode :
+    public NodeBase<NodeType::BranchFlags, BRFlagsData>
+{
+    using NodeBase::NodeBase;
 };
 
 } // namespace LC3::Language
