@@ -8,6 +8,7 @@ namespace LC3::Language {
     _(Num) \
     _(Str) \
     _(Addr) \
+    _(Branch) \
     _(Vec) \
     _(NumNum) \
     _(NumAddr) \
