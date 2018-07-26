@@ -41,7 +41,7 @@ size_t StringNode::size(const SyntaxTreeNode& node) {
 
     const auto& strVal = node.data<StringNode>();
 
-    return strVal->size();
+    return strVal->size() + 1;
 }
 
 } // namespace LC3::Language
