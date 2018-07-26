@@ -42,7 +42,7 @@ struct CheckerContext {
     }
 
     const SyntaxTreeNode& currentChild() const {
-        return node->child(childIndex);
+        return parent().child(childIndex);
     }
 };
 
