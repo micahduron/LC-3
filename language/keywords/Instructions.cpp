@@ -1,3 +1,4 @@
+#include <cctype>
 #include <util/StringUtils.h>
 #include "Instructions.h"
 
@@ -12,6 +13,20 @@ const KeywordMap<enum Instruction> Instructions::InstrMap = {
     #undef _
 };
 
+static bool IsBranchInstruction(const StringView& strVal) {
+    if (!strVal.beginsWith("BR", CaselessCompare())) {
+        return false;
+    }
+    for (char c : strVal.subString(2)) {
+        char lowC = std::tolower(c);
+
+        if (!(lowC == 'n' || lowC == 'z' || lowC == 'p')) {
+            return false;
+        }
+    }
+    return true;
+}
+
 enum Instruction Instructions::get(const StringView& instrName) {
     auto mapIter = InstrMap.find(instrName);
 
@@ -19,7 +34,7 @@ enum Instruction Instructions::get(const StringView& instrName) {
         // A special case in the LC3 grammar is the BR instruction.
         // The BR instruction has a variable number of flags that
         // are specified in the instruction's name.
-        return instrName.beginsWith("BR", CaselessCompare()) ?
+        return IsBranchInstruction(instrName) ?
             Instruction::BR :
             Instruction::Invalid;
     }
