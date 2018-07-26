@@ -95,6 +95,7 @@ using Num = BasicCheck<NodeType::Number>;
 using Reg = BasicCheck<NodeType::Register>;
 using Label = BasicCheck<NodeType::LabelRef>;
 using Str = BasicCheck<NodeType::String>;
+using BrFlags = BasicCheck<NodeType::BranchFlags>;
 
 struct Addr : public NodeChecker::ParserElement {
     static ParseState parse(CheckerContext& ctx) {
@@ -124,6 +125,7 @@ using Register = FormatSpec<NodeFormat::Reg, Reg>;
 using Number = FormatSpec<NodeFormat::Num, Num>;
 using Address = FormatSpec<NodeFormat::Addr, Addr>;
 using String = FormatSpec<NodeFormat::Str, Str>;
+using Branch = FormatSpec<NodeFormat::Branch, BrFlags, Addr>;
 using Vector = FormatSpec<NodeFormat::Vec, Num>;
 
 using NumNum = FormatSpec<NodeFormat::NumNum, Num, Num>;
@@ -167,24 +169,6 @@ bool AnalyzeTreeNode(SyntaxTreeNode& node, AnalyzerFlags& flags) {
     return true;
 }
 
-static NodeFormat CheckBranch(const SyntaxTreeNode& node) {
-    StringView flags = node.token.str.subString(2);
-
-    for (char flag : flags) {
-        switch (std::tolower(flag)) {
-            case 'n':
-            case 'z':
-            case 'p':
-                break;
-            default:
-                Log::error() << "Unrecognized branch flag.\n";
-
-                return NodeFormat::Invalid;
-        }
-    }
-    return CheckNode<Address>(node);
-}
-
 static NodeFormat GetInstructionFormat(const SyntaxTreeNode& node) {
     assert(node.type == NodeType::Instruction);
 
@@ -197,7 +181,7 @@ static NodeFormat GetInstructionFormat(const SyntaxTreeNode& node) {
         case I(AND):
             return CheckNode<RegRegNum, RegRegReg>(node);
         case I(BR):
-            return CheckBranch(node);
+            return CheckNode<Branch>(node);
         case I(JMP):
             return CheckNode<Address>(node);
         case I(JSR):
