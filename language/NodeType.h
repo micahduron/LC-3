@@ -7,6 +7,7 @@ namespace LC3::Language {
 enum class NodeType {
     Instruction,
     Directive,
+    BranchFlags,
     LabelDefn,
     LabelRef,
     Register,
@@ -25,6 +26,7 @@ inline std::ostream& operator << (std::ostream& outStream, NodeType nodeType) {
 
         CASE(Instruction);
         CASE(Directive);
+        CASE(BranchFlags);
         CASE(LabelDefn);
         CASE(LabelRef);
         CASE(Register);
