@@ -27,6 +27,10 @@ namespace LC3 {
             return m_word;
         }
 
+        operator Word () const {
+            return get();
+        }
+
         Value abs() const;
         size_t bitWidth() const;
         std::optional<Value> restrictWidth(size_t bitWidth, bool isSigned = false) const;
