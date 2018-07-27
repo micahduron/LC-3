@@ -158,7 +158,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
             if (!vecVal) {
                 Log::error(vecChild) << "Vector is larger than 8 bits "
                                         << "(" << rawVec << ").\n";
-                return {};
+                return { std::nullopt };
             }
             return { opcode | *vecVal };
         }
@@ -166,7 +166,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
             auto offsetVal = GetOffset(instrNode.child(0), symTable, progCounter, 11);
 
             if (!offsetVal) {
-                return {};
+                return { std::nullopt };
             }
             return { opcode | *offsetVal };
         }
@@ -175,7 +175,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
             auto offsetVal = GetOffset(instrNode.child(1), symTable, progCounter, 9);
 
             if (!offsetVal) {
-                return {};
+                return { std::nullopt };
             }
             return { opcode | (flagsVal << 9) | *offsetVal };
         }
@@ -190,7 +190,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
             auto offsetVal = GetOffset(instrNode.child(1), symTable, progCounter, 9);
 
             if (!offsetVal) {
-                return {};
+                return { std::nullopt };
             }
             return { opcode | (regOne << 9) | *offsetVal };
         }
@@ -210,7 +210,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
             if (!numVal) {
                 Log::error(instrNode) << "Imediate cannot fit within 5 bits (" << rawNum << ").\n";
 
-                return {};
+                return { std::nullopt };
             }
             return { opcode | (regOne << 9) | (regTwo << 6) | (1 << 5) | *numVal };
         }
@@ -221,7 +221,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
             auto offsetVal = rawOffset.restrictWidth(6, true);
 
             if (!offsetVal) {
-                return {};
+                return { std::nullopt };
             }
             return { opcode | (regOne << 9) | (regTwo << 6) | *offsetVal };
         }
@@ -230,7 +230,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
 
             throw std::logic_error("Oops.");
     }
-    return {};
+    return { std::nullopt };
 }
 
 bool EncodeInstruction(const SyntaxTreeNode& instrNode, const SymbolTable& symTable,
