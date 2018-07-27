@@ -79,6 +79,10 @@ struct SyntaxTreeNode {
         return this != &other;
     }
 
+    std::ostream& errorPrefix(std::ostream& errStream) const {
+        return errStream << location() << " " << location().getLine() << "\n";
+    }
+
 protected:
     std::any m_data;
 };
