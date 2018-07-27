@@ -72,7 +72,7 @@ bool EncodeDirective(const SyntaxTreeNode& dirNode, const SymbolTable& symTable,
         case Directive::FILL: {
             auto fillContents = GetNodeValue(dirNode.child(0), symTable);
 
-            writer.putWord(fillContents.get());
+            writer.putWord(fillContents);
             break;
         }
         case Directive::BLKW: {
@@ -104,7 +104,7 @@ bool EncodeDirective(const SyntaxTreeNode& dirNode, const SymbolTable& symTable,
 static LC3::Value GetRawOffset(const SyntaxTreeNode& addrNode, 
                                const SymbolTable& symTable, const ProgramCounter& progCounter) {
     auto addrVal = GetNodeValue(addrNode, symTable);
-    LC3::Word offset = addrVal.get() - progCounter.nextAddress();
+    LC3::Word offset = addrVal - progCounter.nextAddress();
 
     return { offset };
 }
@@ -160,7 +160,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
                                         << "(" << rawVec << ").\n";
                 return {};
             }
-            return { opcode | vecVal->get() };
+            return { opcode | *vecVal };
         }
         case NodeFormat::Addr: {
             auto offsetVal = GetOffset(instrNode.child(0), symTable, progCounter, 11);
@@ -168,7 +168,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
             if (!offsetVal) {
                 return {};
             }
-            return { opcode | offsetVal->get() };
+            return { opcode | *offsetVal };
         }
         case NodeFormat::Branch: {
             auto flagsVal = GetBranchFlags(instrNode.child(0));
@@ -177,7 +177,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
             if (!offsetVal) {
                 return {};
             }
-            return { opcode | (flagsVal << 9) | offsetVal->get() };
+            return { opcode | (flagsVal << 9) | *offsetVal };
         }
         case NodeFormat::RegReg: {
             auto regOne = instrNode.child(0).data<RegisterNode>();
@@ -192,7 +192,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
             if (!offsetVal) {
                 return {};
             }
-            return { opcode | (regOne << 9) | offsetVal->get() };
+            return { opcode | (regOne << 9) | *offsetVal };
         }
         case NodeFormat::RegRegReg: {
             auto regOne = instrNode.child(0).data<RegisterNode>();
@@ -212,7 +212,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
 
                 return {};
             }
-            return { opcode | (regOne << 9) | (regTwo << 6) | (1 << 5) | numVal->get() };
+            return { opcode | (regOne << 9) | (regTwo << 6) | (1 << 5) | *numVal };
         }
         case NodeFormat::RegRegAddr: {
             auto regOne = instrNode.child(0).data<RegisterNode>();
@@ -223,7 +223,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
             if (!offsetVal) {
                 return {};
             }
-            return { opcode | (regOne << 9) | (regTwo << 6) | offsetVal->get() };
+            return { opcode | (regOne << 9) | (regTwo << 6) | *offsetVal };
         }
         default:
             Log::error(instrNode) << "Unimplemented instruction format " << instrData.format << "\n";
