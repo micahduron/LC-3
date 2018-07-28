@@ -36,7 +36,7 @@ public:
         if (symIter != m_table.end()) {
             return { symIter->second };
         }
-        return {};
+        return { std::nullopt };
     }
 
     iterator begin() const {
