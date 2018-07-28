@@ -46,6 +46,8 @@ bool LookupNames(const SyntaxTreeNode& root) {
         }
     });
     for (const Token* refToken : referencedSyms) {
+        assert(refToken != nullptr);
+
         StringView symbolName = refToken->str;
 
         if (definedSyms.find(symbolName) == definedSyms.end()) {
