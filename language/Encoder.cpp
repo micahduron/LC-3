@@ -187,9 +187,12 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
         }
         case NodeFormat::RegAddr: {
             auto regOne = instrNode.child(0).data<RegisterNode>();
-            auto offsetVal = GetOffset(instrNode.child(1), symTable, progCounter, 9);
+            auto& offsetChild = instrNode.child(1);
+            auto offsetVal = GetOffset(offsetChild, symTable, progCounter, 9);
 
             if (!offsetVal) {
+                Log::error(offsetChild) << "Offset cannot fit within 9 bits.\n";
+
                 return { std::nullopt };
             }
             return { opcode | (regOne << 9) | *offsetVal };
@@ -204,11 +207,13 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
         case NodeFormat::RegRegNum: {
             auto regOne = instrNode.child(0).data<RegisterNode>();
             auto regTwo = instrNode.child(1).data<RegisterNode>();
-            auto rawNum = GetNodeValue(instrNode.child(2), symTable);
+
+            auto& numChild = instrNode.child(2);
+            auto rawNum = GetNodeValue(numChild, symTable);
             auto numVal = rawNum.restrictWidth(5, true);
 
             if (!numVal) {
-                Log::error(instrNode) << "Imediate cannot fit within 5 bits (" << rawNum << ").\n";
+                Log::error(numChild) << "Imediate cannot fit within 5 bits.\n";
 
                 return { std::nullopt };
             }
@@ -217,10 +222,13 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
         case NodeFormat::RegRegAddr: {
             auto regOne = instrNode.child(0).data<RegisterNode>();
             auto regTwo = instrNode.child(1).data<RegisterNode>();
-            auto rawOffset = GetNodeValue(instrNode.child(2), symTable);
+
+            auto& offsetChild = instrNode.child(2);
+            auto rawOffset = GetNodeValue(offsetChild, symTable);
             auto offsetVal = rawOffset.restrictWidth(6, true);
 
             if (!offsetVal) {
+                Log::error(offsetChild) << "Offset cannot fit within 6 bits.\n";
                 return { std::nullopt };
             }
             return { opcode | (regOne << 9) | (regTwo << 6) | *offsetVal };
