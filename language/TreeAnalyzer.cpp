@@ -226,9 +226,9 @@ static NodeFormat GetInstructionFormat(const SyntaxTreeNode& node) {
 
 bool AnalyzeInstruction(SyntaxTreeNode& node, AnalyzerFlags& flags) {
     if (!flags.addressedMemory) {
-        Log::error() << "Instruction in unaddressed memory.\n"
-                     << "Use the .ORIG and .END directives to "
-                     << "designate an addressed region of memory.\n";
+        Log::error(node) << "Instruction in unaddressed memory.\n"
+                         << "Use the .ORIG and .END directives to "
+                         << "designate an addressed region of memory.\n";
         return false;
     }
     NodeFormat instrFormat = GetInstructionFormat(node);
@@ -247,8 +247,7 @@ bool AnalyzeDirective(SyntaxTreeNode& node, AnalyzerFlags& flags) {
     NodeFormat nodeFormat = NodeFormat::Invalid;
 
     if (!flags.addressedMemory && dirType != Directive::ORIG) {
-        auto& err = Log::error();
-        err << node.location() << node.location().getLine() << "\n";
+        auto& err = Log::error(node);
 
         if (dirType != Directive::END) {
             err << "Memory allocation in unaddressed memory."
@@ -263,7 +262,7 @@ bool AnalyzeDirective(SyntaxTreeNode& node, AnalyzerFlags& flags) {
     #define D(Dir) Directive::Dir
         case D(ORIG):
             if (flags.addressedMemory) {
-                Log::error() << "Nested .ORIG directives is not allowed.\n";
+                Log::error(node) << "Nested .ORIG directives is not allowed.\n";
 
                 return false;
             }
@@ -283,8 +282,8 @@ bool AnalyzeDirective(SyntaxTreeNode& node, AnalyzerFlags& flags) {
             nodeFormat = CheckNode<Empty>(node);
             flags.addressedMemory = false;
             break;
-        default:
-            Log::error() << dirType << "\n";
+        case D(Invalid):
+            throw std::logic_error("Encountered invalid directive node.");
     #undef D
     }
     return nodeFormat != NodeFormat::Invalid;
@@ -331,12 +330,11 @@ NodeFormat CheckNode(const SyntaxTreeNode& node) {
     CheckerContext ctx;
 
     if (!(CheckNodeSingle<SpecTs>(ctx, node) || ...)) {
-        auto& err = Log::error();
+        auto& err = Log::error(node);
 
-       err << node.location() << " " << node.location().getLine() << "\n"
-            << "No matching format found. Valid formats are:\n";
+        err << "No matching format found. Valid formats are:\n";
         PrintSpecs<SpecTs...>(err);
-        err << '\n';
+        err << "\n";
     }
     return ctx.format;
 }
