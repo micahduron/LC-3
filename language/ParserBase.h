@@ -43,9 +43,8 @@ public:
                 return ParseState::Success;
             }
             if (context.flags & ErrorMode::Error) {
-                Log::error() << token.location << " Unexpected token '"
-                             << token.type << "'.\n"
-                             << token.location.getLine() << '\n';
+                Log::error(token) << "Unexpected " << token.type << " token.\n";
+
                 return ParseState::FatalFail;
             }
             return ParseState::NonFatalFail;

@@ -35,8 +35,7 @@ ParseState ParserBase::DirectiveName::parse(ParserContext& context) {
             return ParseState::Success;
         }
     }
-    Log::error() << "Invalid directive name.\n"
-                 << token.location.getLine() << '\n';
+    Log::error(token) << "Invalid directive name.\n";
 
     return ParseState::FatalFail;
 }
@@ -72,8 +71,8 @@ ParseState ParserBase::InstrName::parse(ParserContext& context) {
 
         if (instrType == Instruction::Invalid) {
             if (context.flags & ErrorMode::Error) {
-                Log::error() << token.location << " Unknown instruction "
-                             << "name.\n";
+                Log::error(token) << "Unknown instruction.\n";
+
                 return ParseState::FatalFail;
             } else {
                 return ParseState::NonFatalFail;
@@ -143,8 +142,7 @@ ParseState ParserBase::LabelRef::parse(ParserContext& context) {
 
     if (token.type != TokenType::Word) {
         if (context.flags & ErrorMode::Error) {
-            Log::error() << token.location << " Unexpected token.\n"
-                         << token.location.getLine() << '\n';
+            Log::error(token) << "Unexpected " << token.type << " token.\n";
 
             return ParseState::FatalFail;
         }
@@ -206,7 +204,7 @@ ParseState ParserBase::DecNumberDefn::parse(ParserContext& context) {
     }
     if (token.type != TokenType::Number) {
         if (context.flags & ErrorMode::Error) {
-            Log::error() << "Expected number\n";
+            Log::error(token) << "Expected number but got " << token.type << ".\n";
 
             return ParseState::FatalFail;
         } else {
@@ -215,7 +213,7 @@ ParseState ParserBase::DecNumberDefn::parse(ParserContext& context) {
     }
     if (!DecNumberDefn::IsValid(token.str)) {
         if (context.flags & ErrorMode::Error) {
-            Log::error() << "Invalid number\n";
+            Log::error() << "Invalid number format.\n";
 
             return ParseState::FatalFail;
         } else {
