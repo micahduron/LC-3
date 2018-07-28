@@ -28,7 +28,8 @@ struct Token {
     SourceLocation location;
 
     std::ostream& errorPrefix(std::ostream& errStream) const {
-        errStream << location << "\n" << location.getLine() << "\n";
+        errStream << location << "\n" << location.getLine() << "\n"
+                  << std::setw(location.lineOffset + 1) << "^" << "\n";
 
         return errStream;
     }
