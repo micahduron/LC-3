@@ -36,8 +36,7 @@ bool LookupNames(const SyntaxTreeNode& root) {
             StringView symbolName = node.token.str;
 
             if (definedSyms.find(symbolName) != definedSyms.end()) {
-                Log::error() << node.location() << " " << node.location().getLine() << "\n"
-                             << "Symbol has multiple definitions.\n";
+                Log::error(node) << "Symbol has multiple definitions.\n";
                 retStatus = false;
             } else {
                 definedSyms.insert(symbolName);
@@ -50,10 +49,7 @@ bool LookupNames(const SyntaxTreeNode& root) {
         StringView symbolName = refToken->str;
 
         if (definedSyms.find(symbolName) == definedSyms.end()) {
-            auto& tokenLoc = refToken->location;
-
-            Log::error() << tokenLoc << " " << tokenLoc.getLine() << "\n"
-                         << "Reference to undefined symbol.\n";
+            Log::error(*refToken) << "Reference to undefined symbol.\n";
             retStatus = false;
         }
     }
@@ -88,7 +84,7 @@ std::optional<SymbolTable> PopulateSymbolTable(const SyntaxTreeNode& root) {
                 Directive dirType = childNode.data<DirectiveNode>();
 
                 if (dirType == Directive::END && !unresolvedSyms.empty()) {
-                    Log::error() << childNode.location() << " " << "Label to unaddressed memory.\n";
+                    Log::error(childNode) << "Label to unaddressed memory.\n";
                     retStatus = false;
 
                     break;
