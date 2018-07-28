@@ -49,7 +49,7 @@ struct SyntaxTreeNode {
         visitor(*this);
 
         for (auto& child : this->children) {
-            visitor(child);
+            child.walk(visitor);
         }
     }
 
@@ -58,7 +58,7 @@ struct SyntaxTreeNode {
         visitor(*this);
 
         for (const auto& child : this->children) {
-            visitor(child);
+            child.walk(visitor);
         }
     }
 
