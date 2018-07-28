@@ -80,7 +80,7 @@ struct SyntaxTreeNode {
     }
 
     std::ostream& errorPrefix(std::ostream& errStream) const {
-        return errStream << location() << " " << location().getLine() << "\n";
+        return token.errorPrefix(errStream);
     }
 
 protected:

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <stdexcept>
 #include <util/StringView.h>
 #include "SourceLocation.h"
@@ -25,6 +26,12 @@ struct Token {
     TokenType type = TokenType::Unknown;
     Util::StringView str;
     SourceLocation location;
+
+    std::ostream& errorPrefix(std::ostream& errStream) const {
+        errStream << location << "\n" << location.getLine() << "\n";
+
+        return errStream;
+    }
 };
 
 inline std::ostream& operator << (std::ostream& outStream, TokenType tokenType) {
