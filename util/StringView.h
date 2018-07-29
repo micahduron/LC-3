@@ -216,6 +216,20 @@ public:
         return beginsWith(prefix, lexicographicCmp);
     }
 
+    template <typename Comparator>
+    constexpr bool endsWith(StringView suffix, Comparator&& cmp = Comparator()) const {
+        if (suffix.size() > size()) return false;
+
+        return subString(size() - suffix.size()).compare(suffix, cmp) == 0;
+    }
+
+    constexpr bool endsWith(StringView suffix) const {
+        auto lexicographicCmp = [](char c1, char c2) -> int {
+            return c1 - c2;
+        };
+        return endsWith(suffix, lexicographicCmp);
+    }
+
     constexpr bool operator == (StringView other) const {
         return compare(other) == 0;
     }
