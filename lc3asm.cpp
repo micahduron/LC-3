@@ -33,6 +33,11 @@ int main(int argc, char** argv) {
     StringView outputFilename = argv[2];
 
     if (inputFilename != "-") {
+        if (!inputFilename.endsWith(".asm")) {
+            Log::error() << "Input file must end with .asm\n";
+
+            return 1;
+        }
         std::ifstream inFile(inputFilename.data());
 
         src = GetSourceText(inFile);
