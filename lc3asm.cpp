@@ -19,10 +19,17 @@ using LC3::Language::TreeAnalyzer;
 using LC3::Language::SymbolTable;
 using LC3::Language::Encoder;
 
+int Run(int argc, char** argv);
 std::string GetSourceText(std::istream& inStream);
 int Assemble(const std::string& src, LC3Writer& writer);
 
 int main(int argc, char** argv) {
+    int ret = Run(argc, argv);
+
+    return ret;
+}
+
+int Run(int argc, char** argv) {
     if (argc < 3) {
         std::cerr << "Incorrect number of arguments.\n"
                   << "Usage: lc3asm input_file output_file\n";
@@ -48,13 +55,7 @@ int main(int argc, char** argv) {
     }
     LC3Writer writer(outputFilename.data());
 
-    int asmStatus = Assemble(src, writer);
-
-    if (asmStatus != 0) {
-        std::cerr << Log::errorCount() << " errors, "
-                  << Log::warningCount() << " warnings\n";
-    }
-    return asmStatus;
+    return Assemble(src, writer);
 }
 
 std::string GetSourceText(std::istream& inStream) {
