@@ -196,9 +196,6 @@ public:
     }
 
     constexpr int compare(StringView other) const {
-        auto lexicographicCmp = [](char c1, char c2) -> int {
-            return c1 - c2;
-        };
         return compare(other, lexicographicCmp);
     }
 
@@ -210,9 +207,6 @@ public:
     }
 
     constexpr bool beginsWith(StringView prefix) const {
-        auto lexicographicCmp = [](char c1, char c2) -> int {
-            return c1 - c2;
-        };
         return beginsWith(prefix, lexicographicCmp);
     }
 
@@ -224,9 +218,6 @@ public:
     }
 
     constexpr bool endsWith(StringView suffix) const {
-        auto lexicographicCmp = [](char c1, char c2) -> int {
-            return c1 - c2;
-        };
         return endsWith(suffix, lexicographicCmp);
     }
 
@@ -283,6 +274,10 @@ public:
     }
 
 private:
+    static constexpr int lexicographicCmp(char c1, char c2) {
+        return c1 - c2;
+    }
+
     constexpr const char& get(size_t index) const {
         return *(data() + index);
     }
