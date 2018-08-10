@@ -23,10 +23,32 @@ int Run(int argc, char** argv);
 std::string GetSourceText(std::istream& inStream);
 int Assemble(const std::string& src, LC3Writer& writer);
 
+void PrintCount(std::ostream& outStream, size_t count, const StringView& name);
+
 int main(int argc, char** argv) {
     int ret = Run(argc, argv);
 
+    if (Log::errorCount() > 0) {
+        std::cerr << "Assembly failed with ";
+        PrintCount(std::cerr, Log::errorCount(), "error");
+
+        std::cerr << " and ";
+        PrintCount(std::cerr, Log::warningCount(), "warning");
+        std::cerr << ".\n";
+    } else if (Log::warningCount() > 0) {
+        std::cerr << "Assembly succeeded with ";
+        PrintCount(std::cerr, Log::warningCount(), "warning");
+        std::cerr << ".\n";
+    }
     return ret;
+}
+
+void PrintCount(std::ostream& outStream, size_t count, const StringView& name) {
+    outStream << count << " " << name;
+
+    if (count != 1) {
+        outStream << "s";
+    }
 }
 
 int Run(int argc, char** argv) {
