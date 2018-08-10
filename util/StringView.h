@@ -124,7 +124,7 @@ private:
     friend class ::Util::StringView;
 };
 
-}
+} // namespace Internals
 
 class StringView {
 public:
@@ -292,7 +292,7 @@ inline std::ostream& operator << (std::ostream& outStream, const StringView& str
     return outStream;
 }
 
-}
+} // namespace Util
 
 constexpr Util::StringView operator ""_sv (const char* str, size_t strSize) {
     return { str, strSize };
