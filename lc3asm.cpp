@@ -31,8 +31,8 @@ int main(int argc, char** argv) {
 
 int Run(int argc, char** argv) {
     if (argc < 3) {
-        std::cerr << "Incorrect number of arguments.\n"
-                  << "Usage: lc3asm input_file output_file\n";
+        Log::error() << "Incorrect number of arguments.\n"
+                     << "Usage: lc3asm input_file output_file\n";
         return 1;
     }
     std::string src;
