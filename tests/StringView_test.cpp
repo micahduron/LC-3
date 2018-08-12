@@ -68,24 +68,21 @@ int main() {
     };
 
     UnitTest(StrCmpZero, t) {
-        StringView str1 = "abc"_sv;
-        StringView str2 = "abc"_sv;
+        StringView str = "abc"_sv;
 
-        t.succeedIf(str1.compare(str2) == 0);
+        t.succeedIf(str.compare("abc") == 0);
     };
 
     UnitTest(StrCmpLess, t) {
-        StringView str1 = "abc"_sv;
-        StringView str2 = "abz"_sv;
+        StringView str = "abc"_sv;
 
-        t.succeedIf(str1.compare(str2) < 0);
+        t.succeedIf(str.compare("abz") < 0);
     };
 
     UnitTest(StrCmpGreater, t) {
-        StringView str1 = "xyz"_sv;
-        StringView str2 = "abc"_sv;
+        StringView str = "xyz"_sv;
 
-        t.succeedIf(str1.compare(str2) > 0);
+        t.succeedIf(str.compare("abc") > 0);
     };
 
     UnitTest(BeginsWith, t) {
