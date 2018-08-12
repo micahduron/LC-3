@@ -1,82 +1,128 @@
 #include <iostream>
 #include <string>
 #include <util/StringView.h>
+#include "UnitTest.h"
 
 using Util::StringView;
 
 int main() {
-    std::string text = "Hello world!";
-    StringView view;
+    UnitTest(EmptyStringZeroSize, t) {
+        StringView str;
 
-    if (view.size() != 0) {
-        std::cerr << "Empty StringView reports to be non-empty.\n";
+        t.succeedIf(str.size() == 0);
+    };
 
-        return 1;
-    }
-    if (view.front() != '\0') {
-        std::cerr << "front() returns non-null on empty StringView.\n";
+    UnitTest(EmptyStringNullFront, t) {
+        StringView str;
 
-        return 1;
-    }
-    if (view.back() != '\0') {
-        std::cerr << "back() returns non-null on empty StringView.\n";
+        t.succeedIf(str.front() == '\0');
+    };
 
-        return 1;
-    }
-    view = text;
+    UnitTest(EmptyStringNullBack, t) {
+        StringView str;
 
-    if (view != text) {
-        std::cerr << "Equality operator (" <<
-            "View: " << view << ", " <<
-            "String: " << text << ")\n";
-        return 1;
-    }
-    for (size_t i = 0; i < text.size(); ++i) {
-        StringView subView = view.subString(0, view.size() - i);
+        t.succeedIf(str.back() == '\0');
+    };
 
-        if (subView.compare(text) == text[i]) {
-            std::cerr << "StringView::compare() (" <<
-                "Index: " << i << ", " <<
-                "View: " << subView << ")\n";
-            return 1;
-        }
-        if (subView.front() != subView[0]) {
-            std::cerr << "front() (" <<
-                "Returned: " << subView.front() << ", " <<
-                "Expected: " << subView[0] << ")\n";
+    UnitTest(StrEquality, t) {
+        StringView str1 = "abcd"_sv;
+        StringView str2 = "abcd"_sv;
+        StringView str3 = "wxyz"_sv;
 
-            return 1;
-        }
-        if (subView.back() != subView[subView.size() - 1]) {
-            std::cerr << "back() (" <<
-                "Returned: " << subView.back() << ", " <<
-                "Expected: " << subView[subView.size() - 1] << ")\n";
+        t.succeedIf(str1 == str2 && str1 != str3);
+    };
 
-            return 1;
-        }
-    }
-    std::string tmpText;
-    tmpText.reserve(text.size());
+    UnitTest(StdStringConversion, t) {
+        std::string stdStr = "abcd";
+        StringView strView = stdStr;
 
-    for (const char& c : view) {
-        tmpText += c;
-    }
-    if (view != tmpText) {
-        std::cerr << "Ranged for-loop (" <<
-            "View: " << view << ", " <<
-            "String: " << tmpText << ")\n";
-        return 1;
-    }
-    tmpText.clear();
+        t.succeedIf(
+            strView.data() == stdStr.data() &&
+            strView.size() == stdStr.size()
+        );
+    };
 
-    for (size_t k = 0; k < view.size(); ++k) {
-        tmpText += view[k];
-    }
-    if (view != tmpText) {
-        std::cerr << "Subscript operator (" <<
-            "View: " << view << ", " <<
-            "String: " << tmpText << ")\n";
-        return 1;
-    }
-    return 0;
+    UnitTest(StrLitConversion, t) {
+        const char* strLit = "abcd";
+        StringView strView = strLit;
+
+        size_t strLen = std::strlen(strLit);
+
+        t.succeedIf(
+            strView.data() == strLit &&
+            strView.size() == strLen
+        );
+    };
+
+    UnitTest(SubStrMatch, t) {
+        StringView bigStr = "aaaxyzaaa"_sv;
+
+        t.succeedIf(bigStr.subString(3, 3) == "xyz");
+    };
+
+    UnitTest(EndIterNull, t) {
+        StringView bigStr = "abcdef"_sv;
+        StringView littleStr = bigStr.subString(0, 3);
+
+        t.succeedIf(*(littleStr.end()) == '\0');
+    };
+
+    UnitTest(StrCmpZero, t) {
+        StringView str1 = "abc"_sv;
+        StringView str2 = "abc"_sv;
+
+        t.succeedIf(str1.compare(str2) == 0);
+    };
+
+    UnitTest(StrCmpLess, t) {
+        StringView str1 = "abc"_sv;
+        StringView str2 = "abz"_sv;
+
+        t.succeedIf(str1.compare(str2) < 0);
+    };
+
+    UnitTest(StrCmpGreater, t) {
+        StringView str1 = "xyz"_sv;
+        StringView str2 = "abc"_sv;
+
+        t.succeedIf(str1.compare(str2) > 0);
+    };
+
+    UnitTest(BeginsWith, t) {
+        StringView str = "Hello, world!";
+
+        t.succeedIf(str.beginsWith("Hello"));
+    };
+
+    UnitTest(BeginsWithTooLarge, t) {
+        StringView str = "abc"_sv;
+
+        t.failIf(str.beginsWith("abcdef"));
+    };
+
+    UnitTest(EndsWith, t) {
+        StringView str = "The end."_sv;
+
+        t.succeedIf(str.endsWith("."));
+    };
+
+    UnitTest(EndsWithTooLarge, t) {
+        StringView str = "xyz"_sv;
+
+        t.failIf(str.endsWith("xyzabc"));
+    };
+
+    UnitTest(StrHash, t) {
+        StringView str1 = "abcd"_sv;
+        StringView str2 = "xabcd"_sv;
+
+        size_t hash1 = StringView::hash(str1);
+        size_t hash2 = StringView::hash(str2.subString(1));
+        size_t hash3 = StringView::hash(str2);
+
+        // It is theoretically possible for hash1 == hash3, but for the
+        // sake of testing it is assumed to be extremely unlikely.
+        t.succeedIf(hash1 == hash2 && hash1 != hash3);
+    };
+    return RunTests();
 }
