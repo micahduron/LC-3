@@ -13,15 +13,40 @@ const KeywordMap<enum Instruction> Instructions::InstrMap = {
     #undef _
 };
 
+struct BranchFlags {
+    bool n = false;
+    bool z = false;
+    bool p = false;
+};
+
 static bool IsBranchInstruction(const StringView& strVal) {
     if (!strVal.beginsWith("BR", CaselessCompare())) {
         return false;
     }
-    for (char c : strVal.subString(2)) {
-        char lowC = std::tolower(c);
+    BranchFlags seenFlags;
 
-        if (!(lowC == 'n' || lowC == 'z' || lowC == 'p')) {
-            return false;
+    for (char c : strVal.subString(2)) {
+        switch (std::tolower(c)) {
+            case 'n':
+                if (seenFlags.n) {
+                    return false;
+                }
+                seenFlags.n = true;
+                break;
+            case 'z':
+                if (seenFlags.z) {
+                    return false;
+                }
+                seenFlags.z = true;
+                break;
+            case 'p':
+                if (seenFlags.p) {
+                    return false;
+                }
+                seenFlags.p = true;
+                break;
+            default:
+                return false;
         }
     }
     return true;
