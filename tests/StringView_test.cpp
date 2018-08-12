@@ -25,12 +25,20 @@ int main() {
         t.succeedIf(str.back() == '\0');
     };
 
-    UnitTest(StrEquality, t) {
+    UnitTest(StrEqualitySameSize, t) {
         StringView str1 = "abcd"_sv;
         StringView str2 = "abcd"_sv;
         StringView str3 = "wxyz"_sv;
 
         t.succeedIf(str1 == str2 && str1 != str3);
+    };
+
+    UnitTest(StrEqualityDiffSize, t) {
+        StringView str1 = "abcd"_sv;
+        StringView str2 = "abcde"_sv;
+        StringView str3 = "abc"_sv;
+
+        t.succeedIf(str1 != str2 && str1 != str3);
     };
 
     UnitTest(StdStringConversion, t) {
