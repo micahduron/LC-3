@@ -58,6 +58,9 @@ static BRFlagsNode MakeBranchFlags(const Token& flagToken) {
                 throw std::logic_error("Unimplemented branch flag");
         }
     }
+    if (!branchFlags.n && !branchFlags.z && !branchFlags.p) {
+        Log::warning(flagToken) << "Branch instruction with no flags is a no-op.\n";
+    }
     return BRFlagsNode(std::move(branchFlags), flagToken);
 }
 
