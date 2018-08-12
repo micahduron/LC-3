@@ -28,7 +28,7 @@ public:
     }
     template <typename MapFn,
               typename = decltype(std::declval<MapFn>()('a'))>
-    CharClass(MapFn mapFn) {
+    CharClass(MapFn&& mapFn) {
         for (size_t i = 0; i < SetSize; ++i) {
             char charVal = static_cast<char>(i);
 
