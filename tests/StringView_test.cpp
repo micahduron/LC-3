@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <util/StringView.h>
+#include <util/StringUtils.h>
 #include "UnitTest.h"
 
 using Util::StringView;
@@ -120,6 +121,52 @@ int main() {
         // It is theoretically possible for hash1 == hash3, but for the
         // sake of testing it is assumed to be extremely unlikely.
         t.succeedIf(hash1 == hash2 && hash1 != hash3);
+    };
+
+    UnitTest(StringUtilsHash, t) {
+        using Util::Str::CaselessHash;
+
+        CaselessHash hasher;
+
+        size_t lowerHash = hasher("abcdefg");
+        size_t mixedHash = hasher("aBcDEfg");
+
+        t.succeedIf(lowerHash == mixedHash);
+    };
+
+    UnitTest(StringUtilsCmpZero, t) {
+        using Util::Str::CaselessCompare;
+
+        StringView str = "abcdefg"_sv;
+
+        t.succeedIf(str.compare("aBcDEfg", CaselessCompare()) == 0);
+    };
+
+    UnitTest(StringUtilsCmpNeg, t) {
+        using Util::Str::CaselessCompare;
+
+        StringView str = "abc"_sv;
+
+        t.succeedIf(str.compare("ABZ", CaselessCompare()) < 0);
+    };
+
+    UnitTest(StringUtilsCmpPos, t) {
+        using Util::Str::CaselessCompare;
+
+        StringView str = "xyz"_sv;
+
+        t.succeedIf(str.compare("ABC", CaselessCompare()) > 0);
+    };
+
+    UnitTest(StringUtilsEq, t) {
+        using Util::Str::CaselessEqual;
+
+        CaselessEqual eq;
+
+        StringView str1 = "abc"_sv;
+        StringView str2 = "aBC"_sv;
+
+        t.succeedIf(eq(str1, str2));
     };
     return RunTests();
 }
