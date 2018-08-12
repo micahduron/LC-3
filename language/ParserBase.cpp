@@ -103,6 +103,7 @@ ParseState ParserBase::InstrName::parse(ParserContext& context) {
 ParseState ParserBase::LabelDefn::parse(ParserContext& context) {
     assert(context.tree.treeTop() == context.tree.currRoot());
 
+    SyntaxTreeBuilder::DescentGuard guard{ context.tree };
     Token token = *context.tokenizer;
 
     if (token.type != TokenType::Word) {
@@ -115,26 +116,17 @@ ParseState ParserBase::LabelDefn::parse(ParserContext& context) {
     if (nextToken.type == TokenType::Colon) {
         context.tokenizer += 2;
     
-        ConstructNode(context, token);
+        context.tree.descendTree(NodeType::LabelDefn, token);
 
         return ParseState::Success;
     } else if (!Instructions::has(token.str) && !Directives::has(token.str)) {
         ++context.tokenizer;
 
-        ConstructNode(context, token);
+        context.tree.descendTree(NodeType::LabelDefn, token);
 
         return ParseState::Success;
     }
     return ParseState::NonFatalFail;
-}
-
-void ParserBase::LabelDefn::ConstructNode(ParserContext& context, const Token& token) {
-    SyntaxTreeNode& treeNode = context.tree.descendTree();
-
-    treeNode.type = NodeType::LabelDefn;
-    treeNode.token = token;
-
-    context.tree.ascendTree();
 }
 
 ParseState ParserBase::LabelRef::parse(ParserContext& context) {

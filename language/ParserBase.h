@@ -112,9 +112,6 @@ public:
 
     struct LabelDefn : public ParserElement {
         static ParseState parse(ParserContext& context);
-
-    private:
-        static void ConstructNode(ParserContext& context, const Token& token);
     };
 
     struct LabelRef : public ParserElement {
