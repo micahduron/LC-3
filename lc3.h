@@ -13,15 +13,9 @@ namespace LC3 {
 
     class Value {
     public:
-        Value() {}
-        Value(const Value& other) = default;
-        Value(Value&& other) = default;
         Value(Word word) :
           m_word{ word }
         {}
-
-        Value& operator = (const Value& other) = default;
-        Value& operator = (Value&& other) = default;
 
         Word get() const {
             return m_word;
