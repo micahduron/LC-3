@@ -106,7 +106,7 @@ static LC3::Value GetRawOffset(const SyntaxTreeNode& addrNode,
     auto addrVal = GetNodeValue(addrNode, symTable);
     LC3::Word offset = addrVal - progCounter.nextAddress();
 
-    return { offset };
+    return LC3::Value{ offset };
 }
 
 static std::optional<LC3::Value> GetOffset(const SyntaxTreeNode& addrNode, const SymbolTable& symTable,
@@ -260,14 +260,14 @@ LC3::Value GetNodeValue(const SyntaxTreeNode& treeNode, const SymbolTable& symTa
     assert(treeNode.type == NodeType::Number || treeNode.type == NodeType::LabelRef);
 
     if (treeNode.type == NodeType::Number) {
-        return { treeNode.data<NumberNode>() };
+        return LC3::Value{ treeNode.data<NumberNode>() };
     }
     StringView labelName = treeNode.token.str;
     auto labelAddr = symTable.get(labelName);
 
     assert(labelAddr.has_value());
 
-    return { *labelAddr };
+    return LC3::Value{ *labelAddr };
 }
 
 } // namespace LC3::Language

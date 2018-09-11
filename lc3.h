@@ -13,7 +13,7 @@ namespace LC3 {
 
     class Value {
     public:
-        Value(Word word) :
+        explicit Value(Word word) :
           m_word{ word }
         {}
 

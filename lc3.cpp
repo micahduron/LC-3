@@ -9,9 +9,9 @@ Value Value::abs() const {
     if (m_word & highestBit) {
         Word negatedNum = ~m_word + 1;
 
-        return { negatedNum };
+        return Value{ negatedNum };
     }
-    return { m_word };
+    return Value{ m_word };
 }
 
 size_t Value::bitWidth() const {
@@ -31,7 +31,7 @@ std::optional<Value> Value::restrictWidth(size_t numBits, bool isSigned) const {
     Value testVal = isSigned ? abs() : *this;
 
     if (testVal.bitWidth() > numBits) {
-        return {};
+        return std::nullopt;
     }
     Word bitMask = (1 << numBits) - 1;
 
