@@ -3,15 +3,10 @@
 
 namespace LC3 {
 
-static constexpr Word highestBit = 1 << (WordBits - 1);
+static constexpr Word signBit = 1 << (WordBits - 1);
 
 Value Value::abs() const {
-    if (m_word & highestBit) {
-        Word negatedNum = ~m_word + 1;
-
-        return Value{ negatedNum };
-    }
-    return Value{ m_word };
+    return (m_word & signBit) ? negate() : *this;
 }
 
 size_t Value::bitWidth() const {

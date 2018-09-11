@@ -25,6 +25,10 @@ namespace LC3 {
             return get();
         }
 
+        Value negate() const {
+            return Value(~m_word + 1);
+        }
+
         Value abs() const;
         size_t bitWidth() const;
         std::optional<Value> restrictWidth(size_t bitWidth, bool isSigned = false) const;

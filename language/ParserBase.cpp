@@ -217,10 +217,10 @@ ParseState ParserBase::DecNumberDefn::parse(ParserContext& context) {
     }
     ++context.tokenizer;
 
-    LC3::Word parsedNum = std::strtoul(token.str.data(), nullptr, 10);
+    LC3::Value parsedNum(std::strtoul(token.str.data(), nullptr, 10));
 
     if (isNegative) {
-        parsedNum = ~parsedNum + 1;
+        parsedNum = parsedNum.negate();
     }
     context.tree.descendTree<NumberNode>(parsedNum, token);
 
