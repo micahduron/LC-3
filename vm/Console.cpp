@@ -30,6 +30,9 @@ private:
 };
 
 void Console_Impl::activate() {
+    if (m_isActivated) {
+        return;
+    }
     tcgetattr(STDIN_FILENO, &m_oldSettings);
 
     struct termios rawSettings = m_oldSettings;
