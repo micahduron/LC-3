@@ -12,6 +12,9 @@
 !/language/keywords/
 /language/keywords/*
 
+!/vm
+/vm/*
+
 !/configure.ac
 !Makefile.am
 
