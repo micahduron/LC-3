@@ -11,9 +11,7 @@ public:
     Console_Impl(Console_Impl&&) = delete;
 
     ~Console_Impl() {
-        if (isActivated()) {
-            deactivate();
-        }
+        deactivate();
     }
 
     Console_Impl& operator = (const Console_Impl&) = delete;
@@ -42,9 +40,12 @@ void Console_Impl::activate() {
 }
 
 void Console_Impl::deactivate() {
-        tcsetattr(STDIN_FILENO, TCSAFLUSH, &m_oldSettings);
+    if (!m_isActivated) {
+        return;
+    }
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &m_oldSettings);
 
-        m_isActivated = false;
+    m_isActivated = false;
 }
 
 void Console::setState(bool state) {
