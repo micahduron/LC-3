@@ -11,6 +11,8 @@ namespace LC3 {
     constexpr size_t WordBytes = sizeof(Word);
     constexpr size_t WordBits = WordBytes * CHAR_BIT;
 
+    constexpr LC3::Word WordMax = static_cast<Word>(-1);
+
     class Value {
     public:
         explicit Value(Word word) :
