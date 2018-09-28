@@ -1,9 +1,9 @@
+#pragma once
+
+#include <bitset>
 #include <cstddef>
 #include <limits>
-#include <bitset>
 #include "StringView.h"
-
-#pragma once
 
 namespace Util {
 
