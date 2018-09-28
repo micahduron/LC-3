@@ -17,6 +17,7 @@ using Keywords::Directive;
 
 struct AnalyzerFlags {
     bool addressedMemory = false;
+    bool seenOrigDirective = false;
     bool terminateCheck = false;
 };
 
@@ -269,8 +270,16 @@ bool AnalyzeDirective(SyntaxTreeNode& node, AnalyzerFlags& flags) {
 
                 return false;
             }
+            if (flags.seenOrigDirective) {
+                Log::error(node) << "Multiple .ORIG statements within a single file "
+                                 << "is not supported.\n";
+                flags.terminateCheck = true;
+
+                return false;
+            }
             nodeFormat = CheckNode<Number>(node);
             flags.addressedMemory = true;
+            flags.seenOrigDirective = true;
             break;
         case D(FILL):
             nodeFormat = CheckNode<Address>(node);
