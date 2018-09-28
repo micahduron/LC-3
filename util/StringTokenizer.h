@@ -1,11 +1,11 @@
-#include <string>
-#include <cstddef>
-#include <cassert>
-#include <algorithm>
-#include "StringView.h"
-#include "CharClass.h"
-
 #pragma once
+
+#include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <string>
+#include "CharClass.h"
+#include "StringView.h"
 
 namespace Util {
 
