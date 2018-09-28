@@ -3,21 +3,21 @@
 namespace Util {
 
 CharClass CharClass::combine(const CharClass& classOne, const CharClass& classTwo) {
-    return {
+    return CharClass {
         [&classOne, &classTwo] (char c) {
             return classOne(c) || classTwo(c);
         }
     };
 }
 CharClass CharClass::intersect(const CharClass& classOne, const CharClass& classTwo) {
-    return {
+    return CharClass {
         [&classOne, &classTwo] (char c) {
             return classOne(c) && classTwo(c);
         }
     };
 }
 CharClass CharClass::complement(const CharClass& charClass) {
-    return {
+    return CharClass {
         [&charClass] (char c) {
             return !charClass(c);
         }

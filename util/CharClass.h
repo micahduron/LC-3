@@ -13,7 +13,7 @@ private:
     using BitSet = std::bitset<SetSize>;
 
 public:
-    CharClass(StringView acceptedChars) {
+    explicit CharClass(StringView acceptedChars) {
         for (char c : acceptedChars) {
             set(c, true);
         }
@@ -28,7 +28,7 @@ public:
         >
 
     template <typename MapFn, HasCallOperator(MapFn)>
-    CharClass(MapFn&& mapFn) {
+    explicit CharClass(MapFn&& mapFn) {
         for (size_t i = 0; i < SetSize; ++i) {
             auto charVal = static_cast<char>(i);
 
