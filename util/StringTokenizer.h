@@ -139,4 +139,4 @@ private:
     StrIter m_endIter;
 };
 
-}
+} // namespace Util
