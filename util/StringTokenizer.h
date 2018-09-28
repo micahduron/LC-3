@@ -13,7 +13,6 @@ class StringTokenizer {
 public:
     using StrIter = StringView::iterator;
 
-    StringTokenizer(const StringTokenizer& other) = default;
     StringTokenizer(StringView source) :
       StringTokenizer{ source.begin(), source.end() }
     {}
@@ -22,8 +21,6 @@ public:
       m_currIter{ startIter },
       m_endIter{ endIter }
     {}
-
-    StringTokenizer& operator = (const StringTokenizer& other) = default;
 
     size_t position() const {
         return static_cast<size_t>(m_currIter - m_startIter);
