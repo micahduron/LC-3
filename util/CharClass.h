@@ -63,4 +63,4 @@ CharClass operator ~ (const CharClass& charClass);
 CharClass operator & (const CharClass& classOne, const CharClass& classTwo);
 CharClass operator | (const CharClass& classOne, const CharClass& classTwo);
 
-}
+} // namespace Util

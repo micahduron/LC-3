@@ -34,4 +34,4 @@ CharClass operator | (const CharClass& classOne, const CharClass& classTwo) {
     return CharClass::combine(classOne, classTwo);
 }
 
-}
+} // namespace Util
