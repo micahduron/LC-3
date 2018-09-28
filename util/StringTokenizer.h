@@ -13,7 +13,7 @@ class StringTokenizer {
 public:
     using StrIter = StringView::iterator;
 
-    StringTokenizer(StringView source) :
+    explicit StringTokenizer(StringView source) :
       StringTokenizer{ source.begin(), source.end() }
     {}
     StringTokenizer(StrIter startIter, StrIter endIter) :
