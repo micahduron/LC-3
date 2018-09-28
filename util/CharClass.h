@@ -13,30 +13,30 @@ private:
     using BitSet = std::bitset<SetSize>;
 
 public:
-    CharClass(const CharClass& other) {
-        // std::bitset doesn't have a normal copy constructor, weirdly.
-        for (size_t i = 0; i < SetSize; ++i) {
-            if (other.m_bitSet.test(i)) {
-                m_bitSet.set(i, true);
-            }
-        }
-    }
     CharClass(StringView acceptedChars) {
         for (char c : acceptedChars) {
             set(c, true);
         }
     }
-    template <typename MapFn,
-              typename = decltype(std::declval<MapFn>()('a'))>
+
+    #define HasCallOperator(ObjType) \
+        class = std::enable_if< \
+          std::is_same_v< \
+            decltype(std::declval<ObjType>()(std::declval<char>())), \
+            bool \
+          > \
+        >
+
+    template <typename MapFn, HasCallOperator(MapFn)>
     CharClass(MapFn&& mapFn) {
         for (size_t i = 0; i < SetSize; ++i) {
-            char charVal = static_cast<char>(i);
+            auto charVal = static_cast<char>(i);
 
-            if (mapFn(charVal)) {
-                m_bitSet.set(i, true);
-            }
+            m_bitSet.set(i, mapFn(charVal));
         }
     }
+
+    #undef HasCallOperator
 
     CharClass& operator = (const CharClass& other) = delete;
 
