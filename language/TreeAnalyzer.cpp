@@ -17,6 +17,7 @@ using Keywords::Directive;
 
 struct AnalyzerFlags {
     bool addressedMemory = false;
+    bool terminateCheck = false;
 };
 
 static bool AnalyzeTreeNode(SyntaxTreeNode& node, AnalyzerFlags& flags);
@@ -146,6 +147,8 @@ bool TreeAnalyzer::analyze(SyntaxTreeNode& root) {
     AnalyzerFlags flags;
 
     root.walk([&status, &flags](SyntaxTreeNode& node) {
+        if (flags.terminateCheck) return;
+
         if (!AnalyzeTreeNode(node, flags)) {
             status = false;
         }
