@@ -18,6 +18,7 @@ public:
     using BinaryWriter::open;
     using BinaryWriter::close;
 
-    bool putWord(word_type word);
-    bool putWord(word_type::value_type wordVal);
+    bool putWord(word_type word) {
+        return put(word.value());
+    }
 };

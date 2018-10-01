@@ -12,8 +12,7 @@ CharClass_test_SOURCES = \
   CharClass_test.cpp \
   ../util/CharClass.cpp ../util/CharClass.h
 LC3Writer_test_SOURCES = \
-  LC3Writer_test.cpp \
-  ../LC3Writer.cpp ../LC3Writer.h
+  LC3Writer_test.cpp
 StringTokenizer_test_SOURCES = \
   StringTokenizer_test.cpp \
   ../util/StringTokenizer.h \

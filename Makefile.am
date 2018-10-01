@@ -6,7 +6,6 @@ bin_PROGRAMS = lc3asm
 
 lc3asm_SOURCES = lc3asm.cpp \
                  Log.h Log.cpp \
-                 LC3Writer.h LC3Writer.cpp \
                  language/Parser.h language/Parser.cpp \
                  language/ParserBase.h language/ParserBase.cpp \
                  language/Tokenizer.h language/Tokenizer.cpp \
