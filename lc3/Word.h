@@ -54,8 +54,24 @@ public:
         return Word(m_value + otherWord.value());
     }
 
+    constexpr Word operator - (Word otherWord) const {
+        return Word(m_value - otherWord.value());
+    }
+
+    constexpr Word operator * (Word otherWord) const {
+        return Word(m_value * otherWord.value());
+    }
+
+    constexpr Word operator / (Word otherWord) const {
+        return Word(m_value / otherWord.value());
+    }
+
     constexpr Word operator << (int shiftVal) const {
         return Word(m_value << shiftVal);
+    }
+
+    constexpr Word operator >> (int shiftVal) const {
+        return Word(m_value >> shiftVal);
     }
 
     constexpr Word operator ~ () const {
