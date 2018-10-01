@@ -81,7 +81,7 @@ bool EncodeDirective(const SyntaxTreeNode& dirNode, const SymbolTable& symTable,
         case Directive::BLKW: {
             LC3::Word wordCount = dirNode.child(0).data<NumberNode>();
             LC3::Word memVal = dirNode.children.size() > 1 ?
-                                GetNodeValue(dirNode.child(1), symTable) :
+                                GetNodeValue(dirNode.child(1), symTable).value() :
                                 0;
             for (LC3::WordValue i = 0; i < wordCount.value(); ++i) {
                 writer.putWord(memVal);
