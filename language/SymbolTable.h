@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 #include <optional>
-#include <lc3.h>
+#include <lc3/Word.h>
 #include <util/StringView.h>
 
 namespace LC3::Language {

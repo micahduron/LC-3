@@ -166,7 +166,7 @@ ParseState ParserBase::HexNumber::parse(ParserContext& context) {
 
     // Removes the leading 'x' character, leaving only the hex digits.
     token.str = token.str.subString(1);
-    LC3::Word parsedNum = std::strtoul(token.str.data(), nullptr, 16);
+    LC3::Word parsedNum(std::strtoul(token.str.data(), nullptr, 16));
     context.tree.descendTree<NumberNode>(parsedNum, token);
 
     return ParseState::Success;
@@ -217,7 +217,7 @@ ParseState ParserBase::DecNumberDefn::parse(ParserContext& context) {
     }
     ++context.tokenizer;
 
-    LC3::Value parsedNum(std::strtoul(token.str.data(), nullptr, 10));
+    LC3::Word parsedNum(std::strtoul(token.str.data(), nullptr, 10));
 
     if (isNegative) {
         parsedNum = parsedNum.negate();
@@ -293,7 +293,7 @@ ParseState ParserBase::Register::parse(ParserContext& context) {
     {
         ++context.tokenizer;
 
-        LC3::Word regNum = token.str[1] - '0';
+        LC3::Word regNum(token.str[1] - '0');
         context.tree.descendTree<RegisterNode>(regNum, token);
 
         return ParseState::Success;

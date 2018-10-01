@@ -66,6 +66,16 @@ enum Instruction Instructions::get(const StringView& instrName) {
     return mapIter->second;
 }
 
+LC3::Word Instructions::getOpcode(const StringView& instrName) {
+    Instruction instrVal = Instructions::get(instrName);
+
+    return Instructions::getOpcode(instrVal);
+}
+
+LC3::Word Instructions::getOpcode(Instruction instr) {
+    return LC3::Word(static_cast<LC3::Word::value_type>(instr));
+}
+
 std::ostream& operator << (std::ostream& outStream, Instruction instr) {
     switch (instr) {
         #define _(Name, Opcode) \

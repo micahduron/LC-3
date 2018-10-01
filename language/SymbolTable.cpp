@@ -3,7 +3,6 @@
 #include <stack>
 #include <unordered_set>
 #include <Log.h>
-#include <lc3.h>
 #include "keywords/Directives.h"
 #include "NodeType.h"
 #include "TreeNodes.h"

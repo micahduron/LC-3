@@ -15,6 +15,9 @@
 !/vm
 /vm/*
 
+!/lc3
+/lc3/*
+
 !/configure.ac
 !Makefile.am
 

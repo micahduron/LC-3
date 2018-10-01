@@ -20,7 +20,7 @@ size_t DirectiveNode::size(const SyntaxTreeNode& node) {
     switch (dirType) {
         case Directive::BLKW: {
             const auto& sizeField = node.child(0);
-            size_t sizeVal = sizeField.data<NumberNode>();
+            size_t sizeVal = sizeField.data<NumberNode>().value();
 
             return sizeVal;
         }

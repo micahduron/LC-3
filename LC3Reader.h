@@ -1,6 +1,6 @@
 #include <util/BinaryReader.h>
 #include <util/EndiannessConverter.h>
-#include "lc3.h"
+#include <lc3/Word.h>
 
 #pragma once
 
@@ -18,6 +18,5 @@ public:
     using BinaryReader::open;
     using BinaryReader::close;
 
-    size_t readWords(word_type* wordBuf, size_t numWords);
     bool getWord(word_type& wordRef);
 };

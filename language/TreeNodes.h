@@ -3,7 +3,7 @@
 #include <utility>
 #include <memory>
 #include <string>
-#include <lc3.h>
+#include <lc3/Word.h>
 #include "SyntaxTreeNode.h"
 #include "NodeFormat.h"
 #include "keywords/Instructions.h"

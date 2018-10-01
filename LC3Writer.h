@@ -1,6 +1,6 @@
 #include <util/BinaryWriter.h>
 #include <util/EndiannessConverter.h>
-#include "lc3.h"
+#include <lc3/Word.h>
 
 #pragma once
 
@@ -18,6 +18,6 @@ public:
     using BinaryWriter::open;
     using BinaryWriter::close;
 
-    size_t writeWords(const word_type* wordArray, size_t numWords);
     bool putWord(word_type word);
+    bool putWord(word_type::value_type wordVal);
 };

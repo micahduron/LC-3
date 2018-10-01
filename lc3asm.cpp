@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <lc3.h>
+#include <lc3/Word.h>
 #include <Log.h>
 #include <LC3Writer.h>
 #include <util/StringView.h>

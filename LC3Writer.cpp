@@ -1,8 +1,9 @@
 #include "LC3Writer.h"
 
 bool LC3Writer::putWord(word_type word) {
-    return put(word);
+    return putWord(word.value());
 }
-size_t LC3Writer::writeWords(const word_type* wordArray, size_t numWords) {
-    return write(wordArray, numWords);
+
+bool LC3Writer::putWord(word_type::value_type wordVal) {
+    return put(wordVal);
 }

@@ -1,5 +1,6 @@
 #include <iostream>
-#include "../LC3Writer.h"
+#include <lc3/Word.h>
+#include <LC3Writer.h>
 
 int main() {
     LC3Writer writer("LC3Writer_test.obj");

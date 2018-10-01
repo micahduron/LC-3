@@ -1,7 +1,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <optional>
-#include <lc3.h>
+#include <lc3/Word.h>
 #include <Log.h>
 #include "keywords/Instructions.h"
 #include "keywords/Directives.h"
@@ -20,7 +20,10 @@ static bool EncodeDirective(const SyntaxTreeNode& dirNode, const SymbolTable& sy
 static bool EncodeInstruction(const SyntaxTreeNode& instrNode, const SymbolTable& symTable,
                               const ProgramCounter& progCounter, LC3Writer& writer);
 
-static LC3::Value GetNodeValue(const SyntaxTreeNode& treeNode, const SymbolTable& symTable);
+static LC3::Word GetNodeValue(const SyntaxTreeNode& treeNode, const SymbolTable& symTable);
+
+static std::optional<LC3::Word> RestrictWidth(LC3::Word word, size_t numBits);
+static std::optional<LC3::Word> RestrictWidthSigned(LC3::Word word, size_t numBits);
 
 bool Encoder::encode(const SyntaxTreeNode& rootNode, const SymbolTable& symTable,
                      LC3Writer& writer)
@@ -78,9 +81,9 @@ bool EncodeDirective(const SyntaxTreeNode& dirNode, const SymbolTable& symTable,
         case Directive::BLKW: {
             LC3::Word wordCount = dirNode.child(0).data<NumberNode>();
             LC3::Word memVal = dirNode.children.size() > 1 ?
-                                GetNodeValue(dirNode.child(1), symTable).get() :
+                                GetNodeValue(dirNode.child(1), symTable) :
                                 0;
-            for (LC3::Word i = 0; i < wordCount; ++i) {
+            for (LC3::WordValue i = 0; i < wordCount.value(); ++i) {
                 writer.putWord(memVal);
             }
             break;
@@ -101,21 +104,18 @@ bool EncodeDirective(const SyntaxTreeNode& dirNode, const SymbolTable& symTable,
     return retStatus;
 }
 
-static LC3::Value GetRawOffset(const SyntaxTreeNode& addrNode, 
+static LC3::Word GetRawOffset(const SyntaxTreeNode& addrNode,
                                const SymbolTable& symTable, const ProgramCounter& progCounter) {
     auto addrVal = GetNodeValue(addrNode, symTable);
-    LC3::Word offset = addrVal - progCounter.nextAddress();
 
-    return LC3::Value{ offset };
+    return LC3::Word(addrVal.value() - progCounter.nextAddress().value());
 }
 
-static std::optional<LC3::Value> GetOffset(const SyntaxTreeNode& addrNode, const SymbolTable& symTable,
+static std::optional<LC3::Word> GetOffset(const SyntaxTreeNode& addrNode, const SymbolTable& symTable,
                             const ProgramCounter& progCounter, size_t bitWidth)
 {
-    assert(bitWidth <= LC3::WordBits);
-
     auto rawOffset = GetRawOffset(addrNode, symTable, progCounter);
-    auto offsetVal = rawOffset.restrictWidth(bitWidth, true);
+    auto offsetVal = RestrictWidthSigned(rawOffset, bitWidth);
 
     if (!offsetVal) {
         Log::error(addrNode) << "Offset cannot fit within " << bitWidth << " bits (" << rawOffset << ").\n";
@@ -128,14 +128,14 @@ static std::optional<LC3::Value> GetOffset(const SyntaxTreeNode& addrNode, const
 static LC3::Word GetBranchFlags(const SyntaxTreeNode& flagsNode) {
     assert(flagsNode.type == NodeType::BranchFlags);
 
-    LC3::Word flagsVal = 0;
+    LC3::WordValue flagsVal = 0;
     const auto& branchFlags = flagsNode.data<BRFlagsNode>();
 
     flagsVal |= branchFlags.n ? (1 << 2) : 0;
     flagsVal |= branchFlags.z ? (1 << 1) : 0;
     flagsVal |= branchFlags.p ? (1 << 0) : 0;
 
-    return flagsVal;
+    return LC3::Word(flagsVal);
 }
 
 static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& instrNode,
@@ -153,7 +153,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
         case NodeFormat::Vec: {
             const auto& vecChild = instrNode.child(0);
             auto rawVec = GetNodeValue(vecChild, symTable);
-            auto vecVal = rawVec.restrictWidth(8, false);
+            auto vecVal = RestrictWidth(rawVec, 8);
 
             if (!vecVal) {
                 Log::error(vecChild) << "Vector is larger than 8 bits "
@@ -210,7 +210,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
 
             auto& numChild = instrNode.child(2);
             auto rawNum = GetNodeValue(numChild, symTable);
-            auto numVal = rawNum.restrictWidth(5, true);
+            auto numVal = RestrictWidthSigned(rawNum, 5);
 
             if (!numVal) {
                 Log::error(numChild) << "Imediate cannot fit within 5 bits.\n";
@@ -225,7 +225,7 @@ static std::optional<LC3::Word> GetEncodedInstruction(const SyntaxTreeNode& inst
 
             auto& offsetChild = instrNode.child(2);
             auto rawOffset = GetNodeValue(offsetChild, symTable);
-            auto offsetVal = rawOffset.restrictWidth(6, true);
+            auto offsetVal = RestrictWidthSigned(rawOffset, 6);
 
             if (!offsetVal) {
                 Log::error(offsetChild) << "Offset cannot fit within 6 bits.\n";
@@ -256,18 +256,40 @@ bool EncodeInstruction(const SyntaxTreeNode& instrNode, const SymbolTable& symTa
     return true;
 }
 
-LC3::Value GetNodeValue(const SyntaxTreeNode& treeNode, const SymbolTable& symTable) {
+LC3::Word GetNodeValue(const SyntaxTreeNode& treeNode, const SymbolTable& symTable) {
     assert(treeNode.type == NodeType::Number || treeNode.type == NodeType::LabelRef);
 
     if (treeNode.type == NodeType::Number) {
-        return LC3::Value{ treeNode.data<NumberNode>() };
+        return treeNode.data<NumberNode>();
     }
     StringView labelName = treeNode.token.str;
     auto labelAddr = symTable.get(labelName);
 
     assert(labelAddr.has_value());
 
-    return LC3::Value{ *labelAddr };
+    return *labelAddr;
+}
+
+static std::optional<LC3::Word> RestrictWidth_Helper(LC3::Word word, size_t numBits, bool isSigned) {
+    assert(numBits <= LC3::Word::numBits);
+
+    LC3::WordValue maxValue = (1 << (numBits + 1)) - 1;
+    LC3::WordValue testValue = isSigned ? word.abs().value() : word.value();
+
+    if (testValue > maxValue) {
+        return std::nullopt;
+    }
+    LC3::WordValue bitMask = (1 << numBits) - 1;
+
+    return { LC3::Word(word.value() & bitMask) };
+}
+
+std::optional<LC3::Word> RestrictWidth(LC3::Word word, size_t numBits) {
+    return RestrictWidth_Helper(word, numBits, false);
+}
+
+std::optional<LC3::Word> RestrictWidthSigned(LC3::Word word, size_t numBits) {
+    return RestrictWidth_Helper(word, numBits, true);
 }
 
 } // namespace LC3::Language

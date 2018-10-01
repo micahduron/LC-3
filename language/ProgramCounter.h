@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lc3.h>
+#include <lc3/Word.h>
 #include "language/SyntaxTreeNode.h"
 
 namespace LC3::Language {

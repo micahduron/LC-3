@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <lc3.h>
+#include <lc3/Word.h>
 #include <util/StringView.h>
 #include <util/KeywordMap.h>
 
@@ -10,7 +10,7 @@ namespace LC3::Language::Keywords {
 using Util::StringView;
 using Util::KeywordMap;
 
-enum class Instruction : LC3::Word {
+enum class Instruction : LC3::Word::value_type {
     #define _(Name, Opcode) Name = Opcode,
     #include "Instructions.str"
     #undef _
@@ -28,14 +28,8 @@ public:
 
     static enum Instruction get(const StringView& instrName);
 
-    static LC3::Word getOpcode(const StringView& instrName) {
-        return static_cast<LC3::Word>(get(instrName));
-    }
-
-    static LC3::Word getOpcode(Instruction instr) {
-        return static_cast<LC3::Word>(instr);
-    }
-
+    static LC3::Word getOpcode(const StringView& instrName);
+    static LC3::Word getOpcode(Instruction instr);
 };
 
 std::ostream& operator << (std::ostream& outStream, Instruction instr);

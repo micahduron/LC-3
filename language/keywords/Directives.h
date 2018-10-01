@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include <lc3.h>
+#include <lc3/Word.h>
 #include <util/StringView.h>
 #include <util/KeywordMap.h>
 
