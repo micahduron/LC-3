@@ -12,8 +12,6 @@
 
 using Util::StringView;
 
-using LC3::Log;
-
 using LC3::Language::Parser;
 using LC3::Language::TreeAnalyzer;
 using LC3::Language::SymbolTable;

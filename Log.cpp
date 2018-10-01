@@ -1,7 +1,5 @@
 #include "Log.h"
 
-namespace LC3 {
-
 static size_t numErrors = 0;
 static size_t numWarnings = 0;
 
@@ -28,5 +26,3 @@ std::ostream& Log::warning(bool newWarning) {
 size_t Log::warningCount() {
     return numWarnings;
 }
-
-} // namespace LC3
